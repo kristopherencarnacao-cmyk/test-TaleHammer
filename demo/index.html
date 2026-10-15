@@ -229,6 +229,28 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
 .ag-al-h .cnt{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .ag-al-h .btn{margin-left:auto;padding:4px 10px;font-size:13px}
 .ag-list{display:flex;flex-wrap:wrap;gap:6px}
+.stepbar{display:flex;border-bottom:1px solid var(--rule)}
+.stepbar button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 4px;background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font:inherit;font-size:13px;min-width:0}
+.stepbar button[aria-selected="true"]{color:var(--brass);border-bottom-color:var(--brass)}
+.stepbar .sn{font-family:var(--mono);font-size:11px;border:1px solid currentColor;width:18px;height:18px;display:inline-grid;place-items:center;flex:none}
+.stepbar .sl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:420px){.stepbar .sl{font-size:11px}.stepbar button{flex-direction:column;gap:3px}}
+.pc-body[class*="step-"]{display:block}
+.blk.wide{border-bottom:0}
+.step-next{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:4px;flex-wrap:wrap}
+.rdy-sum{font-family:var(--mono);font-size:12px;color:var(--muted);margin-right:auto}
+.ag-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;align-items:start}
+.ag-col{border:1px solid var(--c);padding:10px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ag-col-h{display:flex;align-items:center;gap:8px;min-height:34px}
+.ag-col-h .nm{flex:1;display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
+.ag-col-h .step button:disabled{opacity:.35;cursor:default}
+.ag-x{padding:2px 8px;font-size:12px}
+.ag-pl{border-top:1px dashed var(--rule);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.ag-pl-h{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.rdy{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--ink);cursor:pointer;font:inherit;font-size:13px;padding:2px}
+.rdy .bx{width:18px;height:18px;border:1px solid var(--c);display:inline-grid;place-items:center;font-size:13px;color:var(--c)}
+.rdy[aria-checked="true"] .bx{background:color-mix(in srgb,var(--c) 22%,transparent)}
+.ag-empty{font-size:13px;color:var(--muted)}
 .ag-chip{display:inline-flex;align-items:center;border:1px solid var(--c);border-radius:999px;overflow:hidden}
 .ag-chip button{background:none;border:0;padding:4px 10px;cursor:pointer;font-size:13px;color:var(--ink)}
 .ag-chip .rm{padding:4px 9px 4px 4px;color:var(--muted)}
@@ -1137,7 +1159,7 @@ html.up-lock,html.up-lock body{overflow:hidden}
 
   <nav class="tabs" role="tablist">
     <button role="tab" id="tab-cards" aria-selected="true" data-tab="cards">Cards</button>
-    <button role="tab" id="tab-track" aria-selected="false" data-tab="track"><span class="t-long">Campaign tracker</span><span class="t-short">Tracker</span></button>
+    <button role="tab" id="tab-track" aria-selected="false" data-tab="track"><span class="t-long">Campaign</span><span class="t-short">Campaign</span></button>
     <button role="tab" id="tab-coll" aria-selected="false" data-tab="coll">Collection</button>
     <button role="tab" id="tab-rules" aria-selected="false" data-tab="rules">Rules</button>
   </nav>
@@ -1215,9 +1237,12 @@ const findCard=id=>ALL_CARDS.find(c=>c.id===id);
 const load=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}};
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 const AKEY="demo-dominatus-codex-agendas", CKEY="demo-dominatus-campaign";
-let chosen=load(AKEY,[]).filter(c=>AGENDA_LIB.some(a=>a.id===c.id));      // [{id, phase}]
-const blankCamp=()=>({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
-let camp=load(CKEY,null)||blankCamp();
+/* players: how many players each alliance has. Every player is issued all three of their alliance's agendas for the phase, so a phase only records who is ready.
+   ready: {"Alliance|n": true}; step: the Campaign tab step last open for that phase (1 war zone, 2 agendas, 3 battle, 4 results). */
+const normCamp=c=>{c.players=c.players||{};AL.forEach(a=>{if(typeof c.players[a]!=="number")c.players[a]=1});
+  [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.step=ph.step||1});return c};
+const blankCamp=()=>normCamp({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
+let camp=normCamp(load(CKEY,null)||blankCamp());
 const UKEY="demo-dominatus-collection", UPG=["Battle Honour","Battle Skill","Relic"];
 /* earned upgrade cards, kept per alliance: [{id, al, phase, t}]. An alliance holds at most one copy of a card.
    Older saves had no alliance: Relics go to their own alliance, Honours and Skills to the first column. */
@@ -1225,16 +1250,16 @@ const normColl=list=>(Array.isArray(list)?list:[]).filter(x=>x&&typeof x.id==="s
   .map(x=>{const c=findCard(x.id);const al=c.alliance||(AL.includes(x.al)?x.al:AL[0]);return {id:x.id,al,phase:x.phase||1,t:x.t||Date.now()}})
   .filter((x,i,a)=>a.findIndex(y=>y.id===x.id&&y.al===x.al)===i);
 let coll=normColl(load(UKEY,[]));
-const saveAll=()=>{save(AKEY,chosen);save(CKEY,camp);save(UKEY,coll)};
+const saveAll=()=>{save(CKEY,camp);save(UKEY,coll)};
 /* history: every tracker action stores a snapshot of the state after it */
 const HKEY="demo-dominatus-history", HMAX=400;
 const clone=o=>JSON.parse(JSON.stringify(o));
 let hist=load(HKEY,null);
-const snap=label=>({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:Date.now(),label,camp:clone(camp),chosen:clone(chosen),coll:clone(coll)});
+const snap=label=>({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:Date.now(),label,camp:clone(camp),coll:clone(coll)});
 if(!Array.isArray(hist)||!hist.length){hist=[snap("Campaign started")];save(HKEY,hist)}
 function record(label){saveAll();hist.push(snap(label));if(hist.length>HMAX)hist=hist.slice(-HMAX);save(HKEY,hist)}
 const nameOf=id=>{const c=findCard(id);return c?c.name:id};
-const inPhase=(p,al)=>chosen.filter(c=>c.phase===p).map(c=>AGENDA_LIB.find(a=>a.id===c.id)).filter(a=>a&&(!al||a.alliance===al));
+const agendasFor=(al,p)=>AGENDA_LIB.filter(a=>a.alliance===al&&a.phase===p);
 const aaOf=(p,a)=>camp.phases[p].aa[a]||0;
 function ascendancy(p){const v=AL.map(a=>[a,aaOf(p,a)]);const top=Math.max(...v.map(x=>x[1]));if(!top)return null;
   const lead=v.filter(x=>x[1]===top).map(x=>x[0]);return lead.length===1?lead[0]:"tie:"+lead.join(" & ")}
@@ -1506,7 +1531,7 @@ function openCard(id,side="front"){
   if(scrim.hidden)lastFocus=document.activeElement;
   const isA=c.deck==="Agenda",two=!!(c.back&&c.back.trim());
   const labels=isA?["Agenda","Primary Mission"]:c.deck==="Location"?["Location bonus","War zone rules"]:c.deck==="Briefing"?["Briefing","Outcomes"]:["Front","Reverse"];
-  const inPlay=isA&&chosen.find(x=>x.id===id);
+  const inPlay=null;
   scrim.innerHTML=`<div class="dossier" role="dialog" aria-modal="true" aria-labelledby="d-title" style="--c:${deckColor(c)}">
     <div class="d-head"><div><div class="d-meta">${ic(c.deck)}${esc(c.deck)}${c.alliance?" · "+alIcon(c.alliance)+esc(c.alliance):""}${c.phase?" · Phase "+c.phase:""}${c.roll?" · D6 "+esc(c.roll):""}${inPlay&&inPlay.phase?" · In play, phase "+inPlay.phase:""}</div>
       <h2 id="d-title">${esc(c.name)}</h2></div><button class="x" aria-label="Close">✕</button></div>
@@ -1647,56 +1672,6 @@ upEl.addEventListener("keydown",e=>{
 upEl.addEventListener("click",e=>{if(e.target===upEl||e.target.classList.contains("up-shade"))closeUpick()});
 addEventListener("resize",()=>{if(up.open){upFan.place();markMore()}});
 
-/* ---------- agenda selection page (inside the tracker tab) ---------- */
-const pk={al:"All",phase:1,open:false,returnTo:null};
-function addAgenda(id){const prev=chosen.find(c=>c.id===id);const a=AGENDA_LIB.find(x=>x.id===id);
-  chosen=chosen.filter(c=>c.id!==id);chosen.push({id,phase:pk.phase});
-  record(`Phase ${pk.phase}: added ${a.name} (${a.alliance})${prev&&prev.phase&&prev.phase!==pk.phase?` — moved from phase ${prev.phase}`:""}`)}
-function pickState(a,big){const have=chosen.find(c=>c.id===a.id);
-  if(!have)return `<button class="btn primary" data-add="${a.id}">${big?"Add to phase "+pk.phase:"Add"}</button>`;
-  return have.phase===pk.phase?`<span class="pk-added">✓ Added</span>`:`<span class="pk-added">Phase ${have.phase}</span>`}
-function openPicker(phase,al){pk.phase=phase;pk.al=al||"All";pk.open=true;pk.returnTo=`[data-pick="${phase}|${al}"]`;renderTracker();
-  const top=document.getElementById("pk-page");if(top){if(!calm())top.classList.add("boot");top.scrollIntoView({block:"start"});top.querySelector("#pk-back").focus()}}
-function closePicker(){pk.open=false;renderTracker();const r=document.querySelector(pk.returnTo);if(r){r.focus();r.scrollIntoView({block:"center"})}}
-function renderPicker(t){
-  const lists=(pk.al==="All"?AL:[pk.al]);
-  t.innerHTML=`<section class="pk-page" id="pk-page" aria-labelledby="pk-title">
-    <div class="pk-top">
-      <button class="back" id="pk-back">‹ Back to phase ${pk.phase}</button>
-      <div class="pk-titles"><div class="d-meta">Campaign phase ${pk.phase}</div><h2 id="pk-title">Choose agendas</h2></div>
-      <div class="row" id="pk-al" role="group" aria-label="Alliance">${["All",...AL].map(a=>`<button class="chip" aria-pressed="${a===pk.al}" data-a="${a}">${a!=="All"?`${alIcon(a)}`:""}${a}${a!=="All"?` <span class="n">${inPhase(pk.phase,a).length}/3</span>`:""}</button>`).join("")}</div>
-      <p class="hint" style="margin:0">Three agendas per alliance each phase. Every agenda also counts as achieved at 35+ VP from its Primary Mission. Tap a name to read the card.</p>
-    </div>
-    <div class="pk-cols">${lists.map(al=>`<div class="pk-col"><div class="pk-grp" style="--c:${alColor(al)}">${al}<span>${inPhase(pk.phase,al).length}/3 in phase ${pk.phase}</span></div>
-      <ul class="pk-list">${AGENDA_LIB.filter(a=>a.alliance===al).map(a=>{const o=objective(a);
-        return `<li style="--c:${alColor(a.alliance)}"><button class="pk-txt" data-view="${a.id}" aria-label="Read ${esc(a.name)}: ${esc(o)}">
-          <span class="pk-name">${esc(a.name)}</span>${o?`<span class="pk-obj">${esc(o)}</span>`:""}</button>${pickState(a)}</li>`}).join("")}</ul></div>`).join("")}</div>
-    <div class="pk-foot"><button class="btn primary" id="pk-done">Done</button></div>
-  </section>`;
-  t.querySelector("#pk-back").onclick=closePicker;
-  t.querySelector("#pk-done").onclick=closePicker;
-  t.querySelectorAll("#pk-al [data-a]").forEach(b=>b.onclick=()=>{pk.al=b.dataset.a;renderTracker();const f=document.querySelector(`#pk-al [data-a="${pk.al}"]`);if(f)f.focus()});
-  t.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{const id=b.dataset.add;addAgenda(id);renderTracker();const f=document.querySelector(`[data-view="${id}"]`);if(f)f.focus()});
-  t.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>openPreview(b.dataset.view));
-}
-function openPreview(id,side="front"){
-  const a=AGENDA_LIB.find(x=>x.id===id);if(!a)return;
-  if(scrim.hidden)lastFocus=document.activeElement;
-  scrim.innerHTML=`<div class="dossier" role="dialog" aria-modal="true" aria-labelledby="d-title" style="--c:${alColor(a.alliance)}">
-    <div class="d-head"><div><div class="d-meta">${ic("Agenda")}Agenda · ${alIcon(a.alliance)}${esc(a.alliance)}</div>
-      <h2 id="d-title">${esc(a.name)}</h2></div><button class="x" aria-label="Close">✕</button></div>
-    <div class="sides"><button aria-pressed="${side==="front"}" data-s="front">Agenda</button><button aria-pressed="${side==="back"}" data-s="back">Primary Mission</button></div>
-    <div class="face">${rich(a[side])}</div>
-    <div class="d-actions">${pickState(a,true)}
-      </div></div>`;
-  showScrim();
-  scrim.querySelector(".x").onclick=closeCard;
-  scrim.querySelectorAll(".sides button").forEach(b=>b.onclick=()=>openPreview(id,b.dataset.s));
-  const add=scrim.querySelector("[data-add]");if(add)add.onclick=()=>{addAgenda(id);renderTracker();lastFocus=document.querySelector(`[data-view="${id}"]`);openPreview(id,side)};
-  scrim.querySelector(".x").focus();
-}
-
-
 /* ---------- history page ---------- */
 const hv={open:false,eraseAsk:false,flash:null};
 function openHistory(){hv.open=true;hv.eraseAsk=false;renderTracker();const p=document.getElementById("hist-page");if(p){if(!calm())p.classList.add("boot");p.scrollIntoView({block:"start"});p.querySelector("#hist-back").focus()}}
@@ -1705,15 +1680,15 @@ const fmtTime=t=>{const d=new Date(t),now=new Date();const same=d.toDateString()
   const time=d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
   return same?time:d.toLocaleDateString([], {month:"short",day:"numeric"})+" · "+time};
 function restoreTo(id){const e=hist.find(x=>x.id===id);if(!e)return;
-  camp=clone(e.camp);chosen=clone(e.chosen);if(e.coll)coll=normColl(clone(e.coll));view=Math.min(camp.current,3);
+  camp=normCamp(clone(e.camp));if(e.coll)coll=normColl(clone(e.coll));view=Math.min(camp.current,3);
   flicker(true);record(`Restored to: ${e.label} (${fmtTime(e.t)})`);renderColl();renderGrid();hv.flash=hist[hist.length-1].id;renderTracker();
   const f=document.querySelector(".h-row.is-now");if(f){f.scrollIntoView({block:"center"});}}
 function renderHistory(t){
   const rows=[...hist].reverse();
   t.innerHTML=`<section class="pk-page hist-page" id="hist-page" aria-labelledby="hist-title">
     <div class="pk-top">
-      <button class="back" id="hist-back">‹ Back to tracker</button>
-      <div class="pk-titles"><div class="d-meta">Campaign tracker</div><h2 id="hist-title">History</h2></div>
+      <button class="back" id="hist-back">‹ Back to campaign</button>
+      <div class="pk-titles"><div class="d-meta">Campaign</div><h2 id="hist-title">History</h2></div>
       <p class="hint" style="margin:0">Every change is listed newest first. Restore any entry to put the campaign back exactly as it was at that moment. Restoring is recorded too, so you can always undo it.</p>
     </div>
     <ol class="h-list">${rows.map((e,i)=>`<li class="h-row ${i===0?"is-now":""} ${hv.flash===e.id?"flash":""}">
@@ -1730,18 +1705,17 @@ function renderHistory(t){
   t.querySelector("#hist-back").onclick=closeHistory;
   t.querySelectorAll("[data-restore]").forEach(b=>b.onclick=()=>restoreTo(b.dataset.restore));
   t.querySelectorAll("[data-erase]").forEach(b=>b.onclick=()=>{const v=b.dataset.erase;
-    if(v==="yes"){camp=blankCamp();chosen=[];coll=[];view=1;saveAll();renderColl();hist=[snap("Campaign started")];save(HKEY,hist);hv.eraseAsk=false;hv.open=false;renderTracker();
+    if(v==="yes"){camp=blankCamp();coll=[];view=1;saveAll();renderColl();hist=[snap("Campaign started")];save(HKEY,hist);hv.eraseAsk=false;hv.open=false;renderTracker();
       const tb=document.querySelector(".hist-btn");if(tb)tb.focus();return}
     hv.eraseAsk=v==="ask";renderTracker();const f=document.querySelector(v==="ask"?'[data-erase="no"]':'[data-erase="ask"]');if(f)f.focus()});
 }
 
 /* ---------- campaign tracker ---------- */
-let resetAsk=false;
+let resetAsk=false,optAsk=false;const MAXP=8;
 let view=Math.min(camp.current,3);
 const statusOf=p=>p<camp.current?"done":p===camp.current?"current":"next";
 function renderTracker(){
   const t=document.getElementById("trk");
-  if(pk.open){renderPicker(t);return}
   if(hv.open){renderHistory(t);return}
   const cur=view, cp=camp.phases[cur];
   const curLoc=cp.loc&&findCard(cp.loc);
@@ -1766,39 +1740,61 @@ function renderTracker(){
     record(ph.control?`Phase ${p}: ${ph.control} took control${was?` from ${was}`:""}`:`Phase ${p}: ${was} no longer in control`);renderTracker()});
   t.querySelectorAll("[data-aa]").forEach(b=>b.onclick=()=>{const [p,a,d]=b.dataset.aa.split("|");const ph=camp.phases[p];const was=ph.aa[a]||0;ph.aa[a]=Math.max(0,was+(+d));
     if(ph.aa[a]!==was)record(`Phase ${p}: ${a} Agenda Achieved ${was} → ${ph.aa[a]}`);renderTracker()});
-  t.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{const [p,a]=b.dataset.pick.split("|");openPicker(+p,a)});
+  const stp=(ph,n)=>{camp.phases[ph].step=n;saveAll();renderTracker();const f=document.getElementById(`st-${ph}-${n}`);if(f)f.focus()};
+  t.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{const [ph,n]=b.dataset.step.split("|");stp(+ph,+n)});
+  t.querySelectorAll("[data-pl]").forEach(b=>b.onclick=()=>{const [a,d]=b.dataset.pl.split("|");const was=camp.players[a];const n=Math.max(0,Math.min(MAXP,was+(+d)));
+    if(n===was)return;camp.players[a]=n;record(`${a}: ${n} player${n===1?"":"s"}`);renderTracker();const f=t.querySelector(`[data-pl="${a}|${d}"]`);if(f)f.focus()});
+  t.querySelectorAll("[data-ready]").forEach(b=>b.onclick=()=>{const [ph,k]=b.dataset.ready.split("|");const r=camp.phases[ph].ready;const [a,i]=k.split("#");
+    r[a+"|"+i]=!r[a+"|"+i];if(!r[a+"|"+i])delete r[a+"|"+i];record(`Phase ${ph}: ${a} player ${+i+1} ${r[a+"|"+i]?"ready":"not ready"}`);renderTracker();const f=t.querySelector(`[data-ready="${b.dataset.ready}"]`);if(f)f.focus()});
+  t.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>{const ph=+b.dataset.next;stp(ph,Math.min(4,camp.phases[ph].step+1))});
+  t.querySelectorAll("[data-optadd]").forEach(b=>b.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column`);renderTracker();renderColl()});
+  t.querySelectorAll("[data-optrm]").forEach(b=>b.onclick=()=>{if(colN(OPT_AL)&&optAsk!==true){optAsk=true;renderTracker();const k=t.querySelector("[data-optno]");if(k)k.focus();return}optAsk=false;removeCol();renderTracker()});
+  t.querySelectorAll("[data-optno]").forEach(b=>b.onclick=()=>{optAsk=false;renderTracker()});
   t.querySelectorAll("[data-card]").forEach(b=>b.onclick=()=>openCard(b.dataset.card));
-  t.querySelectorAll("[data-unpick]").forEach(b=>b.onclick=()=>{const id=b.dataset.unpick;const c=chosen.find(x=>x.id===id);const a=AGENDA_LIB.find(x=>x.id===id);
-    chosen=chosen.filter(x=>x.id!==id);record(`Phase ${c&&c.phase}: removed ${a.name} (${a.alliance})`);renderTracker()});
   t.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>{const v=b.dataset.reset;
-    if(v==="yes"){camp=blankCamp();chosen=[];coll=[];view=1;renderColl();record("Campaign reset — all progress cleared")}resetAsk=v==="ask";renderTracker()});
+    if(v==="yes"){camp=blankCamp();coll=[];view=1;renderColl();record("Campaign reset — all progress cleared")}resetAsk=v==="ask";renderTracker()});
   t.querySelectorAll("[data-hist]").forEach(b=>b.onclick=openHistory);
+}
+function stepBody(p){
+  const ph=camp.phases[p],st=ph.step,on=colsOn();
+  const locs=CARDS.filter(c=>c.deck==="Location"&&c.phase===p);
+  if(st===1)return `<div class="blk wide"><span class="k-lbl">War zone for phase ${p}</span>
+    <div class="locs">${locs.map(l=>`<div style="display:flex;gap:8px;align-items:center"><button class="loc" aria-pressed="${ph.loc===l.id}" data-loc="${p}|${l.id}"><span class="d6">${esc(l.roll)}</span><span class="nm">${esc(l.name)}</span>${ph.loc===l.id?"✓":""}</button><button class="linkish" data-card="${l.id}" aria-label="Read ${esc(l.name)}">Read</button></div>`).join("")}</div>
+    <span class="hint">Roll a D6, or let the holder of Hollow Spire choose. Its war zone rules apply to every battle this phase.</span>
+    <div class="step-next"><button class="btn primary" data-next="${p}">Next: agendas ›</button></div></div>`;
+  if(st===2){
+    const total=on.reduce((n,a)=>n+camp.players[a],0),rdy=on.reduce((n,a)=>n+Array.from({length:camp.players[a]},(_,i)=>i).filter(i=>ph.ready[a+"|"+i]).length,0);
+    const col=a=>{const n=camp.players[a],ag=agendasFor(a,p),opt=a===OPT_AL;
+      return `<div class="ag-col" style="--c:${alColor(a)}"><div class="ag-col-h"><span class="nm">${alIcon(a)}${a}</span>
+        <span class="step" role="group" aria-label="${a} players"><button data-pl="${a}|-1" aria-label="Remove a ${a} player"${n<=0?" disabled":""}>−</button><output aria-live="polite" title="Players">${n}</output><button data-pl="${a}|1" aria-label="Add a ${a} player"${n>=MAXP?" disabled":""}>+</button></span>
+        ${opt?`<button class="btn ghost ag-x" data-optrm aria-label="Remove the ${a} column">✕</button>`:""}</div>
+        ${opt&&optAsk?`<div class="acol-ask"><span>Remove ${a}? Its ${colN(a)} collected upgrade${colN(a)===1?"":"s"} will be lost.</span><button class="btn primary" data-optrm>Remove</button><button class="btn" data-optno>Keep</button></div>`:""}
+        ${n?Array.from({length:n},(_,i)=>`<div class="ag-pl"><div class="ag-pl-h"><span>Player ${i+1}</span>
+          <button class="rdy" role="checkbox" aria-checked="${!!ph.ready[a+"|"+i]}" data-ready="${p}|${a}#${i}"><span class="bx" aria-hidden="true">${ph.ready[a+"|"+i]?"✓":""}</span>Ready</button></div>
+          <div class="ag-list">${ag.map(x=>`<span class="ag-chip" style="--c:${alColor(a)}"><button data-card="${x.id}">${esc(x.name)}</button></span>`).join("")}</div></div>`).join(""):`<span class="ag-empty">No players. Use + to add one.</span>`}</div>`};
+    return `<div class="blk wide"><span class="k-lbl">Agendas for phase ${p}</span>
+      <span class="hint">Every player is issued all three of their alliance's phase ${p} agendas. Tap one to read it, then tick Ready once the player has them.</span>
+      <div class="ag-cols">${on.map(col).join("")}${on.includes(OPT_AL)?"":`<button class="acol-new" data-optadd style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} (optional)</span></button>`}</div>
+      <div class="step-next"><span class="rdy-sum" aria-live="polite">${rdy} / ${total} ready</span><button class="btn${total&&rdy===total?" primary":""}" data-next="${p}">Next: battle ›</button></div></div>`}
+  if(st===3)return `<div class="blk wide"><span class="k-lbl">Agenda Achieved cards</span>
+    <div class="aa">${on.map(a=>`<div class="aa-row"><span class="nm">${alIcon(a)}${a}</span>
+      <span class="step"><button data-aa="${p}|${a}|-1" aria-label="Remove one for ${a}">−</button><output aria-live="polite">${aaOf(p,a)}</output><button data-aa="${p}|${a}|1" aria-label="Add one for ${a}">+</button></span></div>`).join("")}</div>
+    <span class="hint">The battle step is coming next. For now, count Agenda Achieved cards here.</span>
+    <div class="step-next"><button class="btn primary" data-next="${p}">Next: results ›</button></div></div>`;
+  const asc=ascendancy(p);
+  return `<div class="blk wide"><span class="k-lbl">Controlled by</span>
+    <div class="ctrl-row">${on.map(a=>`<button class="chip" aria-pressed="${ph.control===a}" data-ctl="${p}|${a}">${alIcon(a)}${a}</button>`).join("")}</div>
+    <span class="hint">Goes to the alliance with the most phase ${p} Battle Honours at the end of the phase.</span>
+    <span class="asc">${!asc?`<span class="hint">The alliance with the most Agenda Achieved cards is in ascendancy.</span>`:asc.startsWith("tie:")?`Tied for ascendancy: <b>${esc(asc.slice(4))}</b>`:`In ascendancy: <b>${esc(asc)}</b>`}</span>
+    <span class="hint">Full results (honours, skills, relics) are coming in the next section.</span></div>`;
 }
 function phaseCard(p){
   const ph=camp.phases[p], state=statusOf(p);
-  const locs=CARDS.filter(c=>c.deck==="Location"&&c.phase===p);
-  const asc=ascendancy(p);
   return `<section class="pcard" id="pc-${p}" data-state="${state}" aria-labelledby="ph-${p}">
     <div class="pc-head"><span class="num">${ROMAN[p-1]}</span><div class="pc-title"><span class="k-lbl">Campaign</span><h3 id="ph-${p}">Phase ${p}</h3></div>
       <span class="pill ${state}">${state==="current"?"In progress":state==="done"?"✓ Complete":"Upcoming"}</span></div>
-    <div class="pc-body">
-      <div class="blk"><span class="k-lbl">Location rolled</span>
-        <div class="locs">${locs.map(l=>`<div style="display:flex;gap:8px;align-items:center"><button class="loc" aria-pressed="${ph.loc===l.id}" data-loc="${p}|${l.id}"><span class="d6">${esc(l.roll)}</span><span class="nm">${esc(l.name)}</span>${ph.loc===l.id?"✓":""}</button><button class="linkish" data-card="${l.id}" aria-label="Read ${esc(l.name)}">Read</button></div>`).join("")}</div>
-        <span class="k-lbl" style="margin-top:6px">Controlled by</span>
-        <div class="ctrl-row">${AL.map(a=>`<button class="chip" aria-pressed="${ph.control===a}" data-ctl="${p}|${a}">${alIcon(a)}${a}</button>`).join("")}</div>
-        <span class="hint">Goes to the alliance with the most phase ${p} Battle Honours at the end of the phase.</span>
-      </div>
-      <div class="blk"><span class="k-lbl">Agenda Achieved cards</span>
-        <div class="aa">${AL.map(a=>`<div class="aa-row"><span class="nm">${alIcon(a)}${a}</span>
-          <span class="step"><button data-aa="${p}|${a}|-1" aria-label="Remove one for ${a}">−</button><output aria-live="polite">${aaOf(p,a)}</output><button data-aa="${p}|${a}|1" aria-label="Add one for ${a}">+</button></span></div>`).join("")}</div>
-        <span class="asc">${!asc?`<span class="hint">The alliance with the most cards is in ascendancy at the end of the phase.</span>`:asc.startsWith("tie:")?`Tied for ascendancy: <b>${esc(asc.slice(4))}</b>`:`In ascendancy: <b>${esc(asc)}</b>`}</span>
-      </div>
-      <div class="blk"><span class="k-lbl">Agendas in play</span>
-        ${AL.map(a=>{const list=inPhase(p,a);return `<div class="ag-al"><div class="ag-al-h">${alIcon(a)}${a}<span class="cnt">${list.length}/3</span>
-          <button class="btn" data-pick="${p}|${a}">+ Add</button></div>
-          <div class="ag-list">${list.length?list.map(x=>`<span class="ag-chip" style="--c:${alColor(a)}"><button data-card="${x.id}">${esc(x.name)}</button><button class="rm" data-unpick="${x.id}" aria-label="Remove ${esc(x.name)} from phase ${p}">✕</button></span>`).join(""):`<span class="ag-empty">None chosen</span>`}</div></div>`}).join("")}
-      </div>
-    </div>
+    <div class="stepbar" role="tablist" aria-label="Phase ${p} steps">${[["War zone","Select war zone"],["Agendas","Select agendas"],["Battle","Battle"],["Results","Results"]].map(([sh,lg],k)=>`<button role="tab" id="st-${p}-${k+1}" aria-selected="${ph.step===k+1}" data-step="${p}|${k+1}"><span class="sn">${k+1}</span><span class="sl">${sh}</span></button>`).join("")}</div>
+    <div class="pc-body step-${ph.step}" role="tabpanel" aria-labelledby="st-${p}-${ph.step}">${stepBody(p)}</div>
     <div class="pc-foot">${state==="current"?`<span class="hint">Finished every battle in this phase? Marking it complete moves the campaign to ${p<3?"phase "+(p+1):"its end"}. You can still edit this phase afterwards.</span><button class="btn primary" data-complete="${p}">Mark phase ${p} complete</button>`
       :state==="done"?`<span class="hint">This phase is complete. You can still change anything here.</span>${p===camp.current-1?`<button class="btn" data-reopen="${p}">Reopen phase ${p}</button>`:""}`
       :`<span class="hint">This phase starts when phase ${p-1} is marked complete. You can set it up in advance.</span>`}</div></section>`;
@@ -1835,7 +1831,7 @@ function renderRules(){
 
 const TABS=["cards","track","coll","rules"];
 function showTab(tab){
-  if(tab!=="track"&&(pk.open||hv.open)){pk.open=false;hv.open=false;renderTracker()}
+  if(tab!=="track"&&hv.open){hv.open=false;renderTracker()}
   document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===tab));
   TABS.forEach(t=>document.getElementById("view-"+t).hidden=t!==tab);
   try{localStorage.setItem("demo-dominatus-tab",tab)}catch(e){}
@@ -1854,10 +1850,10 @@ const GUIDE=[
   art:`<div class="ga ga-hand"><div class="gh-fan"><i></i><i></i><i class="c"><em></em><u><s></s><s></s><s></s><s></s><s></s><s></s></u></i><i></i><i></i></div><div class="gh-finger"></div></div>`},
  {t:"Read a card",b:"Tap any card to open it. Rule names glow green, points and values are bold, win conditions are underlined, and on Briefings the → arrow shows which Agenda your stance matchup gives you.",
   art:`<div class="ga ga-read"><div class="gr-card"><p><span class="hl h1">Agenda Achieved</span>: score <span class="hl h2">35 VP</span>, or <span class="hl h3">control half the objectives.</span></p><p>▸ Your FD is <span class="hl h4">Take and Hold</span> → <span class="hl h5">Landfall Protocol</span></p><p class="fl">The fleet has reached orbit…</p></div></div>`},
- {t:"Track a phase",b:"On the Campaign tracker, record the location you rolled, who controls it, and each alliance's Agenda Achieved cards. The bar at the bottom shows where the campaign stands and who is in ascendancy.",
+ {t:"Run a phase",b:"On the Campaign tab, work through each phase in four steps: war zone, agendas, battle and results. Switch between them whenever you like. The bar at the bottom shows where the campaign stands.",
   art:`<div class="ga ga-track"><div class="gt-loc"><span>1-2 The Cinder Reach</span><span class="sel">3-4 Vault of Echoes ✓</span></div><div class="gt-aa"><b>Reavers</b><span class="st">−</span><output><i>0</i><i>1</i><i>2</i></output><span class="st">+</span></div><div class="gt-asc">In ascendancy: <b>Reavers</b></div></div>`},
- {t:"Choose agendas",b:"Each alliance plays three agendas per phase. Tap + Add to open the agenda page, tap a name to read the full card, then Add it to the phase.",
-  art:`<div class="ga ga-pick"><div class="gp-row"><span>The Long Knife</span><em>Add</em></div><div class="gp-row b"><span>Spoils Eternal</span><em>Add</em></div><div class="gp-row"><span>Vanish</span><em>Add</em></div><div class="gp-cnt">Reavers <b><i>0</i><i>1</i><i>2</i></b>/3</div></div>`},
+ {t:"Issue agendas",b:"Set how many players each alliance has. Every player gets their alliance's three agendas for the phase. Tap a name to read it, then tick Ready.",
+  art:`<div class="ga ga-pick"><div class="gp-row"><span>The Long Knife</span><em>Ready</em></div><div class="gp-row b"><span>Spoils Eternal</span><em>Ready</em></div><div class="gp-row"><span>Vanish</span><em>Ready</em></div><div class="gp-cnt">Reavers <b><i>0</i><i>1</i><i>2</i></b>/3</div></div>`},
  {t:"Collect upgrades",b:"The Collection tab has a column per alliance. Tap + Add upgrade to fan out that alliance's upgrade deck, pick a card and tap Add. Vanguard and Dominion are always there; the Reavers column can be added or removed.",
   art:`<div class="ga ga-pick"><div class="gp-row"><span>Iron Resolve</span><em>Add</em></div><div class="gp-row b"><span>Rally Cry</span><em>Add</em></div><div class="gp-row"><span>Hunter's Mark</span><em>Add</em></div><div class="gp-cnt">Collected <b><i>0</i><i>1</i><i>2</i></b></div></div>`},
  {t:"Advance and rewind",b:"When a phase is over, tap Mark phase complete to move the campaign on. Every change goes into History, where you can restore any earlier moment.",
