@@ -1010,10 +1010,9 @@ body.flicker.fast .crt-band,body.flicker.fast::after,body.flicker.fast .wrap{ani
 .cols{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:14px;align-items:start}
 .acol{--fr:color-mix(in srgb,var(--c) 80%,var(--brass));display:flex;flex-direction:column;min-width:0;border-color:color-mix(in srgb,var(--c) 35%,var(--phos-dim))}
 .acol.boot{animation:panelBoot .45s cubic-bezier(.2,.9,.25,1) both}
-.acol-h{display:flex;align-items:center;gap:8px;padding:12px 12px 10px 14px;border-bottom:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:inset 0 -3px 0 -2px var(--c)}
+.acol-h{display:flex;align-items:center;gap:8px;box-sizing:border-box;height:54px;padding:0 12px 0 14px;border-bottom:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:inset 0 -3px 0 -2px var(--c)}
 .acol-h .al-ic{color:var(--c)}.acol-h .ic{width:20px;height:20px}
 .acol-h h3{margin:0;flex:1;min-width:0;font-family:var(--term);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);text-shadow:0 0 8px color-mix(in srgb,var(--c) 40%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.acol-req{font-family:var(--term);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--phos-dim);padding:2px 6px}
 .acol-x{flex:none;width:30px;height:30px;border:1px solid var(--phos-dim);background:transparent;color:var(--muted);cursor:pointer;font-size:12px}
 .acol-x:hover,.acol-x:focus-visible{color:var(--danger);border-color:var(--danger)}
 .acol-tally{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px dashed var(--phos-dim)}
@@ -1553,7 +1552,7 @@ function colHTML(a){
     .sort((p,q)=>UPG.indexOf(p.c.deck)-UPG.indexOf(q.c.deck)||p.x.phase-q.x.phase||p.x.t-q.x.t);
   const k=AL.indexOf(a),opt=a===OPT_AL;
   return `<section class="acol term-frame" data-col="${a}" style="--c:${alColor(a)}" aria-labelledby="col-h-${k}">
-    <header class="acol-h">${alIcon(a)}<h3 id="col-h-${k}">${esc(a)}</h3>${opt?`<button class="acol-x" data-colx aria-label="Remove the ${a} column">✕</button>`:`<span class="acol-req" title="Every campaign includes this alliance">Core</span>`}</header>
+    <header class="acol-h">${alIcon(a)}<h3 id="col-h-${k}">${esc(a)}</h3>${opt?`<button class="acol-x" data-colx aria-label="Remove the ${a} column">✕</button>`:""}</header>
     <div class="acol-tally">${UPG.map(d=>`<span>${ic(d)}<b>${have.filter(o=>o.c.deck===d).length}</b>${UPG_SHORT[d]}</span>`).join("")}</div>
     ${colAsk===a?`<div class="acol-ask" role="alert"><p>Remove the ${a} column and its ${have.length} upgrade${have.length===1?"":"s"}? History can bring it back.</p><div><button class="btn danger-btn" data-colx-yes>Remove</button> <button class="btn" data-colx-no>Keep</button></div></div>`:""}
     ${have.length?`<ul class="acol-list">${have.map(({x,c})=>`<li class="${flashIds.includes(c.id+"|"+a)?"new":""}">
