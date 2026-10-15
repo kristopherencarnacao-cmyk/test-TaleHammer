@@ -251,6 +251,8 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
 .rdy .bx{width:18px;height:18px;border:1px solid var(--c);display:inline-grid;place-items:center;font-size:13px;color:var(--c)}
 .rdy[aria-checked="true"] .bx{background:color-mix(in srgb,var(--c) 22%,transparent)}
 .ag-empty{font-size:13px;color:var(--muted)}
+.ag-chip .att{padding:4px 2px 4px 9px;color:var(--c)}
+.ag-chip.sel{background:color-mix(in srgb,var(--c) 22%,transparent)}
 .ag-chip{display:inline-flex;align-items:center;border:1px solid var(--c);border-radius:999px;overflow:hidden}
 .ag-chip button{background:none;border:0;padding:4px 10px;cursor:pointer;font-size:13px;color:var(--ink)}
 .ag-chip .rm{padding:4px 9px 4px 4px;color:var(--muted)}
@@ -1240,7 +1242,7 @@ const AKEY="demo-dominatus-codex-agendas", CKEY="demo-dominatus-campaign";
 /* players: how many players each alliance has. Every player is issued all three of their alliance's agendas for the phase, so a phase only records who is ready.
    ready: {"Alliance|n": true}; step: the Campaign tab step last open for that phase (1 war zone, 2 agendas, 3 battle, 4 results). */
 const normCamp=c=>{c.players=c.players||{};AL.forEach(a=>{if(typeof c.players[a]!=="number")c.players[a]=1});
-  [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.step=ph.step||1});return c};
+  [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.attempt=ph.attempt||{};ph.step=ph.step||1});return c};
 const blankCamp=()=>normCamp({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
 let camp=normCamp(load(CKEY,null)||blankCamp());
 const UKEY="demo-dominatus-collection", UPG=["Battle Honour","Battle Skill","Relic"];
@@ -1746,6 +1748,9 @@ function renderTracker(){
     if(n===was)return;camp.players[a]=n;record(`${a}: ${n} player${n===1?"":"s"}`);renderTracker();const f=t.querySelector(`[data-pl="${a}|${d}"]`);if(f)f.focus()});
   t.querySelectorAll("[data-ready]").forEach(b=>b.onclick=()=>{const [ph,k]=b.dataset.ready.split("|");const r=camp.phases[ph].ready;const [a,i]=k.split("#");
     r[a+"|"+i]=!r[a+"|"+i];if(!r[a+"|"+i])delete r[a+"|"+i];record(`Phase ${ph}: ${a} player ${+i+1} ${r[a+"|"+i]?"ready":"not ready"}`);renderTracker();const f=t.querySelector(`[data-ready="${b.dataset.ready}"]`);if(f)f.focus()});
+  t.querySelectorAll("[data-att]").forEach(b=>b.onclick=()=>{const [ph,k,id]=b.dataset.att.split("|");const [a,i]=k.split("#");const at=camp.phases[ph].attempt,key=a+"|"+i;
+    if(at[key]===id){delete at[key];record(`Phase ${ph}: ${a} player ${+i+1} no longer attempting ${nameOf(id)}`)}else{at[key]=id;record(`Phase ${ph}: ${a} player ${+i+1} will attempt ${nameOf(id)}`)}
+    renderTracker();const f=t.querySelector(`[data-att="${b.dataset.att}"]`);if(f)f.focus()});
   t.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>{const ph=+b.dataset.next;stp(ph,Math.min(4,camp.phases[ph].step+1))});
   t.querySelectorAll("[data-optadd]").forEach(b=>b.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column`);renderTracker();renderColl()});
   t.querySelectorAll("[data-optrm]").forEach(b=>b.onclick=()=>{if(colN(OPT_AL)&&optAsk!==true){optAsk=true;renderTracker();const k=t.querySelector("[data-optno]");if(k)k.focus();return}optAsk=false;removeCol();renderTracker()});
@@ -1771,9 +1776,9 @@ function stepBody(p){
         ${opt&&optAsk?`<div class="acol-ask"><span>Remove ${a}? Its ${colN(a)} collected upgrade${colN(a)===1?"":"s"} will be lost.</span><button class="btn primary" data-optrm>Remove</button><button class="btn" data-optno>Keep</button></div>`:""}
         ${n?Array.from({length:n},(_,i)=>`<div class="ag-pl"><div class="ag-pl-h"><span>Player ${i+1}</span>
           <button class="rdy" role="checkbox" aria-checked="${!!ph.ready[a+"|"+i]}" data-ready="${p}|${a}#${i}"><span class="bx" aria-hidden="true">${ph.ready[a+"|"+i]?"✓":""}</span>Ready</button></div>
-          <div class="ag-list">${ag.map(x=>`<span class="ag-chip" style="--c:${alColor(a)}"><button data-card="${x.id}">${esc(x.name)}</button></span>`).join("")}</div></div>`).join(""):`<span class="ag-empty">No players. Use + to add one.</span>`}</div>`};
+          <div class="ag-list" role="radiogroup" aria-label="Agenda ${a} player ${i+1} will attempt">${ag.map(x=>{const on=ph.attempt[a+"|"+i]===x.id;return `<span class="ag-chip${on?" sel":""}" style="--c:${alColor(a)}"><button class="att" role="radio" aria-checked="${on}" data-att="${p}|${a}#${i}|${x.id}" aria-label="${on?"Attempting":"Attempt"} ${esc(x.name)}">${on?"◉":"○"}</button><button data-card="${x.id}">${esc(x.name)}</button></span>`}).join("")}</div></div>`).join(""):`<span class="ag-empty">No players. Use + to add one.</span>`}</div>`};
     return `<div class="blk wide"><span class="k-lbl">Agendas for phase ${p}</span>
-      <span class="hint">Every player is issued all three of their alliance's phase ${p} agendas. Tap one to read it, then tick Ready once the player has them.</span>
+      <span class="hint">Every player is issued all three of their alliance's phase ${p} agendas. Tap a name to read it, and the circle beside it to choose the one that player will attempt. Tick Ready once they have them.</span>
       <div class="ag-cols">${on.map(col).join("")}${on.includes(OPT_AL)?"":`<button class="acol-new" data-optadd style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} (optional)</span></button>`}</div>
       <div class="step-next"><span class="rdy-sum" aria-live="polite">${rdy} / ${total} ready</span><button class="btn${total&&rdy===total?" primary":""}" data-next="${p}">Next: battle ›</button></div></div>`}
   if(st===3)return `<div class="blk wide"><span class="k-lbl">Agenda Achieved cards</span>
