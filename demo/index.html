@@ -819,8 +819,8 @@ nav.tabs button[aria-selected="true"]::before{content:"> "}
     radial-gradient(ellipse 55% 30% at 28% 10%,rgba(220,240,255,.07),transparent 70%),                          /* window reflection on the glass */
     linear-gradient(115deg,transparent 62%,rgba(220,240,255,.025) 70%,transparent 78%)}
 @media(max-width:560px){.crt-glass{box-shadow:0 0 0 80px #000,inset 0 0 0 1px rgba(var(--rgb),.10),inset 0 0 18px 4px rgba(0,0,0,.85),inset 0 0 70px 12px rgba(0,0,0,.4)}}
-/* tablet and up: a tighter, perfectly round corner (same radius across and down) instead of the stretched phone-proportioned one */
-@media(min-width:768px){.crt-glass{border-radius:14px;box-shadow:0 0 0 80px #000,inset 0 0 0 1px rgba(var(--rgb),.10),inset 0 0 22px 4px rgba(0,0,0,.8),inset 0 0 90px 14px rgba(0,0,0,.4)}}
+/* tablet and up: square corners, no radius */
+@media(min-width:768px){.crt-glass{border-radius:0;box-shadow:0 0 0 80px #000,inset 0 0 0 1px rgba(var(--rgb),.10),inset 0 0 22px 4px rgba(0,0,0,.8),inset 0 0 90px 14px rgba(0,0,0,.4)}}
 /* content gets a hair more breathing room so nothing tucks under the curved rim */
 .wrap{padding-inline:max(16px,calc(env(safe-area-inset-left,0px) + 14px))}
 
