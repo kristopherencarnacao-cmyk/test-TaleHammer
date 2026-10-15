@@ -241,10 +241,10 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
 .rdy-sum{font-family:var(--mono);font-size:12px;color:var(--muted);margin-right:auto}
 .ag-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;align-items:start}
 .ag-col{border:1px solid var(--c);padding:10px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.ag-col-h{display:flex;align-items:center;gap:8px;min-height:34px}
+.ag-col-h{display:flex;align-items:center;gap:8px;height:38px}
 .ag-col-h .nm{flex:1;display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
 .ag-col-h .step button:disabled{opacity:.35;cursor:default}
-.ag-x{padding:2px 8px;font-size:12px}
+.ag-x{padding:0 8px;height:28px;font-size:12px;line-height:1}
 .ag-pl{border-top:1px dashed var(--rule);padding-top:8px;display:flex;flex-direction:column;gap:6px}
 .ag-pl-h{display:flex;align-items:center;justify-content:space-between;font-size:13px}
 .rdy{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--ink);cursor:pointer;font:inherit;font-size:13px;padding:2px}
@@ -266,6 +266,12 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
 .wz h4{margin:2px 0 0;font-size:18px}
 .wz p{margin:0;font-size:13px;line-height:1.45;color:var(--muted);flex:1}
 .wz-act{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.bt-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;align-items:start}
+@media(min-width:1000px){.bt-cols{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.bt-field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.bt-list{display:flex;flex-direction:column;gap:6px}
+.bt{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--rule);padding:6px 10px;font-size:13px}
+.bt .rm{background:none;border:0;color:var(--muted);cursor:pointer}
 .ag-chip{display:inline-flex;align-items:center;border:1px solid var(--c);border-radius:999px;overflow:hidden}
 .ag-chip button{background:none;border:0;padding:4px 10px;cursor:pointer;font-size:13px;color:var(--ink)}
 .ag-chip .rm{padding:4px 9px 4px 4px;color:var(--muted)}
@@ -1255,7 +1261,7 @@ const AKEY="demo-dominatus-codex-agendas", CKEY="demo-dominatus-campaign";
 /* players: how many players each alliance has. Every player is issued all three of their alliance's agendas for the phase, so a phase only records who is ready.
    ready: {"Alliance|n": true}; step: the Campaign tab step last open for that phase (1 war zone, 2 agendas, 3 battle, 4 results). */
 const normCamp=c=>{c.players=c.players||{};AL.forEach(a=>{if(typeof c.players[a]!=="number")c.players[a]=1});
-  [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.step=ph.step||1});return c};
+  [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.battles=ph.battles||{};ph.step=ph.step||1});return c};
 const blankCamp=()=>normCamp({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
 let camp=normCamp(load(CKEY,null)||blankCamp());
 const UKEY="demo-dominatus-collection", UPG=["Battle Honour","Battle Skill","Relic"];
@@ -1762,6 +1768,13 @@ function renderTracker(){
   t.querySelectorAll("[data-ready]").forEach(b=>b.onclick=()=>{const [ph,k]=b.dataset.ready.split("|");const r=camp.phases[ph].ready;const [a,i]=k.split("#");
     r[a+"|"+i]=!r[a+"|"+i];if(!r[a+"|"+i])delete r[a+"|"+i];record(`Phase ${ph}: ${a} player ${+i+1} ${r[a+"|"+i]?"ready":"not ready"}`);renderTracker();const f=t.querySelector(`[data-ready="${b.dataset.ready}"]`);if(f)f.focus()});
   t.querySelectorAll("[data-bf]").forEach(b=>b.onclick=()=>{bfSide=b.dataset.bf;renderTracker();const f=t.querySelector(`[data-bf="${bfSide}"]`);if(f)f.focus()});
+  t.querySelectorAll("[data-btadd]").forEach(b=>b.onclick=()=>{const [ph,a]=b.dataset.btadd.split("|");lastFocus=b;
+    scrim.innerHTML=`<div class="dossier" role="dialog" aria-modal="true" aria-labelledby="d-title" style="--c:${alColor(a)}"><div class="d-head"><div><div class="d-meta">${alIcon(a)}${a} · Phase ${ph}</div><h2 id="d-title">Add battle</h2></div><button class="x" aria-label="Close">✕</button></div>
+      <div class="face">Battle details will go here. This is a placeholder for now.</div><div class="d-actions"><button class="btn primary" id="bt-ok">OK</button></div></div>`;
+    showScrim();scrim.querySelector(".x").onclick=closeCard;
+    scrim.querySelector("#bt-ok").onclick=()=>{const bl=camp.phases[ph].battles;(bl[a]=bl[a]||[]).push({t:Date.now()});record(`Phase ${ph}: ${a} battle ${bl[a].length} added`);closeCard();renderTracker()};
+    scrim.querySelector("#bt-ok").focus()});
+  t.querySelectorAll("[data-btrm]").forEach(b=>b.onclick=()=>{const [ph,a,k]=b.dataset.btrm.split("|");const bl=camp.phases[ph].battles[a];bl.splice(+k,1);record(`Phase ${ph}: ${a} battle removed`);renderTracker()});
   t.querySelectorAll("[data-next]").forEach(b=>b.onclick=()=>{const ph=+b.dataset.next;stp(ph,Math.min(4,camp.phases[ph].step+1))});
   t.querySelectorAll("[data-optadd]").forEach(b=>b.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column`);renderTracker();renderColl()});
   t.querySelectorAll("[data-optrm]").forEach(b=>b.onclick=()=>{if(colN(OPT_AL)&&optAsk!==true){optAsk=true;renderTracker();const k=t.querySelector("[data-optno]");if(k)k.focus();return}optAsk=false;removeCol();renderTracker()});
@@ -1801,11 +1814,14 @@ function stepBody(p){
       <div class="sides"><button aria-pressed="${bfSide==="back"}" data-bf="back">War zone rules</button><button aria-pressed="${bfSide==="front"}" data-bf="front">Location bonus</button></div>
       <div class="face">${rich(l[bfSide])}</div></div>`
       :`<div class="bf bf-none"><span class="hint">No war zone chosen for phase ${p} yet.</span><button class="btn" data-step="${p}|1">Select war zone</button></div>`;
-    return `<div class="blk wide"><span class="k-lbl">Battlefield</span>${bf}
-    <span class="k-lbl" style="margin-top:6px">Agenda Achieved cards</span>`+`
-    <div class="aa">${on.map(a=>`<div class="aa-row"><span class="nm">${alIcon(a)}${a}</span>
-      <span class="step"><button data-aa="${p}|${a}|-1" aria-label="Remove one for ${a}">−</button><output aria-live="polite">${aaOf(p,a)}</output><button data-aa="${p}|${a}|1" aria-label="Add one for ${a}">+</button></span></div>`).join("")}</div>
-    <span class="hint">The battle step is coming next. For now, count Agenda Achieved cards here.</span>
+    const bcol=a=>{const bl=ph.battles[a]||[],opt=a===OPT_AL;
+      return `<div class="ag-col" style="--c:${alColor(a)}"><div class="ag-col-h"><span class="nm">${alIcon(a)}${a}</span>${opt?`<button class="btn ghost ag-x" data-optrm aria-label="Remove the ${a} column">✕</button>`:""}</div>
+        ${opt&&optAsk?`<div class="acol-ask"><span>Remove ${a}? Its ${colN(a)} collected upgrade${colN(a)===1?"":"s"} will be lost.</span><button class="btn primary" data-optrm>Remove</button><button class="btn" data-optno>Keep</button></div>`:""}
+        <div class="aa-row"><span class="nm">Agenda Achieved</span><span class="step"><button data-aa="${p}|${a}|-1" aria-label="Remove one for ${a}">−</button><output aria-live="polite">${aaOf(p,a)}</output><button data-aa="${p}|${a}|1" aria-label="Add one for ${a}">+</button></span></div>
+        <div class="bt-list">${bl.map((b,k)=>`<div class="bt"><span>Battle ${k+1}</span><button class="rm" data-btrm="${p}|${a}|${k}" aria-label="Remove battle ${k+1} for ${a}">✕</button></div>`).join("")||`<span class="ag-empty">No battles yet.</span>`}</div>
+        <button class="btn" data-btadd="${p}|${a}">+ Add battle</button></div>`};
+    return `<div class="blk wide"><div class="bt-cols"><div class="bt-field"><span class="k-lbl">Battlefield</span>${bf}</div>
+      ${on.map(bcol).join("")}${on.includes(OPT_AL)?"":`<button class="acol-new" data-optadd style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} (optional)</span></button>`}</div>
     <div class="step-next"><button class="btn primary" data-next="${p}">Next: results ›</button></div></div>`}
   const asc=ascendancy(p);
   return `<div class="blk wide"><span class="k-lbl">Controlled by</span>
