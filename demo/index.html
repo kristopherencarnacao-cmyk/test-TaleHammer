@@ -257,6 +257,15 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
 .bf .sides{margin:0;padding:0}
 .bf .face{margin:0;padding:12px;max-height:360px;overflow:auto}
 .bf-none{align-items:flex-start;border-style:dashed}
+.wz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.wz{border:1px solid var(--rule);border-top:3px solid var(--c);background:var(--slab);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.wz.on{border-color:var(--brass);border-top-color:var(--brass);box-shadow:0 0 0 1px var(--brass)}
+.wz-top{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.wz-deck{display:inline-flex;align-items:center;gap:4px}
+.wz-ok{margin-left:auto;color:var(--brass)}
+.wz h4{margin:2px 0 0;font-size:18px}
+.wz p{margin:0;font-size:13px;line-height:1.45;color:var(--muted);flex:1}
+.wz-act{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
 .ag-chip{display:inline-flex;align-items:center;border:1px solid var(--c);border-radius:999px;overflow:hidden}
 .ag-chip button{background:none;border:0;padding:4px 10px;cursor:pointer;font-size:13px;color:var(--ink)}
 .ag-chip .rm{padding:4px 9px 4px 4px;color:var(--muted)}
@@ -1766,7 +1775,10 @@ function stepBody(p){
   const ph=camp.phases[p],st=ph.step,on=colsOn();
   const locs=CARDS.filter(c=>c.deck==="Location"&&c.phase===p);
   if(st===1)return `<div class="blk wide"><span class="k-lbl">War zone for phase ${p}</span>
-    <div class="locs">${locs.map(l=>`<div style="display:flex;gap:8px;align-items:center"><button class="loc" aria-pressed="${ph.loc===l.id}" data-loc="${p}|${l.id}"><span class="d6">${esc(l.roll)}</span><span class="nm">${esc(l.name)}</span>${ph.loc===l.id?"✓":""}</button><button class="linkish" data-card="${l.id}" aria-label="Read ${esc(l.name)}">Read</button></div>`).join("")}</div>
+    <div class="wz-grid">${locs.map(l=>{const on=ph.loc===l.id,sn=String(l.back||l.front||"").replace(/[*_#>]/g,"").replace(/\s+/g," ").trim().replace(/^War zone rules\.?\s*/i,"");
+      return `<article class="wz${on?" on":""}" style="--c:${deckColor(l)}"><div class="wz-top"><span class="d6">${esc(l.roll||"")}</span><span class="wz-deck">${ic("Location")}Location</span>${on?'<span class="wz-ok">✓ Selected</span>':""}</div>
+        <h4>${esc(l.name)}</h4><p>${esc(sn.length>170?sn.slice(0,170).replace(/\s+\S*$/,"")+"…":sn)}</p>
+        <div class="wz-act"><button class="btn${on?"":" primary"}" data-loc="${p}|${l.id}" aria-pressed="${on}">${on?"Clear":"Select"}</button><button class="linkish" data-card="${l.id}" aria-label="Read ${esc(l.name)}">Read card</button></div></article>`}).join("")}</div>
     <span class="hint">Roll a D6, or let the holder of Hollow Spire choose. Its war zone rules apply to every battle this phase.</span>
     <div class="step-next"><button class="btn primary" data-next="${p}">Next: agendas ›</button></div></div>`;
   if(st===2){
