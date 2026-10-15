@@ -1144,10 +1144,10 @@ html.up-lock,html.up-lock body{overflow:hidden}
   </nav>
 
   <section id="view-cards">
-    <div class="controls open" id="controls">
-      <button class="filt-tog" id="filt-tog" aria-expanded="true" aria-controls="filt-rows" aria-label="Hide filters"><span aria-hidden="true"></span></button>
-      <div class="filt-sum" id="filt-sum" hidden></div>
-      <div class="filt-rows" id="filt-rows">
+    <div class="controls" id="controls">
+      <button class="filt-tog" id="filt-tog" aria-expanded="false" aria-controls="filt-rows" aria-label="Show filters"><span aria-hidden="true"></span></button>
+      <div class="filt-sum" id="filt-sum"></div>
+      <div class="filt-rows" id="filt-rows" hidden>
       <div class="row frow"><span class="lbl" id="l-fam">Cards</span><div class="fseg" id="f-fam" role="radiogroup" aria-labelledby="l-fam"></div></div>
       <div class="row frow fsub" id="f-sub-row" hidden><span class="lbl" aria-hidden="true"></span><div class="fsub-chips" id="f-sub" role="radiogroup" aria-label="Deck"></div></div>
       <div class="row frow"><span class="lbl" id="l-al">Playing</span><div class="fseg" id="f-al" role="radiogroup" aria-labelledby="l-al"></div></div>
@@ -1310,8 +1310,8 @@ function seg(el,opts,cur,onPick,local){   /* local: only this row changes (no Ca
   el.onkeydown=e=>{if(!["ArrowLeft","ArrowRight"].includes(e.key))return;const bs=[...el.querySelectorAll("button")];const i=bs.indexOf(document.activeElement);if(i<0)return;
     const n=bs[(i+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length];n.click();e.preventDefault()};
 }
-/* filters are an accordion: open by default; the toggle sits on the first row's line so it adds no height */
-let filtOpen=true;
+/* filters are an accordion: closed by default; the toggle sits on the first row's line so it adds no height */
+let filtOpen=false;
 function filtSummary(){const p=[];
   p.push(st.deck?DECK_PLURAL[st.deck]:st.fam==="All"?"All cards":st.fam);
   const narrow=innerWidth<480;
