@@ -1815,8 +1815,7 @@ const SECTIONS=[
 ];
 function renderRules(){
   const pts=(SEED.introduction||"").split(/(?<=\.)\s+(?=[A-Z])|;\s+/).map(s=>s.trim()).filter(Boolean).map(s=>s[0].toUpperCase()+s.slice(1)).map(s=>/[.!?]$/.test(s)?s:s+".");
-  document.getElementById("intro").innerHTML=`<ul class="pts">${pts.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>
-    <div class="al-row">${AL.map(a=>`<span class="tag al" style="--c:${alColor(a)}">${a} · ${AGENDA_LIB.filter(x=>x.alliance===a).length} agendas</span>`).join("")}</div>`;
+  document.getElementById("intro").innerHTML=`<ul class="pts">${pts.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`;
   const Q=SEED.quickReference;document.getElementById("qref-box").hidden=!Q;
   if(Q){const fmt=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>");
     const item=i=>typeof i==="string"?`<li>${fmt(i)}</li>`:`<li>${fmt(i.text)}${i.sub&&i.sub.length?`<ul class="qr-sub">${i.sub.map(x=>`<li>${fmt(x)}</li>`).join("")}</ul>`:""}</li>`;
