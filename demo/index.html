@@ -1000,6 +1000,120 @@ body.flicker.fast .crt-band,body.flicker.fast::after,body.flicker.fast .wrap{ani
 .arc-spark{position:absolute;left:-2px;top:-2px;width:4px;height:4px;border-radius:50%;background:rgba(255,240,210,.7);opacity:0;filter:blur(3px);
   box-shadow:0 0 6px 2px rgba(255,205,130,.45);animation:sparkFly var(--dur) cubic-bezier(.15,.55,.35,1) var(--delay) both}
 @keyframes sparkFly{0%{opacity:1;transform:translate(0,0) scale(1.2)}45%{opacity:.95;transform:translate(calc(var(--dx) * .55),var(--up)) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.35)}}
+
+/* ---------- collection v2: a column per alliance ---------- */
+.col-jump{display:none;gap:6px;flex-wrap:wrap}
+.col-jump .chip{border-color:color-mix(in srgb,var(--c) 55%,var(--phos-dim))}
+.col-jump .chip .al-ic{color:var(--c)}
+.cols{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:14px;align-items:start}
+.acol{--fr:color-mix(in srgb,var(--c) 80%,var(--brass));display:flex;flex-direction:column;min-width:0;border-color:color-mix(in srgb,var(--c) 35%,var(--phos-dim))}
+.acol.boot{animation:panelBoot .45s cubic-bezier(.2,.9,.25,1) both}
+.acol-h{display:flex;align-items:center;gap:8px;padding:12px 12px 10px 14px;border-bottom:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:inset 0 -3px 0 -2px var(--c)}
+.acol-h .al-ic{color:var(--c)}.acol-h .ic{width:20px;height:20px}
+.acol-h h3{margin:0;flex:1;min-width:0;font-family:var(--term);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);text-shadow:0 0 8px color-mix(in srgb,var(--c) 40%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acol-req{font-family:var(--term);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--phos-dim);padding:2px 6px}
+.acol-x{flex:none;width:30px;height:30px;border:1px solid var(--phos-dim);background:transparent;color:var(--muted);cursor:pointer;font-size:12px}
+.acol-x:hover,.acol-x:focus-visible{color:var(--danger);border-color:var(--danger)}
+.acol-tally{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px dashed var(--phos-dim)}
+.acol-tally span{display:flex;align-items:center;gap:5px;justify-content:center;padding:7px 4px;font-family:var(--term);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-left:1px dashed var(--phos-dim);white-space:nowrap;min-width:0;overflow:hidden}
+.acol-tally span:first-child{border-left:0}
+.acol-tally .ic{margin:0;color:var(--brass);width:14px;height:14px}
+.acol-tally b{font-size:14px;color:var(--ink);font-weight:700}
+.acol-ask{padding:12px 14px;border-bottom:1px dashed var(--danger);background:color-mix(in srgb,var(--danger) 8%,transparent);display:flex;flex-direction:column;gap:10px}
+.acol-ask p{margin:0;font-size:13.5px}
+.acol-list{list-style:none;margin:0;padding:0}
+.acol-list li{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 10px;border-bottom:1px solid var(--phos-dim);min-height:54px}
+.acol-list li.new{animation:rowIn2 .7s cubic-bezier(.2,.9,.25,1) both}
+.acol-list li.new .coll-name{animation:chroma .5s .15s steps(4,end) both}
+@keyframes rowIn2{0%{opacity:0;transform:scaleY(.1);background:rgba(var(--rgb),.5)}40%{opacity:1;transform:none}100%{background:transparent}}
+.acol-ic{flex:none;color:var(--brass);display:flex}.acol-ic .ic{margin:0;width:18px;height:18px}
+.acol-list .coll-name{font-size:14px}
+.acol-list .coll-eff{font-size:12px;-webkit-line-clamp:2}
+.acol-list .tag{flex:none}
+.acol-list .coll-x{width:32px;height:32px}
+.acol-add{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px;min-height:44px;padding:8px 12px;cursor:pointer;
+  background:transparent;border:1px dashed color-mix(in srgb,var(--c) 60%,var(--phos-dim));color:var(--brass);
+  font-family:var(--term);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;transition:background .15s,box-shadow .15s}
+.acol-add:hover,.acol-add:focus-visible{background:var(--brass-soft);border-style:solid;border-color:var(--brass);box-shadow:0 0 14px rgba(var(--rgb),.2)}
+.acol-add .plus{display:grid;place-items:center;width:22px;height:22px;border:1px solid currentColor;font-size:16px;line-height:1}
+.acol-add.empty{flex-direction:column;gap:8px;min-height:170px;margin:12px}
+.acol-add.empty .plus{width:44px;height:44px;font-size:26px;box-shadow:0 0 16px rgba(var(--rgb),.25);animation:plusPulse 2.4s ease-in-out infinite}
+.acol-add small{font-family:var(--body);font-size:12px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)}
+@keyframes plusPulse{50%{box-shadow:0 0 26px rgba(var(--rgb),.5);color:var(--seal-hi)}}
+.acol-new{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:220px;padding:16px;cursor:pointer;
+  background:repeating-linear-gradient(135deg,transparent 0 8px,rgba(var(--rgb),.03) 8px 9px);border:1px dashed var(--phos-dim);color:var(--muted);
+  font-family:var(--term);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.acol-new .al-ic{color:var(--c);opacity:.6}.acol-new .ic{width:28px;height:28px;margin:0}
+.acol-new small{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:12px}
+.acol-new:hover,.acol-new:focus-visible{color:var(--brass);border-color:var(--brass);background-color:var(--brass-soft)}
+.coll-act{flex-wrap:wrap;gap:6px}
+.btn.coll-al{padding:6px 10px;display:inline-flex;align-items:center;gap:2px;border-color:color-mix(in srgb,var(--c) 50%,var(--phos-dim));color:var(--ink)}
+.btn.coll-al::before,.btn.coll-al::after{content:none}
+.btn.coll-al .al-ic{color:var(--c)}.btn.coll-al .ic{margin-right:.2em}
+.btn.coll-al[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);box-shadow:0 0 10px color-mix(in srgb,var(--c) 35%,transparent)}
+@media(max-width:860px){
+  .col-jump{display:flex}
+  .cols{grid-auto-columns:min(86%,340px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:-16px;padding:2px 16px 8px;scroll-padding-inline:16px}
+  .cols::-webkit-scrollbar{display:none}
+  .acol,.acol-new{scroll-snap-align:start}}
+@media (prefers-reduced-motion:reduce){.acol.boot,.acol-list li.new,.acol-list li.new .coll-name,.acol-add.empty .plus{animation:none}}
+
+/* ---------- upgrade picker: the alliance's deck fanned over the dimmed app ---------- */
+html.up-lock,html.up-lock body{overflow:hidden}
+.upick{position:fixed;inset:0;z-index:9000;overflow:hidden;display:flex;flex-direction:column;align-items:center;
+  padding:max(12px,env(safe-area-inset-top,0px)) 0 max(12px,env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(1,6,4,.80),rgba(1,6,4,.92) 55%,rgba(1,6,4,.97));backdrop-filter:blur(3px) saturate(.6);-webkit-backdrop-filter:blur(3px) saturate(.6)}
+.upick::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--c);box-shadow:0 0 22px 2px color-mix(in srgb,var(--c) 70%,transparent);opacity:.8}
+.up-shade{position:absolute;inset:0;z-index:-1}
+.up-in{position:relative;width:100%;max-width:780px;padding-inline:16px;display:flex;flex-direction:column;gap:10px}
+.up-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.up-titles{min-width:0}
+.up-top .d-meta{display:flex;align-items:center;gap:2px;color:var(--c)}
+.up-top .d-meta .al-ic{color:var(--c)!important}
+.up-top h2{margin:2px 0 0;font-family:var(--term);font-size:22px;letter-spacing:.06em;text-transform:uppercase;color:var(--brass);text-shadow:0 0 10px rgba(var(--rgb),.4)}
+.up-filt .ic{margin-right:.25em}
+.upick .hand{--cw:clamp(170px,min(62vw,calc((100svh - 300px) / 1.4)),290px);margin-top:0;gap:6px}
+.upick .stage{background:radial-gradient(ellipse 60% 55% at 50% 100%,color-mix(in srgb,var(--c) 16%,transparent),transparent 70%)}
+.upick .hand-ctl{justify-content:center;gap:16px}
+.up-got{font-family:var(--term);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+.up-tip{margin:0;text-align:center}
+.btn.up-act{min-width:9.5em;transition:background .2s,color .2s,border-color .2s}
+.btn.up-act.is-rm{background:transparent;color:var(--ink);border-color:var(--phos-dim);box-shadow:none}
+.btn.up-act.is-rm:hover{background:color-mix(in srgb,var(--danger) 14%,transparent);border-color:var(--danger);color:#fff}
+.btn.up-act.morph{animation:btnMorph .38s steps(4,end)}
+@keyframes btnMorph{0%{filter:brightness(2.2);transform:scaleX(1.06)}30%{filter:brightness(.6);transform:translateX(-2px)}60%{filter:brightness(1.4);transform:translateX(2px)}100%{filter:none;transform:none}}
+/* collected cards in the fan glow and carry a stamp */
+.cc-got{position:absolute;right:12px;top:42px;z-index:3;padding:3px 8px;transform:rotate(7deg);opacity:0;pointer-events:none;
+  font-family:var(--term);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--phos-ink);background:var(--brass);
+  box-shadow:0 0 12px rgba(var(--rgb),.6);transition:opacity .2s}
+.upick .cc.got .cc-got{opacity:1}
+.upick .cc.got .cc-face{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass),0 0 26px rgba(var(--rgb),.28),0 14px 32px rgba(0,0,0,.7)}
+.upick .cc.got:not(.is-cur) .cc-got{opacity:.75}
+/* opening: the deck is dealt up from below into the fan; closing collapses like the auspex windows */
+.upick.opening{animation:scrimIn .3s ease-out both}
+.upick.opening .up-top,.upick.opening .up-filt{animation:auspexBoot .45s .1s steps(1,end) both}
+.upick.opening .cc-inner{animation:dealIn .6s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--k,0) * 55ms + 140ms)}
+.upick.opening .flip-row,.upick.opening .hand-ctl,.upick.opening .up-tip{animation:auspexBoot .4s .5s steps(1,end) both}
+@keyframes dealIn{0%{transform:translateY(115%) rotate(-10deg) scale(.9);opacity:0;filter:brightness(2)}60%{opacity:1}100%{transform:none;filter:none}}
+.upick.closing{animation:scrimOut .26s ease-in both}
+.upick.closing .up-in{animation:auspexClose .26s cubic-bezier(.6,0,.9,.4) both}
+/* the dazzle */
+.dz{position:absolute;inset:0;pointer-events:none;z-index:6}
+.dz-flash{position:absolute;inset:-10%;background:radial-gradient(circle at 50% 42%,rgba(var(--rgb-hi),.95) 0,rgba(var(--rgb),.55) 22%,rgba(var(--rgb),.12) 48%,transparent 66%);mix-blend-mode:screen;animation:dzFlash .65s ease-out both}
+.dz-ring{position:absolute;left:50%;top:42%;width:44px;height:44px;margin:-22px 0 0 -22px;border:2px solid var(--seal-hi);border-radius:50%;
+  box-shadow:0 0 16px rgba(var(--rgb),.9),inset 0 0 12px rgba(var(--rgb),.7);animation:dzRing .75s cubic-bezier(.15,.8,.3,1) both}
+.dz-ring.r2{border-width:1px;animation-delay:.12s;animation-duration:.9s}
+.dz-spark{position:absolute;left:50%;top:42%;width:4px;height:4px;margin:-2px;background:var(--seal-hi);box-shadow:0 0 6px 1px rgba(var(--rgb),.9);
+  animation:dzSpark var(--dur) cubic-bezier(.1,.7,.3,1) var(--delay) both}
+.cc.dazzle .cc-face{animation:dzCard .75s cubic-bezier(.2,.9,.25,1) both}
+.cc.dazzle .cc-got{animation:stampIn .42s .2s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes dzFlash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+@keyframes dzRing{0%{transform:scale(.2);opacity:1}100%{transform:scale(8);opacity:0}}
+@keyframes dzSpark{0%{transform:translate(0,0) scale(1.6);opacity:1}70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.4);opacity:0}}
+@keyframes dzCard{0%{filter:brightness(2.6) saturate(1.4);transform:scale(1)}18%{transform:scale(1.045)}45%{filter:brightness(1.3)}100%{filter:none;transform:none}}
+@keyframes stampIn{0%{opacity:0;transform:rotate(-8deg) scale(2.6)}70%{opacity:1;transform:rotate(9deg) scale(.94)}100%{opacity:1;transform:rotate(7deg) scale(1)}}
+@media(max-width:560px){.upick .hand{--cw:clamp(168px,min(64vw,calc((100svh - 290px) / 1.4)),290px)}.up-top h2{font-size:18px}.up-tip{font-size:12px}}
+@media (prefers-reduced-motion:reduce){.upick.opening,.upick.opening *,.upick.closing,.upick.closing .up-in,.cc.dazzle .cc-face,.cc.dazzle .cc-got,.btn.up-act.morph{animation:none!important}}
 #toc{display:none!important}
 </style>
 
@@ -1068,6 +1182,20 @@ body.flicker.fast .crt-band,body.flicker.fast::after,body.flicker.fast .wrap{ani
 </div>
 
 <div class="scrim" id="scrim" hidden></div>
+<div class="upick" id="upick" role="dialog" aria-modal="true" aria-labelledby="up-title" hidden>
+  <div class="up-in">
+    <div class="up-top"><div class="up-titles"><div class="d-meta" id="up-al"></div><h2 id="up-title">Add upgrades</h2></div><button class="btn" id="up-done">Done</button></div>
+    <div class="fseg up-filt" id="up-filt" role="radiogroup" aria-label="Deck"></div>
+    <div class="hand up-hand">
+      <div class="stage-wrap"><div class="stage" id="up-stage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Upgrade deck. Use the left and right arrow keys to move between cards, and Enter to add the centre card."></div>
+        <div class="flip-row"><button class="btn nav-btn" id="up-prev" aria-label="Previous card">‹</button><button class="btn flip-btn up-act" id="up-act">+ Add</button><button class="btn nav-btn" id="up-next" aria-label="Next card">›</button></div></div>
+      <div class="hand-ctl"><span class="h-count" id="up-count" aria-live="polite"></span><span class="up-got" id="up-got"></span></div>
+    </div>
+    <p class="hint up-tip">Tap a card to bring it forward. Tap the centre card or press Add to give it to this alliance.</p>
+    <p class="sr" id="up-live" aria-live="polite"></p>
+  </div>
+  <div class="up-shade" aria-hidden="true"></div>
+</div>
 <div class="crt-band" aria-hidden="true"></div>
 <div class="crt-glass" aria-hidden="true"><i class="crt-bulge"></i><i class="crt-glare"></i></div>
 
@@ -1088,10 +1216,15 @@ const load=(k,f)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 const AKEY="demo-dominatus-codex-agendas", CKEY="demo-dominatus-campaign";
 let chosen=load(AKEY,[]).filter(c=>AGENDA_LIB.some(a=>a.id===c.id));      // [{id, phase}]
-const blankCamp=()=>({current:1,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
+const blankCamp=()=>({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
 let camp=load(CKEY,null)||blankCamp();
 const UKEY="demo-dominatus-collection", UPG=["Battle Honour","Battle Skill","Relic"];
-let coll=load(UKEY,[]).filter(x=>x&&typeof x.id==="string");   // [{id, phase, t}] earned upgrade cards; no duplicates
+/* earned upgrade cards, kept per alliance: [{id, al, phase, t}]. An alliance holds at most one copy of a card.
+   Older saves had no alliance: Relics go to their own alliance, Honours and Skills to the first column. */
+const normColl=list=>(Array.isArray(list)?list:[]).filter(x=>x&&typeof x.id==="string"&&findCard(x.id))
+  .map(x=>{const c=findCard(x.id);const al=c.alliance||(AL.includes(x.al)?x.al:AL[0]);return {id:x.id,al,phase:x.phase||1,t:x.t||Date.now()}})
+  .filter((x,i,a)=>a.findIndex(y=>y.id===x.id&&y.al===x.al)===i);
+let coll=normColl(load(UKEY,[]));
 const saveAll=()=>{save(AKEY,chosen);save(CKEY,camp);save(UKEY,coll)};
 /* history: every tracker action stores a snapshot of the state after it */
 const HKEY="demo-dominatus-history", HMAX=400;
@@ -1168,9 +1301,11 @@ const matchPh=c=>!st.ph||c.phase==null||c.phase===st.ph;
 const matchDeck=c=>st.deck?c.deck===st.deck:(st.fam==="All"||FAMILIES[st.fam].includes(c.deck));
 const match=c=>matchDeck(c)&&matchAl(c)&&matchPh(c);
 const isShared=c=>st.al!=="Any"&&c.alliance==null;
-function seg(el,opts,cur,onPick){
+function seg(el,opts,cur,onPick,local){   /* local: only this row changes (no Cards tab re-render) */
   el.innerHTML=opts.map(o=>`<button role="radio" aria-checked="${o.v===cur}" data-v="${o.v}" ${o.label?`aria-label="${esc(o.label)}"`:""}>${o.ic||""}<span>${esc(o.t)}</span></button>`).join("");
-  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{onPick(b.dataset.v);renderFilters();renderGrid();const f=el.querySelector(`[data-v="${b.dataset.v}"]`);if(f)f.focus()});
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{onPick(b.dataset.v);
+    if(local)el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-checked",String(x===b)));else{renderFilters();renderGrid()}
+    const f=el.querySelector(`[data-v="${b.dataset.v}"]`);if(f)f.focus()});
   el.onkeydown=e=>{if(!["ArrowLeft","ArrowRight"].includes(e.key))return;const bs=[...el.querySelectorAll("button")];const i=bs.indexOf(document.activeElement);if(i<0)return;
     const n=bs[(i+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length];n.click();e.preventDefault()};
 }
@@ -1226,7 +1361,7 @@ function renderGrid(){
       const teaser=c.deck==="Agenda"||c.deck==="Briefing"?narrative(c):"";
       b.innerHTML=`<div class="deck"><span>${ic(c.deck)}${esc(c.deck)}</span><span>${c.roll?"D6 "+esc(c.roll):""}</span></div>
         <h3>${esc(c.name)}</h3>${teaser?`<p class="teaser">${esc(teaser)}</p>`:""}
-        <div class="meta">${c.alliance?`<span class="tag al">${esc(c.alliance)}</span>`:isShared(c)?`<span class="tag shared">Shared</span>`:""}${c.phase?`<span class="tag">Phase ${c.phase}</span>`:""}${inColl(c.id)?`<span class="tag got">✓ Collected</span>`:""}</div>
+        <div class="meta">${c.alliance?`<span class="tag al">${esc(c.alliance)}</span>`:isShared(c)?`<span class="tag shared">Shared</span>`:""}${c.phase?`<span class="tag">Phase ${c.phase}</span>`:""}${gotTag(c.id)}</div>
         <span class="sigil" aria-hidden="true">${esc(sig)}</span>`;
       b.dataset.id=c.id;b.onclick=()=>openCard(c.id);g.appendChild(b)});
   });
@@ -1234,7 +1369,6 @@ function renderGrid(){
 
 
 /* ---------- hand view: cards fanned like a held hand ---------- */
-const hand={list:[],sel:0,flipped:false,key:""};
 const sideLabels=c=>c.deck==="Agenda"?["Agenda","Primary Mission"]:c.deck==="Location"?["Location bonus","War zone rules"]:c.deck==="Briefing"?["Briefing","Outcomes"]:["Front","Reverse"];
 /* on hand cards the flavour text moves to the bottom, below the rules */
 function handText(s){let h=rich(s);const m=h.match(/<span class="narr">([\s\S]*?)<\/span>\n?/);
@@ -1251,103 +1385,105 @@ function faceHTML(c,side,i,n){
     <div class="cc-rule" aria-hidden="true"><span></span></div>
     <div class="cc-body">${handText(c[side]||"")}</div><span class="cc-more" aria-hidden="true">▼ scroll</span>
     <div class="cc-foot"><span>${esc(lbl)}</span><span>${i+1} / ${n}</span></div>
+    ${UPG.includes(c.deck)?`<span class="cc-got" aria-hidden="true">✓ Collected</span>`:""}
   </div>`}
-function renderHand(){
-  const stage=document.getElementById("stage");
-  const list=ordered();const key=list.map(c=>c.id).join();
-  if(key!==hand.key){
-    const keep=hand.list[hand.sel]&&hand.list[hand.sel].id;
-    hand.list=list;hand.key=key;
-    const at=list.findIndex(c=>c.id===keep);hand.sel=at>=0?at:Math.min(hand.sel,Math.max(0,list.length-1));hand.flipped=false;
-    stage.innerHTML=list.length?list.map((c,i)=>`<div class="cc" data-i="${i}" style="--c:${deckColor(c)}" aria-hidden="true">
-      <div class="cc-inner">${faceHTML(c,"front",i,list.length)}${c.back&&c.back.trim()?faceHTML(c,"back",i,list.length):""}</div></div>`).join("")
-      :'<div class="empty">No cards match these filters.</div>';
-    stage.querySelectorAll(".cc").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.i;if(i===hand.sel)flipHand();else selectHand(i)}));
-  }
-  layoutHand();
-}
-/* pos is fractional while dragging, so the fan follows the finger; it settles on hand.sel */
-hand.pos=0;
 const SPREAD=.26;
-function placeCards(){
-  const stage=document.getElementById("stage"),els=stage.querySelectorAll(".cc");if(!els.length)return;
-  const S=els[0].offsetWidth*SPREAD;
-  els.forEach(el=>{const i=+el.dataset.i,d=i-hand.pos,a=Math.abs(d),t=Math.min(a,1);
-    el.style.transform=`translateX(${d*S}px) translateY(${t*56+a*a*3}px) rotate(${d*6}deg) scale(${1-.1*t})`;
-    el.style.filter=t>0?`saturate(${1-.25*t}) brightness(${1-.06*t})`:"none";
-    el.style.opacity=a>5?Math.max(0,6-a):1;
-    el.style.zIndex=100-Math.round(a*10);
-    el.classList.toggle("is-off",a>5.5)});
-}
-function layoutHand(){
-  const stage=document.getElementById("stage"),n=hand.list.length;
-  if(!stage.classList.contains("dragging"))hand.pos=hand.sel;
-  placeCards();
-  stage.querySelectorAll(".cc").forEach(el=>{
-    const i=+el.dataset.i,cur=i===hand.sel;
-    el.classList.toggle("is-cur",cur);
-    el.classList.toggle("is-flipped",cur&&hand.flipped);
-    el.setAttribute("aria-hidden",cur?"false":"true");
-    if(cur){el.setAttribute("role","group");el.setAttribute("aria-label",`${hand.list[i].name}, ${i+1} of ${n}, ${hand.flipped?sideLabels(hand.list[i])[1]:sideLabels(hand.list[i])[0]} side`)}
-    else{el.removeAttribute("role");el.removeAttribute("aria-label")}
-  });
-  const c=hand.list[hand.sel];
-  document.getElementById("h-count").textContent=n?`${hand.sel+1} of ${n}`:"";
-  const flip=document.getElementById("h-flip");
-  const two=c&&c.back&&c.back.trim();flip.disabled=!two;
-  flip.textContent=two?"Flip card":"One side only";flip.setAttribute("aria-label",two?"Flip to the "+sideLabels(c)[hand.flipped?0:1]+" side":"This card has one side");
-  document.getElementById("h-prev").disabled=hand.sel<=0;document.getElementById("h-next").disabled=hand.sel>=n-1;
-  document.querySelectorAll(".cc:not(.is-cur) .cc-body").forEach(b=>{b.scrollTop=0;b.classList.remove("more")});
-  requestAnimationFrame(markMore);
-}
-/* a short CRT hiccup each time the card under the cursor changes or flips */
-let glitchT=0;
-function glitch(kind){if(calm())return;const s=document.getElementById("stage");
-  s.classList.remove("glitch","glitch-flip");void s.offsetWidth;s.classList.add(kind==="flip"?"glitch-flip":"glitch");
-  clearTimeout(glitchT);glitchT=setTimeout(()=>s.classList.remove("glitch","glitch-flip"),kind==="flip"?520:300)}
-function selectHand(i){if(i<0||i>=hand.list.length)return;const ch=i!==hand.sel;hand.sel=i;hand.flipped=false;layoutHand();if(ch)glitch()}
-function flipHand(){const c=hand.list[hand.sel];if(!c||!(c.back&&c.back.trim()))return;hand.flipped=!hand.flipped;layoutHand();glitch("flip")}
-(function wireHand(){
-  const stage=document.getElementById("stage");
-  document.getElementById("h-prev").onclick=()=>selectHand(hand.sel-1);
-  document.getElementById("h-next").onclick=()=>selectHand(hand.sel+1);
-  document.getElementById("h-flip").onclick=flipHand;
+/* a fan of cards in a stage element. Used by the Cards tab hand view and the Collection's upgrade picker.
+   pos is fractional while dragging, so the fan follows the finger; it settles on f.sel */
+function makeFan(o){
+  const stage=o.stage,f={list:[],sel:0,flipped:false,key:"",pos:0};
+  let glitchT=0;
+  f.cur=()=>f.list[f.sel];
+  f.glitch=kind=>{if(calm())return;
+    stage.classList.remove("glitch","glitch-flip");void stage.offsetWidth;stage.classList.add(kind==="flip"?"glitch-flip":"glitch");
+    clearTimeout(glitchT);glitchT=setTimeout(()=>stage.classList.remove("glitch","glitch-flip"),kind==="flip"?520:300)};
+  f.place=()=>{const els=stage.querySelectorAll(".cc");if(!els.length)return;
+    const S=els[0].offsetWidth*SPREAD;
+    els.forEach(el=>{const i=+el.dataset.i,d=i-f.pos,a=Math.abs(d),t=Math.min(a,1);
+      el.style.transform=`translateX(${d*S}px) translateY(${t*56+a*a*3}px) rotate(${d*6}deg) scale(${1-.1*t})`;
+      el.style.filter=t>0?`saturate(${1-.25*t}) brightness(${1-.06*t})`:"none";
+      el.style.opacity=a>5?Math.max(0,6-a):1;
+      el.style.zIndex=100-Math.round(a*10);
+      el.classList.toggle("is-off",a>5.5)})};
+  const count=()=>{if(o.count)o.count.textContent=f.list.length?`${f.sel+1} of ${f.list.length}`:""};
+  f.layout=()=>{const n=f.list.length;
+    if(!stage.classList.contains("dragging"))f.pos=f.sel;
+    f.place();
+    stage.querySelectorAll(".cc").forEach(el=>{
+      const i=+el.dataset.i,cur=i===f.sel;
+      el.classList.toggle("is-cur",cur);
+      el.classList.toggle("is-flipped",cur&&f.flipped);
+      el.setAttribute("aria-hidden",cur?"false":"true");
+      if(cur){el.setAttribute("role","group");el.setAttribute("aria-label",`${f.list[i].name}, ${i+1} of ${n}, ${f.flipped?sideLabels(f.list[i])[1]:sideLabels(f.list[i])[0]} side`)}
+      else{el.removeAttribute("role");el.removeAttribute("aria-label")}
+    });
+    const c=f.cur();count();
+    if(o.flip){const two=c&&c.back&&c.back.trim();o.flip.disabled=!two;
+      o.flip.textContent=two?"Flip card":"One side only";o.flip.setAttribute("aria-label",two?"Flip to the "+sideLabels(c)[f.flipped?0:1]+" side":"This card has one side")}
+    if(o.prev)o.prev.disabled=f.sel<=0;if(o.next)o.next.disabled=f.sel>=n-1;
+    stage.querySelectorAll(".cc:not(.is-cur) .cc-body").forEach(b=>{b.scrollTop=0;b.classList.remove("more")});
+    requestAnimationFrame(markMore);
+    if(o.onSel)o.onSel(c);
+  };
+  f.select=i=>{if(i<0||i>=f.list.length)return;const ch=i!==f.sel;f.sel=i;f.flipped=false;f.layout();if(ch)f.glitch()};
+  f.flip=()=>{const c=f.cur();if(!c||!(c.back&&c.back.trim()))return;f.flipped=!f.flipped;f.layout();f.glitch("flip")};
+  /* show a new list of cards; keeps the current card in view when it is still in the list */
+  f.set=(list,force)=>{const key=list.map(c=>c.id).join();
+    if(key!==f.key||force){
+      const keep=f.cur()&&f.cur().id;
+      f.list=list;f.key=key;
+      const at=list.findIndex(c=>c.id===keep);f.sel=at>=0?at:Math.min(f.sel,Math.max(0,list.length-1));f.flipped=false;
+      stage.innerHTML=list.length?list.map((c,i)=>`<div class="cc" data-i="${i}" data-id="${c.id}" style="--c:${deckColor(c)}" aria-hidden="true">
+        <div class="cc-inner">${faceHTML(c,"front",i,list.length)}${c.back&&c.back.trim()?faceHTML(c,"back",i,list.length):""}</div></div>`).join("")
+        :`<div class="empty">${esc(o.empty||"No cards match these filters.")}</div>`;
+      stage.querySelectorAll(".cc").forEach(el=>el.addEventListener("click",()=>{const i=+el.dataset.i;if(i===f.sel)(o.tapCur||f.flip)();else f.select(i)}));
+      if(o.onBuild)o.onBuild();
+    }
+    f.layout();
+  };
+  if(o.prev)o.prev.onclick=()=>f.select(f.sel-1);
+  if(o.next)o.next.onclick=()=>f.select(f.sel+1);
+  if(o.flip)o.flip.onclick=f.flip;
   stage.addEventListener("keydown",e=>{
-    if(e.key==="ArrowLeft"){selectHand(hand.sel-1);e.preventDefault()}
-    else if(e.key==="ArrowRight"){selectHand(hand.sel+1);e.preventDefault()}
-    else if(e.key==="Home"){selectHand(0);e.preventDefault()}
-    else if(e.key==="End"){selectHand(hand.list.length-1);e.preventDefault()}
-    else if(e.key==="Enter"||e.key===" "){flipHand();e.preventDefault()}});
+    if(e.key==="ArrowLeft"){f.select(f.sel-1);e.preventDefault()}
+    else if(e.key==="ArrowRight"){f.select(f.sel+1);e.preventDefault()}
+    else if(e.key==="Home"){f.select(0);e.preventDefault()}
+    else if(e.key==="End"){f.select(f.list.length-1);e.preventDefault()}
+    else if(e.key==="Enter"||e.key===" "){(o.tapCur||f.flip)();e.preventDefault()}});
   /* drag: the fan tracks the pointer 1:1, then glides to the nearest card with a little momentum */
   let drag=null,moved=false,raf=0;
   const step=()=>{const el=stage.querySelector(".cc");if(!el)return 60;
     return el.offsetWidth*SPREAD+Math.sin(6*Math.PI/180)*(el.offsetHeight*1.1)};
-  stage.addEventListener("pointerdown",e=>{if(!hand.list.length||e.button>0)return;
-    drag={x:e.clientX,y:e.clientY,start:hand.sel,id:e.pointerId,active:false,samples:[[e.timeStamp,e.clientX]]};moved=false});
+  stage.addEventListener("pointerdown",e=>{if(!f.list.length||e.button>0)return;
+    drag={x:e.clientX,y:e.clientY,start:f.sel,id:e.pointerId,active:false,samples:[[e.timeStamp,e.clientX]]};moved=false});
   stage.addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;
     const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
     if(!drag.active){if(Math.abs(dx)<6||Math.abs(dx)<Math.abs(dy))return;
       drag.active=true;moved=true;stage.classList.add("dragging");try{stage.setPointerCapture(e.pointerId)}catch(_){}
-      if(hand.flipped){hand.flipped=false;layoutHand()}}
+      if(f.flipped){f.flipped=false;f.layout()}}
     drag.samples.push([e.timeStamp,e.clientX]);if(drag.samples.length>6)drag.samples.shift();
-    let p=drag.start-dx/step();const max=hand.list.length-1;
+    let p=drag.start-dx/step();const max=f.list.length-1;
     if(p<0)p=-Math.min(.6,(-p)*.35);else if(p>max)p=max+Math.min(.6,(p-max)*.35);
-    hand.pos=p;
-    if(!raf)raf=requestAnimationFrame(()=>{raf=0;placeCards();
-      const near=Math.max(0,Math.min(max,Math.round(hand.pos)));if(near!==hand.sel){hand.sel=near;document.getElementById("h-count").textContent=`${near+1} of ${hand.list.length}`;glitch()}})});
+    f.pos=p;
+    if(!raf)raf=requestAnimationFrame(()=>{raf=0;f.place();
+      const near=Math.max(0,Math.min(max,Math.round(f.pos)));if(near!==f.sel){f.sel=near;count();if(o.onSel)o.onSel(f.cur());f.glitch()}})});
   const end=e=>{if(!drag||(e&&e.pointerId!==drag.id))return;const d=drag;drag=null;
     if(!d.active)return;
     const s=d.samples,b=s[s.length-1],a=s.find(x=>b[0]-x[0]<=120)||s[0],dt=Math.max(16,b[0]-a[0]),v=(b[1]-a[1])/dt; /* px per ms over the last ~120ms */
     const fling=Math.abs(v)>.3?Math.max(-4,Math.min(4,-v*200/step())):0; /* a quick flick carries on a few cards, never a runaway */
-    const target=Math.max(0,Math.min(hand.list.length-1,Math.round(hand.pos+fling)));
+    const target=Math.max(0,Math.min(f.list.length-1,Math.round(f.pos+fling)));
     stage.classList.remove("dragging");
-    const ch=target!==hand.sel;hand.sel=target;hand.flipped=false;layoutHand();glitch(ch?"":"settle")};
+    const ch=target!==f.sel;f.sel=target;f.flipped=false;f.layout();f.glitch(ch?"":"settle")};
   stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);stage.addEventListener("lostpointercapture",e=>{if(e.target===stage)end(e)}); /* children lose implicit touch capture when the stage takes it; ignore those */
   stage.addEventListener("click",e=>{if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
-  addEventListener("resize",()=>{if(mode==="hand"){placeCards();markMore()}});
   stage.addEventListener("scroll",e=>{if(e.target.classList&&e.target.classList.contains("cc-body"))markMore()},true);
-  document.querySelectorAll(".view-seg button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
-})();
+  return f;
+}
+const $=id=>document.getElementById(id);
+const hand=makeFan({stage:$("stage"),count:$("h-count"),prev:$("h-prev"),next:$("h-next"),flip:$("h-flip")});
+function renderHand(){hand.set(ordered())}
+addEventListener("resize",()=>{if(mode==="hand"){hand.place();markMore()}});
+document.querySelectorAll(".view-seg button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 
 /* ---------- card dossier ---------- */
 const scrim=document.getElementById("scrim");
@@ -1388,39 +1524,128 @@ function openCardWire(id,c){scrim.querySelectorAll("[data-coll]").forEach(b=>b.o
   scrim.querySelector(".coll-act").outerHTML=collBtn(c);openCardWire(id,c);const f=scrim.querySelector("[data-coll]");if(f)f.focus();
   const live=scrim.querySelector(".coll-live");if(live)live.textContent=has?`${c.name} removed from your collection`:`${c.name} added to your collection`})}
 
-/* ---------- collection: earned Battle Honours, Battle Skills and Relics ---------- */
-const inColl=id=>coll.find(x=>x.id===id);
-function collect(id){if(inColl(id))return;const c=findCard(id);const p=Math.min(camp.current,3);
-  coll.push({id,phase:p,t:Date.now()});record(`Collected ${c.deck}: ${c.name} (phase ${p})`);renderColl();refreshTile(id)}
-function uncollect(id){const c=findCard(id);coll=coll.filter(x=>x.id!==id);record(`Removed ${c.deck} from collection: ${c.name}`);renderColl();refreshTile(id)}
-function refreshTile(id){const t=document.querySelector(`#grid [data-id="${id}"] .meta`);if(!t)return;const g=t.querySelector(".got");
-  if(inColl(id)&&!g)t.insertAdjacentHTML("beforeend",`<span class="tag got">✓ Collected</span>`);else if(!inColl(id)&&g)g.remove()}
-const collBtn=c=>{const h=inColl(c.id);
-  return `<span class="coll-act">${h?`<span class="coll-have" title="Collected in phase ${h.phase}">✓ Collected</span><button class="btn ghost" data-coll="${c.id}" aria-label="Remove ${esc(c.name)} from collection">Remove</button>`
-    :`<button class="btn primary" data-coll="${c.id}">+ Add to collection</button>`}<span class="coll-live sr" aria-live="polite"></span></span>`};
+/* ---------- collection: each alliance's earned Battle Honours, Battle Skills and Relics ---------- */
+const OPT_AL=AL[2];                                   /* the rules make the third alliance optional; the first two are always in play */
+const colsOn=()=>camp.opt===false?AL.slice(0,2):AL;
+const inColl=(id,al)=>coll.find(x=>x.id===id&&(!al||x.al===al));
+const colN=a=>coll.filter(x=>x.al===a).length;
+const gotTag=id=>{const h=AL.filter(a=>inColl(id,a));return h.length?`<span class="tag got">✓ ${h.map(a=>esc(AL_SHORT[a])).join(" · ")}</span>`:""};
+/* an alliance's upgrade deck: every Battle Honour and Battle Skill, plus its own Relics */
+const deckFor=al=>ALL_CARDS.filter(c=>UPG.includes(c.deck)&&(!c.alliance||c.alliance===al));
+function collect(id,al){if(inColl(id,al))return;const c=findCard(id);const p=Math.min(camp.current,3);
+  coll.push({id,al,phase:p,t:Date.now()});record(`${al}: collected ${c.deck} ${c.name} (phase ${p})`);renderColl();refreshTile(id)}
+function uncollect(id,al){const c=findCard(id);coll=coll.filter(x=>!(x.id===id&&x.al===al));record(`${al}: removed ${c.deck} ${c.name}`);renderColl();refreshTile(id)}
+function refreshTile(id){const t=document.querySelector(`#grid [data-id="${id}"] .meta`);if(!t)return;const g=t.querySelector(".got");if(g)g.remove();t.insertAdjacentHTML("beforeend",gotTag(id))}
+/* card pop-up: one toggle per alliance that can hold the card (a Relic only fits its own alliance) */
+const collBtn=c=>{const als=(c.alliance?[c.alliance]:AL).filter(a=>colsOn().includes(a));
+  return `<span class="coll-act" role="group" aria-label="Collection">${als.length?als.map(a=>{const h=inColl(c.id,a);
+    return `<button class="btn coll-al" data-coll="${c.id}|${a}" aria-pressed="${!!h}" style="--c:${alColor(a)}" aria-label="${h?"Remove "+esc(c.name)+" from "+a:"Add "+esc(c.name)+" to "+a}">${h?"✓":"+"} ${alIcon(a)}${esc(AL_SHORT[a])}</button>`}).join("")
+    :`<span class="hint">Add the ${OPT_AL} column on the Collection tab to collect this.</span>`}<span class="coll-live sr" aria-live="polite"></span></span>`};
+function openCardWire(id,c){scrim.querySelectorAll("[data-coll]").forEach(b=>b.onclick=()=>{const al=b.dataset.coll.split("|")[1];const has=inColl(id,al);has?uncollect(id,al):collect(id,al);
+  scrim.querySelector(".coll-act").outerHTML=collBtn(c);openCardWire(id,c);const f=scrim.querySelector(`[data-coll="${id}|${al}"]`);if(f)f.focus();
+  const live=scrim.querySelector(".coll-live");if(live)live.textContent=has?`${c.name} removed from ${al}`:`${c.name} added to ${al}`})}
 const effectOf=c=>{const t=(c.front||"").replace(/\s+/g," ").trim();const i=t.indexOf(" — ");return i>-1?t.slice(i+3):t};
-const COLL_PLURAL={"Battle Honour":"Battle Honours","Battle Skill":"Battle Skills","Relic":"Relics"};
-function renderColl(){
-  const el=document.getElementById("coll");if(!el)return;
-  const have=coll.map(x=>({x,c:findCard(x.id)})).filter(o=>o.c);
-  const n=d=>have.filter(o=>o.c.deck===d).length;
-  el.innerHTML=`<div class="coll-head">
-      <div><div class="d-meta">Your upgrades</div><h2 class="coll-title">Collection</h2></div>
-      <button class="btn ghost" id="coll-browse">Browse upgrades ›</button></div>
-    <div class="coll-stats" role="list">${UPG.map(d=>`<div class="coll-stat" role="listitem">${ic(d)}<b>${n(d)}</b><span>${COLL_PLURAL[d]}</span></div>`).join("")}</div>
-    <p class="hint coll-hint">Before each battle, give up to 3 of these to different units (1 per unit). You can't own duplicates. Totals break ties for Location control.</p>
-    ${have.length?UPG.filter(d=>n(d)).map(d=>`<section class="coll-grp" aria-label="${COLL_PLURAL[d]}">
-      <h3 class="group-h">${ic(d)}${COLL_PLURAL[d]}<small>${n(d)}</small></h3>
-      <ul class="coll-list">${have.filter(o=>o.c.deck===d).sort((a,b)=>a.x.phase-b.x.phase||a.x.t-b.x.t).map(({x,c})=>`<li>
+const UPG_SHORT={"Battle Honour":"Honours","Battle Skill":"Skills","Relic":"Relics"};
+let colAsk=null,flashIds=[];   /* column waiting for a removal confirmation; rows to glitch in after the picker closes */
+function colHTML(a){
+  const have=coll.filter(x=>x.al===a).map(x=>({x,c:findCard(x.id)})).filter(o=>o.c)
+    .sort((p,q)=>UPG.indexOf(p.c.deck)-UPG.indexOf(q.c.deck)||p.x.phase-q.x.phase||p.x.t-q.x.t);
+  const k=AL.indexOf(a),opt=a===OPT_AL;
+  return `<section class="acol term-frame" data-col="${a}" style="--c:${alColor(a)}" aria-labelledby="col-h-${k}">
+    <header class="acol-h">${alIcon(a)}<h3 id="col-h-${k}">${esc(a)}</h3>${opt?`<button class="acol-x" data-colx aria-label="Remove the ${a} column">✕</button>`:`<span class="acol-req" title="Every campaign includes this alliance">Core</span>`}</header>
+    <div class="acol-tally">${UPG.map(d=>`<span>${ic(d)}<b>${have.filter(o=>o.c.deck===d).length}</b>${UPG_SHORT[d]}</span>`).join("")}</div>
+    ${colAsk===a?`<div class="acol-ask" role="alert"><p>Remove the ${a} column and its ${have.length} upgrade${have.length===1?"":"s"}? History can bring it back.</p><div><button class="btn danger-btn" data-colx-yes>Remove</button> <button class="btn" data-colx-no>Keep</button></div></div>`:""}
+    ${have.length?`<ul class="acol-list">${have.map(({x,c})=>`<li class="${flashIds.includes(c.id+"|"+a)?"new":""}">
+        <span class="acol-ic">${ic(c.deck)}</span>
         <button class="coll-txt" data-open="${c.id}"><span class="coll-name">${esc(c.name)}</span><span class="coll-eff">${esc(effectOf(c))}</span></button>
-        <span class="coll-tags"><span class="tag">Phase ${ROMAN[x.phase-1]||x.phase}</span>${c.alliance?`<span class="tag al" style="--c:${alColor(c.alliance)}">${esc(AL_SHORT[c.alliance]||c.alliance)}</span>`:""}</span>
-        <button class="coll-x" data-drop="${c.id}" aria-label="Remove ${esc(c.name)} from collection">✕</button></li>`).join("")}</ul></section>`).join("")
-      :`<div class="coll-empty"><p>Nothing collected yet.</p><p class="hint">Open a Battle Honour, Battle Skill or Relic on the Cards tab and tap <b>+ Add to collection</b>.</p></div>`}`;
+        <span class="tag" title="Collected in phase ${x.phase}">${ROMAN[x.phase-1]||x.phase}</span>
+        <button class="coll-x" data-drop="${c.id}" aria-label="Remove ${esc(c.name)} from ${a}">✕</button></li>`).join("")}</ul>`:""}
+    <button class="acol-add${have.length?"":" empty"}" data-addto="${a}" aria-haspopup="dialog"><span class="plus" aria-hidden="true">+</span><span>${have.length?"Add upgrade":"Add first upgrade"}</span>${have.length?"":`<small>Honours, Skills and ${esc(a)} Relics</small>`}</button>
+  </section>`}
+function renderColl(){
+  const el=$("coll");if(!el)return;
+  const cols=colsOn();
+  el.innerHTML=`<div class="coll-head">
+      <div><div class="d-meta">Upgrades by alliance</div><h2 class="coll-title">Collection</h2></div>
+      <button class="btn ghost" id="coll-browse">All upgrade cards ›</button></div>
+    <p class="hint coll-hint">Each alliance's earned Battle Honours, Battle Skills and Relics. Before a battle, a player gives up to 3 to different units (1 per unit). Battle Honour totals break ties for Location control.</p>
+    <div class="col-jump" role="group" aria-label="Jump to an alliance">${cols.map(a=>`<button class="chip" data-jump="${a}" style="--c:${alColor(a)}">${alIcon(a)}${esc(AL_SHORT[a])} <span class="n">${colN(a)}</span></button>`).join("")}</div>
+    <div class="cols" id="cols">${cols.map(colHTML).join("")}${cols.includes(OPT_AL)?"":`<button class="acol-new" id="col-add" style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} column</span><small>Optional third alliance</small></button>`}</div>`;
   el.querySelector("#coll-browse").onclick=()=>{st.fam="Upgrades";st.deck=null;renderFilters();renderGrid();showTab("cards");window.scrollTo(0,0)};
+  el.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>{const c=el.querySelector(`[data-col="${b.dataset.jump}"]`);if(c){c.scrollIntoView({behavior:calm()?"auto":"smooth",block:"nearest",inline:"start"});const f=c.querySelector("[data-addto]");if(f)f.focus({preventScroll:true})}});
   el.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openCard(b.dataset.open));
-  el.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>{const id=b.dataset.drop;const li=b.closest("li");const nxt=li&&(li.nextElementSibling||li.previousElementSibling);const nid=nxt&&nxt.querySelector("[data-drop]")&&nxt.querySelector("[data-drop]").dataset.drop;
-    uncollect(id);const f=nid&&el.querySelector(`[data-drop="${nid}"]`)||el.querySelector("#coll-browse");if(f)f.focus()});
+  el.querySelectorAll("[data-addto]").forEach(b=>b.onclick=()=>openUpick(b.dataset.addto,b));
+  el.querySelectorAll("[data-drop]").forEach(b=>b.onclick=()=>{const id=b.dataset.drop,al=b.closest("[data-col]").dataset.col;const li=b.closest("li");const nxt=li&&(li.nextElementSibling||li.previousElementSibling);
+    const nid=nxt&&nxt.querySelector("[data-drop]")&&nxt.querySelector("[data-drop]").dataset.drop;
+    uncollect(id,al);const col=el.querySelector(`[data-col="${al}"]`);const f=col&&(nid&&col.querySelector(`[data-drop="${nid}"]`)||col.querySelector("[data-addto]"));if(f)f.focus()});
+  const x=el.querySelector("[data-colx]");if(x)x.onclick=()=>{if(!colN(OPT_AL)){removeCol();return}colAsk=OPT_AL;renderColl();const k=el.querySelector("[data-colx-no]");if(k)k.focus()};
+  const y=el.querySelector("[data-colx-yes]");if(y)y.onclick=removeCol;
+  const nn=el.querySelector("[data-colx-no]");if(nn)nn.onclick=()=>{colAsk=null;renderColl();const b=el.querySelector("[data-colx]");if(b)b.focus()};
+  const add=el.querySelector("#col-add");if(add)add.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column to the collection`);renderColl();
+    const c=el.querySelector(`[data-col="${OPT_AL}"]`);if(c){if(!calm())c.classList.add("boot");c.scrollIntoView({block:"nearest",inline:"nearest"});c.querySelector("[data-addto]").focus({preventScroll:true})}};
 }
+function removeCol(){const n=colN(OPT_AL);coll=coll.filter(x=>x.al!==OPT_AL);camp.opt=false;colAsk=null;flicker(true);
+  record(`Removed the ${OPT_AL} column${n?` and its ${n} upgrade${n===1?"":"s"}`:""}`);renderColl();renderGrid();const a=$("col-add");if(a)a.focus()}
+
+/* ---------- upgrade picker: one alliance's upgrade deck fanned out over the dimmed app ---------- */
+const up={al:null,deck:"All",from:null,open:false,added:[]};
+const upEl=$("upick"),upStage=$("up-stage");
+const upMarks=()=>upStage.querySelectorAll(".cc").forEach(el=>el.classList.toggle("got",!!inColl(el.dataset.id,up.al)));
+function upSync(c){const b=$("up-act");
+  $("up-got").textContent=`${colN(up.al)} collected`;
+  if(!c){b.disabled=true;b.textContent="No cards";return}
+  const has=!!inColl(c.id,up.al);b.disabled=false;
+  b.classList.toggle("is-rm",has);b.textContent=has?"Remove":"+ Add";
+  b.setAttribute("aria-label",has?`Remove ${c.name} from ${up.al}`:`Add ${c.name} to ${up.al}`)}
+const upFan=makeFan({stage:upStage,count:$("up-count"),prev:$("up-prev"),next:$("up-next"),empty:"No cards in this deck.",
+  onSel:upSync,onBuild:upMarks,tapCur:()=>{const c=upFan.cur();if(c&&!inColl(c.id,up.al))upToggle()}});
+const upList=()=>deckFor(up.al).filter(c=>up.deck==="All"||c.deck===up.deck);
+function renderUpFilt(){
+  seg($("up-filt"),[{v:"All",t:"All"},...UPG.map(d=>({v:d,t:UPG_SHORT[d],label:d===`Relic`?`${up.al} Relics`:DECK_PLURAL[d],ic:ic(d)}))],up.deck,v=>{up.deck=v;upFan.set(upList())},true)}
+function openUpick(al,from){
+  up.al=al;up.deck="All";up.from=from||document.activeElement;up.added=[];up.open=true;
+  upEl.style.setProperty("--c",alColor(al));
+  $("up-al").innerHTML=`${alIcon(al)}${esc(al)} · upgrade deck`;
+  renderUpFilt();
+  upEl.hidden=false;document.documentElement.classList.add("up-lock");
+  upFan.set(upList(),true);
+  const first=upFan.list.findIndex(c=>!inColl(c.id,al));if(first>0)upFan.select(first);   /* start on the first card the alliance doesn't hold */
+  if(!calm()){upStage.querySelectorAll(".cc").forEach(el=>el.style.setProperty("--k",Math.min(6,Math.abs(+el.dataset.i-upFan.sel))));
+    upEl.classList.remove("closing");void upEl.offsetWidth;upEl.classList.add("opening");setTimeout(()=>upEl.classList.remove("opening"),1100)}
+  $("up-act").focus();
+}
+function closeUpick(){if(!up.open)return;up.open=false;
+  const done=()=>{upEl.hidden=true;upEl.classList.remove("closing","opening");document.documentElement.classList.remove("up-lock");
+    flashIds=calm()?[]:up.added.slice();renderColl();flashIds=[];
+    const col=document.querySelector(`[data-col="${up.al}"]`),b=col&&col.querySelector("[data-addto]");
+    if(col&&up.added.length)col.scrollIntoView({block:"nearest",inline:"nearest"});
+    if(b)b.focus({preventScroll:!!up.added.length})};
+  if(calm()){done();return}
+  upEl.classList.remove("opening");upEl.classList.add("closing");setTimeout(done,260)}
+function upToggle(){const c=upFan.cur();if(!c)return;const al=up.al,key=c.id+"|"+al;
+  const el=upStage.querySelector(`.cc[data-i="${upFan.sel}"]`);const has=!!inColl(c.id,al);
+  if(has){uncollect(c.id,al);up.added=up.added.filter(k=>k!==key);if(el)el.classList.remove("got");upFan.glitch("flip")}
+  else{collect(c.id,al);up.added.push(key);if(el)el.classList.add("got");dazzle(el)}
+  upSync(c);const b=$("up-act");if(!calm()){b.classList.remove("morph");void b.offsetWidth;b.classList.add("morph")}
+  $("up-live").textContent=has?`${c.name} removed from ${al}`:`${c.name} added to ${al}`}
+/* the dazzle: a phosphor flash, two shock rings and a burst of pixel sparks, then the Collected stamp slams down */
+function dazzle(el){if(!el||calm())return;
+  el.classList.remove("dazzle");void el.offsetWidth;el.classList.add("dazzle");
+  const fx=document.createElement("div");fx.className="dz";fx.setAttribute("aria-hidden","true");
+  fx.innerHTML='<i class="dz-flash"></i><i class="dz-ring"></i><i class="dz-ring r2"></i>'+Array.from({length:22},(_,k)=>{const a=k/22*Math.PI*2+Math.random()*.25,r=110+Math.random()*120;
+    return `<i class="dz-spark" style="--dx:${(Math.cos(a)*r).toFixed(0)}px;--dy:${(Math.sin(a)*r*.8).toFixed(0)}px;--dur:${520+Math.random()*480|0}ms;--delay:${Math.random()*90|0}ms"></i>`}).join("");
+  el.querySelector(".cc-inner").appendChild(fx);
+  setTimeout(()=>{fx.remove();el.classList.remove("dazzle")},1250)}
+$("up-act").onclick=upToggle;
+$("up-done").onclick=closeUpick;
+upEl.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){e.preventDefault();closeUpick();return}
+  if(e.key!=="Tab")return;   /* keep focus inside the picker */
+  const fs=[...upEl.querySelectorAll("button:not(:disabled),[tabindex='0']")].filter(x=>x.offsetParent!==null);if(!fs.length)return;
+  const i=fs.indexOf(document.activeElement);
+  if(e.shiftKey&&(i<=0)){fs[fs.length-1].focus();e.preventDefault()}else if(!e.shiftKey&&i===fs.length-1){fs[0].focus();e.preventDefault()}});
+upEl.addEventListener("click",e=>{if(e.target===upEl||e.target.classList.contains("up-shade"))closeUpick()});
+addEventListener("resize",()=>{if(up.open){upFan.place();markMore()}});
 
 /* ---------- agenda selection page (inside the tracker tab) ---------- */
 const pk={al:"All",phase:1,open:false,returnTo:null};
@@ -1480,7 +1705,7 @@ const fmtTime=t=>{const d=new Date(t),now=new Date();const same=d.toDateString()
   const time=d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
   return same?time:d.toLocaleDateString([], {month:"short",day:"numeric"})+" · "+time};
 function restoreTo(id){const e=hist.find(x=>x.id===id);if(!e)return;
-  camp=clone(e.camp);chosen=clone(e.chosen);if(e.coll)coll=clone(e.coll);view=Math.min(camp.current,3);
+  camp=clone(e.camp);chosen=clone(e.chosen);if(e.coll)coll=normColl(clone(e.coll));view=Math.min(camp.current,3);
   flicker(true);record(`Restored to: ${e.label} (${fmtTime(e.t)})`);renderColl();renderGrid();hv.flash=hist[hist.length-1].id;renderTracker();
   const f=document.querySelector(".h-row.is-now");if(f){f.scrollIntoView({block:"center"});}}
 function renderHistory(t){
@@ -1634,7 +1859,7 @@ const GUIDE=[
   art:`<div class="ga ga-track"><div class="gt-loc"><span>1-2 The Cinder Reach</span><span class="sel">3-4 Vault of Echoes ✓</span></div><div class="gt-aa"><b>Reavers</b><span class="st">−</span><output><i>0</i><i>1</i><i>2</i></output><span class="st">+</span></div><div class="gt-asc">In ascendancy: <b>Reavers</b></div></div>`},
  {t:"Choose agendas",b:"Each alliance plays three agendas per phase. Tap + Add to open the agenda page, tap a name to read the full card, then Add it to the phase.",
   art:`<div class="ga ga-pick"><div class="gp-row"><span>The Long Knife</span><em>Add</em></div><div class="gp-row b"><span>Spoils Eternal</span><em>Add</em></div><div class="gp-row"><span>Vanish</span><em>Add</em></div><div class="gp-cnt">Reavers <b><i>0</i><i>1</i><i>2</i></b>/3</div></div>`},
- {t:"Collect upgrades",b:"Won a Battle Honour, Battle Skill or Relic? Open the card and tap + Add to collection. The Collection tab keeps your running list and totals; tap a name to reread it.",
+ {t:"Collect upgrades",b:"The Collection tab has a column per alliance. Tap + Add upgrade to fan out that alliance's upgrade deck, pick a card and tap Add. Vanguard and Dominion are always there; the Reavers column can be added or removed.",
   art:`<div class="ga ga-pick"><div class="gp-row"><span>Iron Resolve</span><em>Add</em></div><div class="gp-row b"><span>Rally Cry</span><em>Add</em></div><div class="gp-row"><span>Hunter's Mark</span><em>Add</em></div><div class="gp-cnt">Collected <b><i>0</i><i>1</i><i>2</i></b></div></div>`},
  {t:"Advance and rewind",b:"When a phase is over, tap Mark phase complete to move the campaign on. Every change goes into History, where you can restore any earlier moment.",
   art:`<div class="ga ga-hist"><div class="gs"><span class="d">I ✓</span><span class="c">II</span><span>III</span></div><ol><li>Phase 1 marked complete</li><li>Reavers Agenda Achieved 1 → 2</li><li class="r">Rolled Vault of Echoes <em>Restore</em></li></ol></div>`},
