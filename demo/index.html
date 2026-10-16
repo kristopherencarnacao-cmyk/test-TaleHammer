@@ -1179,6 +1179,14 @@ html.up-lock,html.up-lock body{overflow:hidden}
 .fld input{font:inherit;font-size:16px;color:var(--ink);background:transparent;border:1px solid var(--rule);padding:9px 10px;border-radius:0;width:100%;min-width:0;box-sizing:border-box}
 .fld input:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
 @media(max-width:360px){nav.tabs{gap:0}nav.tabs button{padding:10px 5px;font-size:11px;letter-spacing:0}}
+.rcard-h .cnt{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--rule);padding:1px 6px}
+.gen-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.gen{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--rule);padding:10px 12px}
+.gen-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.gen-t b{font-size:16px;overflow-wrap:anywhere}.gen-t span{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.gen .ag-x{flex:none}
+.gen-form{display:flex;flex-direction:column;gap:12px;margin:14px 20px}
+.d-actions .btn:disabled{opacity:.45;cursor:default}
 #toc{display:none!important}
 </style>
 
@@ -1286,7 +1294,8 @@ const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 const AKEY="demo-dominatus-codex-agendas", CKEY="demo-dominatus-campaign";
 /* players: how many players each alliance has. Every player is issued all three of their alliance's agendas for the phase, so a phase only records who is ready.
    ready: {"Alliance|n": true}; step: the Campaign tab step last open for that phase (1 war zone, 2 agendas, 3 battle, 4 results). */
-const normCamp=c=>{c.players=c.players||{};c.roster=c.roster||{};AL.forEach(a=>{if(typeof c.players[a]!=="number")c.players[a]=1});
+const normCamp=c=>{c.players=c.players||{};c.roster=c.roster||{};
+  AL.forEach(a=>{const r=c.roster[a];c.roster[a]=Array.isArray(r)?r:(r&&(r.general||r.army)?[{general:r.general||"",army:r.army||""}]:[])});AL.forEach(a=>{if(typeof c.players[a]!=="number")c.players[a]=1});
   [1,2,3].forEach(p=>{const ph=c.phases[p];ph.ready=ph.ready||{};ph.battles=ph.battles||{};ph.step=ph.step||1});return c};
 const blankCamp=()=>normCamp({current:1,opt:true,phases:{1:{loc:null,control:null,aa:{}},2:{loc:null,control:null,aa:{}},3:{loc:null,control:null,aa:{}}}});
 let camp=normCamp(load(CKEY,null)||blankCamp());
@@ -1656,7 +1665,7 @@ function renderColl(){
   const add=el.querySelector("#col-add");if(add)add.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column to the collection`);renderColl();
     const c=el.querySelector(`[data-col="${OPT_AL}"]`);if(c){if(!calm())c.classList.add("boot");c.scrollIntoView({block:"nearest",inline:"nearest"});c.querySelector("[data-addto]").focus({preventScroll:true})}};
 }
-function removeCol(){const n=colN(OPT_AL);coll=coll.filter(x=>x.al!==OPT_AL);camp.opt=false;camp.roster[OPT_AL]=null;colAsk=null;flicker(true);
+function removeCol(){const n=colN(OPT_AL);coll=coll.filter(x=>x.al!==OPT_AL);camp.opt=false;camp.roster[OPT_AL]=[];colAsk=null;flicker(true);
   record(`Removed the ${OPT_AL} column${n?` and its ${n} upgrade${n===1?"":"s"}`:""}`);renderColl();renderGrid();const a=$("col-add");if(a)a.focus()}
 
 /* ---------- upgrade picker: one alliance's upgrade deck fanned out over the dimmed app ---------- */
@@ -1863,30 +1872,40 @@ function phaseCard(p){
 }
 
 /* ---------- roster tab ---------- */
-/* camp.roster[alliance] = {general, army} once a General has been added; the third alliance card is optional and shares camp.opt */
-let rAsk=null;
+/* camp.roster[alliance] = [{general, army}]: every General is one player. The third alliance card is optional and shares camp.opt */
+let rAsk=false;
+function rosterModal(a,title,body,actions,focusSel){
+  scrim.innerHTML=`<div class="dossier" role="dialog" aria-modal="true" aria-labelledby="d-title" style="--c:${alColor(a)}"><div class="d-head"><div><div class="d-meta">${alIcon(a)}${a}</div><h2 id="d-title">${title}</h2></div><button class="x" aria-label="Close">✕</button></div>
+    ${body}<div class="d-actions">${actions}</div></div>`;
+  showScrim();scrim.querySelector(".x").onclick=closeCard;
+  const c=scrim.querySelector("[data-cancel]");if(c)c.onclick=closeCard;
+  const f=scrim.querySelector(focusSel||".x");if(f)f.focus()}
 function renderRoster(){
   const el=document.getElementById("roster");if(!el)return;
   const on=colsOn();
-  const card=a=>{const g=camp.roster[a],opt=a===OPT_AL,filled=g&&(g.general||g.army);
-    return `<section class="rcard" data-ros="${a}" style="--c:${alColor(a)}" aria-label="${a} roster"><div class="rcard-h"><span class="nm">${alIcon(a)}<h3>${a}</h3></span>${opt?`<button class="btn ghost ag-x" data-rcol aria-label="Remove the ${a} card">✕</button>`:""}</div>
-      ${opt&&rAsk==="col"?`<div class="acol-ask"><span>Remove ${a}?${g||colN(a)?" Its General and collected upgrades will be lost.":""}</span><button class="btn primary" data-rcol-yes>Remove</button><button class="btn" data-rask-no>Keep</button></div>`:""}
-      ${g?`<div class="rcard-b"><label class="fld"><span class="k-lbl">General's name</span><input type="text" data-rf="${a}|general" value="${esc(g.general)}" autocomplete="off" maxlength="60"></label>
-        <label class="fld"><span class="k-lbl">Army name</span><input type="text" data-rf="${a}|army" value="${esc(g.army)}" autocomplete="off" maxlength="60"></label>
-        ${rAsk==="g:"+a?`<div class="acol-ask"><span>Remove this General?</span><button class="btn primary" data-rg-yes="${a}">Remove</button><button class="btn" data-rask-no>Keep</button></div>`:`<button class="btn ghost" data-rg-rm="${a}">Remove General</button>`}</div>`
-      :`<div class="rcard-b rcard-empty"><span class="hint">No General yet. A General is the player for ${a}.</span><button class="btn primary" data-rg-add="${a}">+ Add General</button></div>`}</section>`};
+  const card=a=>{const list=camp.roster[a],opt=a===OPT_AL;
+    return `<section class="rcard" data-ros="${a}" style="--c:${alColor(a)}" aria-label="${a} roster"><div class="rcard-h"><span class="nm">${alIcon(a)}<h3>${a}</h3><span class="cnt">${list.length}</span></span>${opt?`<button class="btn ghost ag-x" data-rcol aria-label="Remove the ${a} card">✕</button>`:""}</div>
+      ${opt&&rAsk?`<div class="acol-ask"><span>Remove ${a}?${list.length||colN(a)?` Its ${list.length} General${list.length===1?"":"s"} and ${colN(a)} collected upgrade${colN(a)===1?"":"s"} will be lost.`:""}</span><button class="btn primary" data-rcol-yes>Remove</button><button class="btn" data-rask-no>Keep</button></div>`:""}
+      <div class="rcard-b${list.length?"":" rcard-empty"}">${list.length?`<ul class="gen-list">${list.map((g,k)=>`<li class="gen"><div class="gen-t"><b>${esc(g.general)}</b><span>${esc(g.army)||"No army name"}</span></div><button class="btn ghost ag-x" data-rg-rm="${a}|${k}" aria-label="Remove ${esc(g.general)}">Remove</button></li>`).join("")}</ul>`
+        :`<span class="hint">No Generals yet. Each General is one ${a} player.</span>`}
+        <button class="btn${list.length?"":" primary"}" data-rg-add="${a}">+ Add General</button></div></section>`};
   el.innerHTML=`<div class="rost-cols">${on.map(card).join("")}${on.includes(OPT_AL)?"":`<button class="acol-new" data-radd style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} (optional)</span></button>`}</div>`;
-  const re=(sel)=>{renderRoster();const f=document.querySelector(sel);if(f)f.focus()};
-  el.querySelectorAll("[data-rg-add]").forEach(b=>b.onclick=()=>{const a=b.dataset.rgAdd;camp.roster[a]={general:"",army:""};record(`Roster: added a ${a} General`);renderRoster();const f=el.querySelector(`[data-rf="${a}|general"]`);if(f)f.focus()});
-  el.querySelectorAll("[data-rf]").forEach(i=>{const [a,k]=i.dataset.rf.split("|");
-    i.oninput=()=>{camp.roster[a][k]=i.value;save(CKEY,camp)};
-    i.onchange=()=>{camp.roster[a][k]=i.value.trim();i.value=camp.roster[a][k];record(`Roster: ${a} ${k==="general"?"General":"army"} set to "${camp.roster[a][k]||"blank"}"`)}});
-  el.querySelectorAll("[data-rg-rm]").forEach(b=>b.onclick=()=>{const a=b.dataset.rgRm,g=camp.roster[a];
-    if(g.general||g.army){rAsk="g:"+a;re("[data-rask-no]");return}camp.roster[a]=null;record(`Roster: removed the ${a} General`);re(`[data-rg-add="${a}"]`)});
-  el.querySelectorAll("[data-rg-yes]").forEach(b=>b.onclick=()=>{const a=b.dataset.rgYes;rAsk=null;camp.roster[a]=null;record(`Roster: removed the ${a} General`);re(`[data-rg-add="${a}"]`)});
-  el.querySelectorAll("[data-rask-no]").forEach(b=>b.onclick=()=>{rAsk=null;renderRoster()});
-  el.querySelectorAll("[data-rcol]").forEach(b=>b.onclick=()=>{if(camp.roster[OPT_AL]||colN(OPT_AL)){rAsk="col";re("[data-rask-no]");return}removeCol();rAsk=null;re("[data-radd]")});
-  el.querySelectorAll("[data-rcol-yes]").forEach(b=>b.onclick=()=>{rAsk=null;removeCol();re("[data-radd]")});
+  const re=sel=>{renderRoster();const f=document.querySelector(sel);if(f)f.focus()};
+  el.querySelectorAll("[data-rg-add]").forEach(b=>b.onclick=()=>{const a=b.dataset.rgAdd;lastFocus=b;
+    rosterModal(a,"Add General",`<form class="gen-form" id="gen-form" autocomplete="off"><label class="fld"><span class="k-lbl">General's name</span><input type="text" id="gf-name" maxlength="60" required></label>
+      <label class="fld"><span class="k-lbl">Army name</span><input type="text" id="gf-army" maxlength="60"></label></form>`,
+      `<button class="btn primary" id="gf-ok" form="gen-form" type="submit" disabled>Add General</button><button class="btn" data-cancel type="button">Cancel</button>`,"#gf-name");
+    const nm=scrim.querySelector("#gf-name"),ok=scrim.querySelector("#gf-ok");nm.oninput=()=>{ok.disabled=!nm.value.trim()};
+    scrim.querySelector("#gen-form").onsubmit=e=>{e.preventDefault();const g=nm.value.trim();if(!g)return;const army=scrim.querySelector("#gf-army").value.trim();
+      camp.roster[a].push({general:g,army});record(`Roster: added ${g}${army?` (${army})`:""} to ${a}`);closeCard();renderRoster();
+      const nb=document.querySelector(`[data-rg-add="${a}"]`);if(nb)nb.focus()}});
+  el.querySelectorAll("[data-rg-rm]").forEach(b=>b.onclick=()=>{const [a,k]=b.dataset.rgRm.split("|");const g=camp.roster[a][+k];if(!g)return;lastFocus=b;
+    rosterModal(a,"Remove General?",`<div class="face">Remove <b>${esc(g.general)}</b>${g.army?` (${esc(g.army)})`:""} from ${a}? You can restore them from History.</div>`,
+      `<button class="btn primary" id="rm-yes" type="button">Remove</button><button class="btn" data-cancel type="button">Keep</button>`,"[data-cancel]");
+    scrim.querySelector("#rm-yes").onclick=()=>{camp.roster[a].splice(+k,1);record(`Roster: removed ${g.general} from ${a}`);closeCard();renderRoster()}});
+  el.querySelectorAll("[data-rask-no]").forEach(b=>b.onclick=()=>{rAsk=false;renderRoster()});
+  el.querySelectorAll("[data-rcol]").forEach(b=>b.onclick=()=>{if(camp.roster[OPT_AL].length||colN(OPT_AL)){rAsk=true;re("[data-rask-no]");return}removeCol();re("[data-radd]")});
+  el.querySelectorAll("[data-rcol-yes]").forEach(b=>b.onclick=()=>{rAsk=false;removeCol();re("[data-radd]")});
   el.querySelectorAll("[data-radd]").forEach(b=>b.onclick=()=>{camp.opt=true;record(`Added the ${OPT_AL} column`);renderRoster();renderColl()});
 }
 
