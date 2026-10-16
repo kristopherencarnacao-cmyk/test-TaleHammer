@@ -1163,6 +1163,10 @@ html.up-lock,html.up-lock body{overflow:hidden}
 .summary .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:520px}
 .summary .seg button{height:40px;min-width:0;justify-content:center;font-size:16px;padding:0}
 @media(max-width:700px){.summary{grid-template-columns:minmax(0,1fr)}.sum-item.sum-phase{flex-direction:column;align-items:stretch;justify-content:flex-start;border-bottom:0;padding-bottom:0}.summary .seg{max-width:none}}
+/* phase selector sits in line with History, not floating */
+.trk-tools{justify-content:space-between;align-items:center;gap:12px;margin-bottom:0}
+.trk-tools .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:1;max-width:340px}
+.trk-tools .seg button{height:42px;min-width:0;justify-content:center;font-size:16px;padding:0;display:inline-flex;align-items:center}
 #toc{display:none!important}
 </style>
 
@@ -1748,9 +1752,7 @@ function renderTracker(){
   const curLoc=cp.loc&&findCard(cp.loc);
   const asc=ascendancy(cur);
   const held=AL.map(a=>[a,[1,2,3].filter(p=>camp.phases[p].control===a).length]).filter(x=>x[1]);
-  t.innerHTML=`<div class="trk-tools"><button class="btn ghost hist-btn" data-hist>History <span class="n">${hist.length}</span></button></div>`+phaseCard(cur)+`<div class="summary" role="region" aria-label="Campaign status">
-      <div class="sum-item sum-phase"><span class="k-lbl">${camp.current>3?"Campaign complete":"Phase "+ROMAN[camp.current-1]+" in progress"}</span><div class="seg" role="group" aria-label="Show phase">${[1,2,3].map(p=>{const s=statusOf(p);return `<button aria-pressed="${p===cur}" data-view="${p}" aria-label="Phase ${p}, ${s==="done"?"complete":s==="current"?"in progress":"upcoming"}" class="seg-${s}">${ROMAN[p-1]}${s==="done"?'<span class="seg-mark" aria-hidden="true">✓</span>':s==="current"?'<span class="seg-dot" aria-hidden="true"></span>':""}</button>`}).join("")}</div></div>
-    </div>
+  t.innerHTML=`<div class="trk-tools"><div class="seg" role="group" aria-label="Show phase">${[1,2,3].map(p=>{const s=statusOf(p);return `<button aria-pressed="${p===cur}" data-view="${p}" aria-label="Phase ${p}, ${s==="done"?"complete":s==="current"?"in progress":"upcoming"}" class="seg-${s}">${ROMAN[p-1]}${s==="done"?'<span class="seg-mark" aria-hidden="true">✓</span>':s==="current"?'<span class="seg-dot" aria-hidden="true"></span>':""}</button>`}).join("")}</div><button class="btn ghost hist-btn" data-hist>History <span class="n">${hist.length}</span></button></div>`+phaseCard(cur)+`
     <div class="trk-foot"><span class="hint">Progress and history are saved in this browser. <button class="linkish" data-hist>View history</button></span><span id="reset-zone">${resetAsk?`<button class="btn primary" data-reset="yes">Clear all progress</button> <button class="btn" data-reset="no">Keep</button>`:`<button class="btn ghost" data-reset="ask">Reset campaign…</button>`}</span></div>`;
   const goTo=(p,focusSel)=>{view=p;renderTracker();
     const el=document.getElementById("pc-"+p);if(el&&el.getBoundingClientRect().top<0)el.scrollIntoView({block:"start"});
