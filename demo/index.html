@@ -1837,9 +1837,9 @@ function phaseCard(p){
       <span class="pill ${state}">${state==="current"?"In progress":state==="done"?"✓ Complete":"Upcoming"}</span></div>
     <div class="stepbar" role="tablist" aria-label="Phase ${p} steps">${[["War zone","Select war zone"],["Agendas","Select agendas"],["Battle","Battle"],["Results","Results"]].map(([sh,lg],k)=>`<button role="tab" id="st-${p}-${k+1}" aria-selected="${ph.step===k+1}" data-step="${p}|${k+1}"><span class="sn">${k+1}</span><span class="sl">${sh}</span></button>`).join("")}</div>
     <div class="pc-body step-${ph.step}" role="tabpanel" aria-labelledby="st-${p}-${ph.step}">${stepBody(p)}</div>
-    <div class="pc-foot">${state==="current"?`<span class="hint">Finished every battle in this phase? Marking it complete moves the campaign to ${p<3?"phase "+(p+1):"its end"}. You can still edit this phase afterwards.</span><button class="btn primary" data-complete="${p}">Mark phase ${p} complete</button>`
+    ${ph.step!==4?"":`<div class="pc-foot">${state==="current"?`<span class="hint">Finished every battle in this phase? Marking it complete moves the campaign to ${p<3?"phase "+(p+1):"its end"}. You can still edit this phase afterwards.</span><button class="btn primary" data-complete="${p}">Mark phase ${p} complete</button>`
       :state==="done"?`<span class="hint">This phase is complete. You can still change anything here.</span>${p===camp.current-1?`<button class="btn" data-reopen="${p}">Reopen phase ${p}</button>`:""}`
-      :`<span class="hint">This phase starts when phase ${p-1} is marked complete. You can set it up in advance.</span>`}</div></section>`;
+      :`<span class="hint">This phase starts when phase ${p-1} is marked complete. You can set it up in advance.</span>`}</div>`}</section>`;
 }
 
 /* ---------- rules tab ---------- */
