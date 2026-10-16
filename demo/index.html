@@ -285,7 +285,7 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--brass)
   background:radial-gradient(ellipse 70% 60% at 50% 100%,var(--brass-soft),transparent 70%)}
 .stage:focus-visible{box-shadow:inset 0 0 0 2px var(--brass)}
 .cc{position:absolute;left:50%;top:18px;width:var(--cw);height:var(--ch);margin-left:calc(var(--cw) / -2);cursor:pointer;perspective:1400px;
-  transform-origin:50% 160%;will-change:transform;
+  transform-origin:50% 50%;will-change:transform;
   transition:transform .42s cubic-bezier(.16,.84,.24,1),opacity .3s ease,filter .3s ease}
 .stage.dragging .cc{transition:none}
 .stage,.stage *{touch-action:pan-y;-webkit-user-select:none;user-select:none}
@@ -744,11 +744,11 @@ nav.tabs button[aria-selected="true"]::before{content:"> "}
 @keyframes segA{0%,48%{background:var(--brass);color:var(--phos-ink)}50%,100%{background:transparent;color:var(--muted)}}
 /* 3 hand */
 .gh-fan{position:relative;width:100%;height:100%;animation:fanSlide 3.2s cubic-bezier(.4,0,.2,1) infinite}
-.gh-fan i{position:absolute;left:50%;top:30px;width:62px;height:88px;margin-left:-31px;border:1px solid var(--phos-dim);background:var(--raise);transform-origin:50% 180%}
-.gh-fan i:nth-child(1){transform:translateX(-64px) rotate(-12deg) translateY(14px)}
-.gh-fan i:nth-child(2){transform:translateX(-32px) rotate(-6deg) translateY(6px)}
-.gh-fan i:nth-child(4){transform:translateX(32px) rotate(6deg) translateY(6px)}
-.gh-fan i:nth-child(5){transform:translateX(64px) rotate(12deg) translateY(14px)}
+.gh-fan i{position:absolute;left:50%;top:30px;width:62px;height:88px;margin-left:-31px;border:1px solid var(--phos-dim);background:var(--raise);transform-origin:50% 50%}
+.gh-fan i:nth-child(1){transform:translateX(-64px) scale(.8)}
+.gh-fan i:nth-child(2){transform:translateX(-32px) scale(.9)}
+.gh-fan i:nth-child(4){transform:translateX(32px) scale(.9)}
+.gh-fan i:nth-child(5){transform:translateX(64px) scale(.8)}
 .gh-fan i.c{z-index:2;border-color:var(--brass);box-shadow:0 0 14px rgba(var(--rgb),.35);top:20px;animation:cardFlip 3.2s infinite}
 .gh-fan i.c em{position:absolute;inset:6px;border-top:10px solid color-mix(in srgb,var(--brass) 70%,#000)}
 @keyframes fanSlide{0%,20%{transform:none}45%,70%{transform:translateX(-26px)}95%,100%{transform:none}}
@@ -1139,7 +1139,7 @@ html.up-lock,html.up-lock body{overflow:hidden}
 .upick.opening .up-top,.upick.opening .up-filt{animation:auspexBoot .45s .1s steps(1,end) both}
 .upick.opening .cc-inner{animation:dealIn .6s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--k,0) * 55ms + 140ms)}
 .upick.opening .flip-row,.upick.opening .hand-ctl,.upick.opening .up-tip{animation:auspexBoot .4s .5s steps(1,end) both}
-@keyframes dealIn{0%{transform:translateY(115%) rotate(-10deg) scale(.9);opacity:0;filter:brightness(2)}60%{opacity:1}100%{transform:none;filter:none}}
+@keyframes dealIn{0%{transform:translateY(115%) scale(.9);opacity:0;filter:brightness(2)}60%{opacity:1}100%{transform:none;filter:none}}
 .upick.closing{animation:scrimOut .26s ease-in both}
 .upick.closing .up-in{animation:auspexClose .26s cubic-bezier(.6,0,.9,.4) both}
 /* the dazzle */
@@ -1452,7 +1452,7 @@ function makeFan(o){
   f.place=()=>{const els=stage.querySelectorAll(".cc");if(!els.length)return;
     const S=els[0].offsetWidth*SPREAD;
     els.forEach(el=>{const i=+el.dataset.i,d=i-f.pos,a=Math.abs(d),t=Math.min(a,1);
-      el.style.transform=`translateX(${d*S}px) translateY(${t*56+a*a*3}px) rotate(${d*6}deg) scale(${1-.1*t})`;
+      el.style.transform=`translateX(${d*S}px) scale(${1-.2*t})`;
       el.style.filter=t>0?`saturate(${1-.25*t}) brightness(${1-.06*t})`:"none";
       el.style.opacity=a>5?Math.max(0,6-a):1;
       el.style.zIndex=100-Math.round(a*10);
@@ -1505,7 +1505,7 @@ function makeFan(o){
   /* drag: the fan tracks the pointer 1:1, then glides to the nearest card with a little momentum */
   let drag=null,moved=false,raf=0;
   const step=()=>{const el=stage.querySelector(".cc");if(!el)return 60;
-    return el.offsetWidth*SPREAD+Math.sin(6*Math.PI/180)*(el.offsetHeight*1.1)};
+    return el.offsetWidth*SPREAD};
   stage.addEventListener("pointerdown",e=>{if(!f.list.length||e.button>0)return;
     drag={x:e.clientX,y:e.clientY,start:f.sel,id:e.pointerId,active:false,samples:[[e.timeStamp,e.clientX]]};moved=false});
   stage.addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;
