@@ -1814,8 +1814,7 @@ function stepBody(p){
       <div class="ag-cols">${on.map(col).join("")}${on.includes(OPT_AL)?"":`<button class="acol-new" data-optadd style="--c:${alColor(OPT_AL)}">${alIcon(OPT_AL)}<span>+ Add ${esc(OPT_AL)} (optional)</span></button>`}</div>
       <div class="step-next"><span class="rdy-sum" aria-live="polite">${rdy} / ${total} ready</span><button class="btn${total&&rdy===total?" primary":""}" data-next="${p}">Next: battle ›</button></div></div>`}
   if(st===3){const l=ph.loc&&findCard(ph.loc);
-    const bf=l?`<div class="bf" style="--c:${deckColor(l)}"><div class="bf-h"><div><div class="d-meta">${ic("Location")}Location · Phase ${p}${l.roll?" · D6 "+esc(l.roll):""}</div><h3>${esc(l.name)}</h3></div>
-        <button class="linkish" data-card="${l.id}">Open card</button></div>
+    const bf=l?`<div class="bf" style="--c:${deckColor(l)}"><div class="bf-h"><div><div class="d-meta">${ic("Location")}Location · Phase ${p}${l.roll?" · D6 "+esc(l.roll):""}</div><h3>${esc(l.name)}</h3></div></div>
       <div class="sides"><button aria-pressed="${bfSide==="back"}" data-bf="back">War zone rules</button><button aria-pressed="${bfSide==="front"}" data-bf="front">Location bonus</button></div>
       <div class="face">${rich(l[bfSide])}</div></div>`
       :`<div class="bf bf-none"><span class="hint">No war zone chosen for phase ${p} yet.</span><button class="btn" data-step="${p}|1">Select war zone</button></div>`;
