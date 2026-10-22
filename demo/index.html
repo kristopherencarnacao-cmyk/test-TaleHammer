@@ -1355,6 +1355,77 @@ body.x-on nav.tabs{display:none}
 @keyframes gcIn{0%,62%{opacity:0;transform:scaleY(.1)}70%,100%{opacity:1;transform:none}}
 @keyframes gcAdd{0%,55%{background:transparent}58%,64%{background:var(--brass);color:var(--phos-ink)}68%,100%{background:transparent}}
 @media (prefers-reduced-motion:reduce){.gc-main b.new{opacity:1}}
+/* ---- wizard: numbered steps, instructions, grouped card fields ---- */
+.x-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.x-nav .x-ni{align-items:center;gap:10px;min-height:52px;padding:6px 8px}
+.x-num{flex:none;display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--phos-dim);font-family:var(--term);font-size:12px;font-weight:700;color:var(--muted)}
+.x-ni.done .x-num,.x-review li.done .x-num{background:var(--brass-soft);border-color:var(--brass);color:var(--brass)}
+.x-ni[aria-current="step"]{border-left-color:var(--brass);background:var(--brass-soft);color:var(--brass)}
+.x-ni[aria-current="step"] .x-num{background:var(--brass);border-color:var(--brass);color:var(--phos-ink);box-shadow:0 0 10px rgba(var(--rgb),.4)}
+.x-nt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.x-nl{font-size:14px;line-height:1.25}
+.x-ns{font-family:var(--term);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-ni.done .x-ns{color:var(--brass)}
+.x-nsh{display:none}
+.x-head{display:flex;flex-direction:column;gap:4px}
+.x-pill{font-family:var(--term);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--phos-dim);padding:3px 8px;white-space:nowrap}
+.x-pill.done{color:var(--brass);border-color:var(--brass);background:var(--brass-soft)}
+.x-how{border:1px solid var(--phos-dim);border-left:3px solid var(--brass);background:rgba(var(--rgb),.03);padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;max-width:72ch}
+.x-todo{margin:0;padding:0;list-style:none;counter-reset:t;display:flex;flex-direction:column;gap:8px}
+.x-todo li{counter-increment:t;position:relative;padding-left:32px;font-size:15px;line-height:1.45}
+.x-todo li::before{content:counter(t);position:absolute;left:0;top:0;width:22px;height:22px;display:grid;place-items:center;font-family:var(--term);font-size:11px;font-weight:700;color:var(--phos-ink);background:var(--brass)}
+.x-todo b{color:var(--brass);font-weight:600}
+.x-tip{margin:2px 0 0;font-size:13px;color:var(--muted);line-height:1.45}
+.x-tip b{color:var(--ink);font-weight:600}
+.x-pager{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;padding-top:16px;border-top:1px dashed var(--phos-dim)}
+.x-pager .btn.primary{margin-left:auto}
+.x-addrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.x-form{display:flex;flex-direction:column;gap:14px;max-width:720px}
+.x-fs{border:1px solid var(--phos-dim);margin:0;padding:12px 14px 14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.x-fs legend{padding:0 6px;margin-left:-6px;font-family:var(--term);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.x-fs-note{margin:-4px 0 0;font-size:13px;line-height:1.45;color:var(--muted)}
+.x-raw{border:1px dashed var(--phos-dim);padding:10px 12px;margin:0}
+.x-shows{font-size:12px;color:var(--muted);line-height:1.5}
+.x-shows code{font-family:var(--term);font-size:11.5px;color:var(--ink);background:rgba(var(--rgb),.05);border:1px solid var(--phos-dim);padding:1px 5px;overflow-wrap:anywhere}
+.x-r2{display:grid;grid-template-columns:minmax(120px,200px) minmax(0,1fr);gap:12px;align-items:start}
+.x-chks{display:flex;gap:6px 20px;flex-wrap:wrap}
+.x-rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.x-rule{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:start;padding-bottom:12px;border-bottom:1px dashed var(--phos-dim)}
+.x-rule .num{font-family:var(--term);font-size:11px;color:var(--brass);border:1px solid var(--phos-dim);text-align:center;padding:2px 0;margin-top:22px}
+.x-rule-f{display:flex;flex-direction:column;gap:10px;min-width:0}
+.x-rule .btn.x-ib{margin-top:20px}
+.x-fds{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.x-fd{border:1px solid var(--phos-dim);margin:0;padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.x-fd legend{padding:0 4px;font-size:13px;color:var(--muted)}
+.x-fd legend b{color:var(--ink);font-weight:600}
+.x-fd-r{display:flex;flex-direction:column;gap:3px}
+.x-fd-r span{font-size:12px;color:var(--muted)}
+.x-fd-r select{font:inherit;font-size:15px;color:var(--ink);background:var(--ash);border:1px solid var(--rule);padding:7px 6px;height:40px;width:100%;min-width:0}
+.x-fd-r select:focus{outline:2px solid var(--brass);outline-offset:1px;border-color:var(--brass)}
+.x-fd-fill{align-self:flex-start;margin-top:4px;padding:6px 10px;font-size:11px}
+.tag.need{color:#f0b37e;border-color:color-mix(in srgb,#f0b37e 55%,var(--phos-dim))}
+.x-review{list-style:none;margin:0;padding:0;border:1px solid var(--phos-dim)}
+.x-review li{display:flex;align-items:center;gap:12px;padding:8px 12px;min-height:56px}
+.x-review li+li{border-top:1px dashed var(--phos-dim)}
+.x-review .btn{flex:none;min-width:5.5em}
+@media(max-width:860px){
+  .x-steps{flex-direction:row;gap:0}
+  .x-nav .x-ni{min-height:48px;gap:6px;padding:6px 10px}
+  .x-nav .x-nt{display:none}
+  .x-nav .x-nsh{display:inline;font-size:13px}
+  .x-nav .x-ni[aria-current="step"]{border-bottom-color:var(--brass)}
+  .x-steps li:last-child .x-ni{margin-right:20px}
+  .x-num{width:22px;height:22px;font-size:11px}
+}
+@media(max-width:480px){
+  .x-how{padding:10px 12px 12px}
+  .x-todo li{font-size:14.5px}
+  .x-r2{grid-template-columns:minmax(0,1fr)}
+  .x-rule{grid-template-columns:20px minmax(0,1fr) auto;gap:8px}
+  .x-fs{padding:10px 10px 12px}
+  .x-pager .btn{flex:1 1 auto}
+  .x-pager .btn.primary{flex-basis:100%;order:-1}
+}
 #toc{display:none!important}
 </style>
 
@@ -2118,77 +2189,186 @@ function renderRules(){
     ${subs.length?`<div class="subs">${subs.map(([n,h])=>`<a class="chip" href="${BASE}#${h}" target="_blank" rel="noopener">${esc(n)} ↗</a>`).join("")}</div>`:""}</div>`).join("");
 }
 
-/* ---------- custom campaign: write your own cards, laid out like dominatus-cards.json ---------- */
-/* The draft lives in this browser (xd, key dominatus-custom). Alliances are stored on cards as slot numbers 0–2,
-   so renaming an alliance never loses its cards; names are written back in when the file is exported. */
+/* ---------- custom campaign: guided card fields ----------
+   Each card is edited as plain parts (bonus name, rules, story, conditions…). xCompose() writes them back into the
+   card text the app reads, adding the fixed labels ("Location bonus —", "War zone rules.", "Narrative:", "Agenda Achieved:",
+   "Primary Mission.", the Narrative Points rule, "Battle Honour — bestow on one Character." …), so players never type them.
+   xParts() reads existing card text back into parts; text it can't read stays as free text (c.raw). */
+const FDS=["Take and Hold","Priority Assets","Purge the Foe","Disruption","Reconnaissance"];
+const UPG_PRE={"Battle Honour":"Battle Honour","Battle Skill":"Battle Skill","Relic":"Relic"};
+const xList=a=>a.length<2?(a[0]||""):a.slice(0,-1).join(", ")+" or "+a[a.length-1];
+const xUnlist=s=>String(s).split(/, | or /).map(x=>x.trim()).filter(Boolean);
+const xEnd=s=>{s=String(s||"").trim();return !s||/[.!?…]["”')]?$/.test(s)?s:s+"."};   /* a trailing " on its own is inches, not a quote */
+const xPoss=a=>a?(/s$/i.test(a)?a+"'":a+"'s"):"";
+const xNPmax=p=>p===3?3:2;
+const xNPline=p=>`Narrative Points (max ${xNPmax(p)}): earn ${p===3?2:1} NP if your alliance controls the phase's Location, and 1 NP if your alliance is in ascendancy.`;
+const XAUTO={"Briefing":(al,p)=>al?`${xPoss(al)} Briefing${p?": Phase "+p:""}`:"","Agenda Achieved":al=>al||""};
+const XCHART_HEAD="Agenda selection — match your Force Disposition against your opponent's:";
+/* parse a card's text into parts; returns null when the text doesn't follow the deck's layout */
+function xParts(c){const F=String(c.front||"").trim(),B=String(c.back||"").trim();let m;
+  switch(c.deck){
+  case "Location":{const f={bName:"",bText:"",rules:[]};
+    if(F){if(!(m=F.match(/^Location bonus — ([^:\n]+?): ([\s\S]*)$/)))return null;f.bName=m[1];f.bText=m[2]}
+    if(B){if(!(m=B.match(/^War zone rules\.\s*([\s\S]*)$/)))return null;
+      f.rules=m[1].split(/(?<=[.!?"”]) (?=[A-Z][^.:!?\n]{0,48}: )/).map(s=>{const r=s.match(/^([^:\n]{1,50}): ([\s\S]*)$/);return r?{n:r[1],t:r[2]}:{n:"",t:s}})}
+    return f}
+  case "Agenda":{const f={story:"",std:true,cond:"",bonus:"",timing:"",scoring:""};
+    if(F){if(!(m=F.match(/^Narrative: ([\s\S]*?)\s*Agenda Achieved: ([\s\S]*)$/)))return null;f.story=m[1];let r=m[2];
+      const g=r.split(/\s*Gain one extra Agenda Achieved card /);if(g.length>2)return null;if(g[1])f.bonus=g[1];r=g[0];
+      const s=r.match(/^score 35 or more victory points from this Primary Mission(?:,\s*(?:or\s+)?|\.?\s*$)/);
+      if(s){f.std=true;f.cond=r.slice(s[0].length)}else{f.std=false;f.cond=r}}
+    if(B){if(!(m=B.match(/^Primary Mission(?: \(([^)]*)\))?\.\s*([\s\S]*)$/)))return null;f.timing=m[1]||"";f.scoring=m[2]}
+    return f}
+  case "Briefing":{const f={story:"",chart:{},rows:null,out:{},np:""};
+    if(F){if(!(m=F.match(/^Narrative: ([\s\S]*?)(?:\n\n([^\n]*):\n([\s\S]*))?$/)))return null;f.story=m[1];
+      if(m[3]){const rows=[];for(const line of m[3].split("\n")){const l=line.replace(/^- /,"").replace(/\.$/,"");
+          const y=l.match(/^Your FD is (.+?): (.+)$/);if(!y)return null;const row={you:xUnlist(y[1]),outs:[]};
+          for(const o of y[2].split("; ")){const z=o.match(/^opponent is (.+?) → (.+)$/);if(!z)return null;row.outs.push({opp:xUnlist(z[1]),ag:"?"+z[2]})}
+          rows.push(row)}
+        rows.forEach(r=>r.you.forEach(a=>r.outs.forEach(o=>o.opp.forEach(b=>{(f.chart[a]=f.chart[a]||{})[b]=o.ag}))));f.rows=rows}}
+    if(B){if(!(m=B.match(/^(Narrative Points \(max (\d)\):[^\n]*)(?:\n\nOutcomes:\n([\s\S]*))?$/)))return null;f.np=m[1];f.npMax=+m[2];
+      for(const line of (m[3]||"").split("\n").filter(Boolean)){const o=line.match(/^- (\d) NP: ([\s\S]*)$/);if(!o)return null;f.out[o[1]]=o[2]}}
+    return f}
+  case "Agenda Achieved":return {text:F};
+  default:{const f={bestow:true,noEpic:false,effect:"",bKw:"",bText:""},pre=UPG_PRE[c.deck];
+    if(!F)return f;
+    m=F.match(new RegExp("^"+pre+" — bestow on one Character( that is not an Epic Hero)?\\.\\s*([\\s\\S]*?)(?:\\s*Bonus \\(([^)]+)\\): ([\\s\\S]*))?$"));
+    if(!m){f.bestow=false;f.effect=F;return f}
+    f.noEpic=!!m[1];f.effect=m[2];f.bKw=m[3]||"";f.bText=m[4]||"";return f}}}
+/* the Agenda chart text, keeping the original row order when nothing in it has changed */
+function xChartText(f,agName){const ch=f.chart||{},name=v=>v?agName(v):"";
+  const same=f.rows&&(()=>{const seen={};for(const r of f.rows)for(const a of r.you)for(const o of r.outs)for(const b of o.opp){if(!ch[a]||ch[a][b]!==o.ag)return false;seen[a+"|"+b]=1}
+    return FDS.every(a=>FDS.every(b=>!(ch[a]&&ch[a][b])||seen[a+"|"+b]))})();
+  let rows;
+  if(same)rows=f.rows;
+  else{const yous=[...FDS,...Object.keys(ch).filter(k=>!FDS.includes(k))];rows=[];
+    for(const a of yous){const r=ch[a]||{},opps=Object.keys(r).filter(b=>r[b]).sort((x,y)=>(FDS.indexOf(x)+99)%99-(FDS.indexOf(y)+99)%99);if(!opps.length)continue;
+      const outs=[];opps.forEach(b=>{let o=outs.find(x=>x.ag===r[b]);if(!o)outs.push(o={ag:r[b],opp:[]});o.opp.push(b)});
+      const sig=JSON.stringify(outs),g=rows.find(x=>x.sig===sig);if(g)g.you.push(a);else rows.push({sig,you:[a],outs})}}
+  const lines=rows.map(r=>`- Your FD is ${xList(r.you)}: ${r.outs.map(o=>`opponent is ${xList(o.opp)} → ${name(o.ag)}`).join("; ")}.`);
+  return lines.length?XCHART_HEAD+"\n"+lines.join("\n"):""}
+/* parts → card text. agName turns a chart cell (an agenda's key, or "?Name" for one that isn't in the draft) into its name */
+function xCompose(c,agName){if(c.raw||!c.f)return {front:c.front||"",back:c.back||""};const f=c.f,T=s=>String(s||"").trim();
+  switch(c.deck){
+  case "Location":{const rules=f.rules.filter(r=>T(r.n)||T(r.t)).map(r=>T(r.n)?`${T(r.n)}: ${xEnd(r.t)}`:xEnd(r.t));
+    return {front:T(f.bName)||T(f.bText)?`Location bonus — ${T(f.bName)||"Bonus"}: ${xEnd(f.bText)}`:"",back:rules.length?"War zone rules. "+rules.join(" "):""}}
+  case "Agenda":{const cond=T(f.cond),b=T(f.bonus);let ach="";
+    if(f.std)ach="score 35 or more victory points from this Primary Mission"+(cond?(/, or /.test(cond)?", ":", or ")+xEnd(cond):".");else ach=xEnd(cond);
+    if(b)ach+=" Gain one extra Agenda Achieved card "+xEnd(/^(if|for|when|by|after|on)\b/i.test(b)?b:"if "+b);
+    const story=T(f.story);
+    return {front:story||cond||b||!f.std?`Narrative: ${xEnd(story)} Agenda Achieved: ${ach}`:"",
+      back:T(f.scoring)?`Primary Mission${T(f.timing)?` (${T(f.timing)})`:""}. ${xEnd(f.scoring)}`:""}}
+  case "Briefing":{const chart=xChartText(f,agName),max=xNPmax(c.phase),outs=[];
+    for(let n=max;n>=0;n--)if(T(f.out[n]))outs.push(`- ${n} NP: ${xEnd(f.out[n])}`);
+    const np=f.np&&f.npMax===max?f.np:xNPline(c.phase);
+    return {front:T(f.story)||chart?`Narrative: ${xEnd(f.story)}`+(chart?"\n\n"+chart:""):"",back:outs.length?np+"\n\nOutcomes:\n"+outs.join("\n"):""}}
+  case "Agenda Achieved":return {front:T(f.text),back:c.back||""};
+  default:{const e=T(f.effect);if(!f.bestow)return {front:e,back:c.back||""};
+    return {front:e||T(f.bText)?`${UPG_PRE[c.deck]} — bestow on one Character${f.noEpic?" that is not an Epic Hero":""}. ${xEnd(e)}${T(f.bKw)&&T(f.bText)?` Bonus (${T(f.bKw)}): ${xEnd(f.bText)}`:""}`:"",back:c.back||""}}}}
+/* what a card still needs before it's finished (shown on the card and used for step progress) */
+function xNeeds(c){if(c.raw)return T0(c.front)?[]:["card text"];const f=c.f||{},n=[];if(!T0(c.name))n.push("name");
+  switch(c.deck){
+  case "Location":if(!T0(f.bText))n.push("bonus");if(!f.rules.some(r=>T0(r.t)))n.push("war zone rule");break;
+  case "Agenda":if(!T0(f.story))n.push("story");if(!f.std&&!T0(f.cond))n.push("how to achieve it");if(!T0(f.scoring))n.push("Primary Mission");break;
+  case "Briefing":if(!T0(f.story))n.push("story");if(!FDS.some(a=>f.chart[a]&&FDS.some(b=>f.chart[a][b])))n.push("Agenda chart");
+    if(!Object.values(f.out).some(T0))n.push("outcomes");break;
+  case "Agenda Achieved":if(!T0(f.text))n.push("text");break;
+  default:if(!T0(f.effect))n.push("effect")}
+  return n}
+function T0(s){return !!String(s||"").trim()}
+/* ---------- custom campaign: a step-by-step wizard for writing your own campaign file ----------
+   The draft lives in this browser (xd, key dominatus-custom). Cards keep their alliance as slot 0–2, so renaming an alliance
+   carries its cards along. Card text is edited as guided parts (c.f); xCompose() above writes the finished text on export. */
 const XKEY="demo-dominatus-custom",SLOT_COL=["var(--lib)","var(--opp)","var(--rai)"],ROLLS=["1-2","3-4","5-6"];
 const XPRE={"Location":"loc","Briefing":"brf","Agenda":"agd","Agenda Achieved":"aa","Battle Honour":"bh","Battle Skill":"bs","Relic":"rel"};
-const XDECK={
- "Location":{al:"none",ph:"req",roll:true,back:true,
-   lead:"Each campaign phase is fought at one Location. The front is the bonus for the alliance that controls it; the back holds the war zone rules for every battle fought there.",
-   expect:"Aim for 3 per phase, one for each D6 roll (1-2, 3-4, 5-6).",
-   fHint:"Start with “Location bonus — Bonus name:” and then what the controlling alliance gains.",
-   bHint:"Start with “War zone rules.” then write each rule as “Rule name: what it does.”"},
- "Briefing":{al:"req",ph:"req",back:true,
-   lead:"Each alliance gets one Briefing per phase. The front is its story and the Force Disposition chart that picks an Agenda; the back lists the outcomes by Narrative Points.",
-   expect:"Aim for 1 per alliance per phase.",
-   fHint:"Start with “Narrative: …”. Lines starting “- ” become bullets, and “→ Agenda name” points a matchup at an Agenda.",
-   bHint:"Say how Narrative Points are earned, then “Outcomes:” with one “- 2 NP: …” line per result."},
- "Agenda":{al:"req",ph:"req",back:true,
-   lead:"Agendas are an alliance's goals for a phase. The front says how to earn Agenda Achieved; the back is the Primary Mission played in place of the usual one.",
-   expect:"Aim for 3 per alliance per phase.",
-   fHint:"Write “Narrative: …” then “Agenda Achieved: score 35 or more victory points from this Primary Mission, or …”.",
-   bHint:"Start with “Primary Mission.” then the scoring rules."},
- "Agenda Achieved":{al:"req",ph:"none",
-   lead:"One card per alliance explaining what holding Agenda Achieved cards does.",
-   expect:"Aim for 1 per alliance.",fHint:"What the alliance gains from holding these cards."},
- "Battle Honour":{al:"opt",ph:"opt",
-   lead:"Character upgrades earned by the victor of a battle. At the end of each phase, the alliance with the most of that phase's Battle Honours takes the phase's Location.",
-   expect:"Give each one the phase it belongs to.",
-   fHint:"Start with “Battle Honour — bestow on one Character.” then the effect. Add “Bonus (Keyword): …” for extras."},
- "Battle Skill":{al:"opt",ph:"opt",
-   lead:"Character upgrades earned by the losing side. Usually shared by every alliance and usable in any phase.",
-   expect:"Leave alliance and phase open unless a skill is meant for one.",
-   fHint:"Start with “Battle Skill — bestow on one Character.” then the effect."},
- "Relic":{al:"req",ph:"opt",
-   lead:"Character upgrades each alliance draws from its own Relics deck at the end of phases 1 and 2.",
-   expect:"Give every alliance its own set.",
-   fHint:"Start with “Relic — bestow on one Character.” then the effect."}};
+/* the wizard's steps, in the order they're easiest to write (Agendas before Briefings, whose chart picks from them) */
+const XSTEPS=[
+ {k:"overview",t:"Name your campaign",s:"Name",ic:"Overview",
+  why:"Start with the basics. Everything here can be changed later.",
+  todo:["Type a name for your campaign.","Name the alliances, or keep the names shown.","Choose whether the campaign uses a third alliance.","Optional: add a link to the full rules."]},
+ {k:"Location",t:"Locations",s:"Locations",
+  why:"Each phase is fought at one Location, picked with a D6 roll. Its bonus goes to the alliance that controls it, and its war zone rules apply to every battle there.",
+  todo:["Tap <b>+ Add Location</b>. It goes into the next empty slot in the table.","Type its name, then check the phase and D6 roll.","Under <b>Location bonus</b>, give the bonus a short name and say what the controlling alliance gets.","Under <b>War zone rules</b>, add each rule: a name and what it does.","Repeat until all 9 slots show ✓."],
+  tip:"“Location bonus —” and “War zone rules.” on the card."},
+ {k:"Agenda",t:"Agendas",s:"Agendas",
+  why:"Agendas are each alliance's goals for a phase. Achieving one earns Agenda Achieved cards, and its Primary Mission replaces the normal one.",
+  todo:["Tap <b>+ Add Agenda</b>. It goes to the next alliance and phase that needs one.","Type its name and a short story.","Under <b>How to achieve it</b>, add any way to achieve it besides scoring 35 VP.","Under <b>Primary Mission</b>, write how players score.","Repeat until each alliance has 3 per phase."],
+  tip:"“Narrative:”, “Agenda Achieved: score 35 or more victory points…” and “Primary Mission.” on the card."},
+ {k:"Briefing",t:"Briefings",s:"Briefings",
+  why:"Each alliance gets one Briefing per phase. It tells the story, shows which Agenda each Force Disposition pairing plays, and lists the outcomes.",
+  todo:["Write the Agendas first. The chart here picks from them.","Tap <b>+ Add Briefing</b>. Its name is filled in for you.","Write the alliance's story for this phase.","In the <b>Agenda chart</b>, choose the Agenda for each pairing.","Under <b>Outcomes</b>, write what happens at each Narrative Points total."],
+  tip:"the Narrative Points rule, the card name and the chart wording."},
+ {k:"Agenda Achieved",t:"Agenda Achieved cards",s:"Achieved",
+  why:"One card per alliance, explaining what holding Agenda Achieved cards does.",
+  todo:["Tap <b>+ Add card</b> once for each alliance.","Say what holding these cards does."],tip:"the card name (the alliance's name)."},
+ {k:"Battle Honour",t:"Battle Honours",s:"Honours",
+  why:"Upgrades the winner of a battle earns. At the end of a phase, the alliance with the most of that phase's Battle Honours takes the Location.",
+  todo:["Tap <b>+ Add Battle Honour</b>.","Type its name and pick its phase.","Write what it does. If a keyword gets extra, add a bonus.","Add at least one for each phase."],
+  tip:"“Battle Honour — bestow on one Character.” and “Bonus (…):” on the card."},
+ {k:"Battle Skill",t:"Battle Skills",s:"Skills",
+  why:"Upgrades the losing side earns. They're usually shared by every alliance and usable in any phase.",
+  todo:["Tap <b>+ Add Battle Skill</b>.","Type its name and write what it does.","If a keyword gets extra, add a bonus."],
+  tip:"“Battle Skill — bestow on one Character.” and “Bonus (…):” on the card."},
+ {k:"Relic",t:"Relics",s:"Relics",
+  why:"Each alliance draws Relics from its own deck at the end of phases 1 and 2.",
+  todo:["Tap <b>+ Add Relic</b>. It goes to the alliance with the fewest.","Type its name and write what it does.","Tick <b>Not for Epic Heroes</b> if it shouldn't go on one.","Give every alliance at least one."],
+  tip:"“Relic — bestow on one Character.” on the card."},
+ {k:"intro",t:"Introduction",s:"Intro",ic:"Rules",
+  why:"The “How the campaign works” summary on the Rules tab.",
+  todo:["Write a short summary of how the campaign works.","Use full sentences. Each one becomes its own bullet point."]},
+ {k:"guide",t:"Step-by-step guide",s:"Guide",ic:"Rules",
+  why:"The walkthrough on the Rules tab that players follow while they play.",
+  todo:["Tap <b>+ Add section</b> for each stage, such as Setup or Each battle.","Give the section a title and add its steps in order.","Put details under a step as sub-points, one per line."],
+  note:"Wrap words in **double asterisks** for bold or *single asterisks* for italic."},
+ {k:"export",t:"Review & download",s:"Finish",ic:"Export",
+  why:"Check each step, then save your campaign as a file.",
+  todo:["Finish any step that doesn't show ✓. Tap <b>Go</b> to jump to it.","Tap <b>Download JSON</b> to save your campaign file.","Keep the file. You can import it here later to carry on editing."]}];
+const XDECKS=XSTEPS.filter(s=>DECKS.includes(s.k)).map(s=>s.k);
 const xs={sec:"overview",open:null,ask:null,qask:null,reset:false,imp:null,msg:"",bad:false,flash:""};
 let xT=0,xSavedAt=0,lastTab="cards";
-xd=load(XKEY,null);
-if(xd&&!Array.isArray(xd.cards))xd=null;
 const xUid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const xSlug=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
 const xAl=i=>i==null?null:(xd.alliances[i]||AL[i]);
 const xCol=i=>i==null?"var(--neu)":SLOT_COL[i];
-const xN=d=>xd.cards.filter(c=>c.deck===d).length;
+const xAls=()=>xd.useThird===false?[0,1]:[0,1,2];
+const xOf=d=>xd.cards.filter(c=>c.deck===d);
 const xMain$=()=>$("x-main");
+const xAgName=v=>{if(!v)return "";if(v[0]==="?")return v.slice(1);const a=xd.cards.find(c=>c._k===v);return a?(a.name.trim()||"Untitled agenda"):""};
+const xText=c=>xCompose(c,xAgName);
 function xSave(){clearTimeout(xT);xT=setTimeout(()=>{save(XKEY,xd);xSavedAt=Date.now();const s=$("x-saved");if(s)s.textContent="Saved "+fmtTime(xSavedAt)},350)}
 function xMsg(t,bad){xs.msg=t;xs.bad=!!bad;const m=$("x-msg");if(m){m.textContent=t;m.classList.toggle("bad",!!bad)}}
 
 /* ---- JSON in and out ---- */
+function xPrep(c){if(!c.f&&!c.raw){const f=xParts(c);if(f)c.f=f;else c.raw=true}if(c.f&&c.deck==="Location"&&!c.f.rules.length)c.f.rules.push({n:"",t:""});return c}
 const xCard=(c,als)=>{const i=c.alliance==null?-1:als.indexOf(c.alliance);
-  return {_k:xUid(),id:c.id||"",deck:c.deck,name:c.name||"",alliance:i>=0?i:null,phase:[1,2,3].includes(c.phase)?c.phase:null,
-    roll:ROLLS.includes(c.roll)?c.roll:null,front:c.front||"",back:c.back||"",link:c.link||"",notes:c.notes||""}};
+  return xPrep({_k:xUid(),id:c.id||"",deck:c.deck,name:c.name||"",alliance:i>=0?i:null,phase:[1,2,3].includes(c.phase)?c.phase:null,
+    roll:ROLLS.includes(c.roll)?c.roll:null,front:c.front||"",back:c.back||"",link:c.link||"",notes:c.notes||""})};
+/* Briefing charts name Agendas; link each name to the Agenda card, so renaming an Agenda updates the chart */
+function xResolve(d){const find=(n,b)=>{const ag=d.cards.filter(a=>a.deck==="Agenda"&&a.name===n);const best=ag.find(a=>a.alliance===b.alliance&&a.phase===b.phase)||ag[0];return best?best._k:"?"+n};
+  d.cards.forEach(b=>{if(b.deck!=="Briefing"||!b.f)return;const ch=b.f.chart;
+    Object.keys(ch).forEach(y=>Object.keys(ch[y]).forEach(o=>{if(ch[y][o]&&ch[y][o][0]==="?")ch[y][o]=find(ch[y][o].slice(1),b)}));
+    (b.f.rows||[]).forEach(r=>r.outs.forEach(o=>{if(o.ag[0]==="?")o.ag=find(o.ag.slice(1),b)}))});return d}
 const xItem=i=>typeof i==="string"?{text:i,sub:[]}:{text:String((i&&i.text)||""),sub:Array.isArray(i&&i.sub)?i.sub.map(String):[]};
 const xQR=q=>({title:(q&&q.title)||"",summary:(q&&q.summary)||"",sections:((q&&q.sections)||[]).map(s=>({title:s.title||"",ordered:!!s.ordered,text:s.text||"",items:(s.items||[]).map(xItem)}))});
 function xFrom(j){const als=AL.map((a,i)=>String((Array.isArray(j.alliances)&&j.alliances[i])||a));let skipped=0;const cards=[];
   (j.cards||[]).forEach(c=>{if(c&&DECKS.includes(c.deck))cards.push(xCard(c,als));else skipped++});
-  return {d:{v:1,campaign:String(j.campaign||""),alliances:als,source:String(j.source||""),introduction:String(j.introduction||""),quickReference:xQR(j.quickReference),cards},skipped}}
-const xBlank=()=>({v:1,campaign:"",alliances:AL.slice(),source:"",introduction:"",quickReference:{title:"",summary:"",sections:[]},cards:[]});
+  return {d:xResolve({v:2,campaign:String(j.campaign||""),alliances:als,useThird:true,source:String(j.source||""),introduction:String(j.introduction||""),quickReference:xQR(j.quickReference),cards}),skipped}}
+const xBlank=()=>({v:2,campaign:"",alliances:AL.slice(),useThird:true,source:"",introduction:"",quickReference:{title:"",summary:"",sections:[]},cards:[]});
 const xCopyCampaign=()=>{const all=[...SEED.cards,...AGENDA_LIB];return xFrom({...SEED,cards:DECKS.flatMap(d=>all.filter(c=>c.deck===d))}).d};
+xd=load(XKEY,null);
+if(xd&&!Array.isArray(xd.cards))xd=null;
+if(xd&&xd.v!==2){xd.cards.forEach(xPrep);xResolve(xd);xd.v=2;if(xd.useThird==null)xd.useThird=true}
 /* display order inside a deck: phase, then alliance, then D6 roll, then the order cards were added */
 const xSorted=d=>xd.cards.map((c,i)=>[c,i]).filter(x=>x[0].deck===d).sort((a,b)=>((a[0].phase??9)-(b[0].phase??9))||((a[0].alliance??9)-(b[0].alliance??9))||(ROLLS.indexOf(a[0].roll)-ROLLS.indexOf(b[0].roll))||a[1]-b[1]).map(x=>x[0]);
 const xAutoId=c=>XPRE[c.deck]+"-"+(xSlug(c.name)||"card");
-/* the same layout as dominatus-cards.json: one card per line, keys sorted, Agendas between Briefings and Agenda Achieved */
+/* the same layout as dominatus-cards.json: one card per line, keys sorted, decks in the file's order */
 function xExport(){const used={},J=JSON.stringify;
   const idOf=c=>{const b=xSlug(c.id)?c.id.trim():xAutoId(c);let id=b,n=2;while(used[id])id=b+"-"+n++;used[id]=1;return id};
-  const cards=DECKS.flatMap(xSorted).map(c=>{const o={alliance:xAl(c.alliance),back:c.back,deck:c.deck,front:c.front,id:idOf(c),link:c.link,name:c.name,notes:c.notes,phase:c.phase};
+  const cards=DECKS.flatMap(xSorted).map(c=>{const t=xText(c),o={alliance:xAl(c.alliance),back:t.back,deck:c.deck,front:t.front,id:idOf(c),link:c.link,name:c.name,notes:c.notes,phase:c.phase};
     if(c.deck==="Location")o.roll=c.roll;return Object.keys(o).sort().reduce((a,k)=>(a[k]=o[k],a),{})});
   const q=xd.quickReference,qr={title:q.title,summary:q.summary,sections:q.sections.map(s=>{const o={title:s.title,ordered:s.ordered,
     items:s.items.filter(i=>i.text.trim()||i.sub.length).map(i=>i.sub.length?{text:i.text,sub:i.sub}:i.text)};if(s.text.trim())o.text=s.text;return o})};
-  return ['{','"alliances": '+J(xd.alliances)+',','"campaign": '+J(xd.campaign)+',','"cards": [',...(cards.length?[cards.map(c=>J(c)).join(",\n")]:[]),'],',
+  return ['{','"alliances": '+J(xd.useThird===false?xd.alliances.slice(0,2):xd.alliances)+',','"campaign": '+J(xd.campaign)+',','"cards": [',...(cards.length?[cards.map(c=>J(c)).join(",\n")]:[]),'],',
     '"introduction": '+J(xd.introduction)+',','"quickReference": '+J(qr)+',','"schema": '+J(SEED.schema||{})+',','"source": '+J(xd.source),'}'].join("\n")+"\n"}
 const xFileName=()=>(xSlug(xd.campaign)||"custom")+"-campaign.json";
 function xDownload(){const url=URL.createObjectURL(new Blob([xExport()],{type:"application/json"}));const a=document.createElement("a");
@@ -2206,181 +2386,267 @@ function xImport(f){if(!f)return;const r=new FileReader();
     xApplyImport(res)};
   r.onerror=()=>xMsg("That file couldn't be read.",true);r.readAsText(f)}
 function xApplyImport(res){xd=res.d;xs.imp=null;xs.sec="overview";xs.open=null;save(XKEY,xd);xSavedAt=Date.now();flicker(true);
-  xs.msg=`Imported ${res.name}: ${xd.cards.length} card${xd.cards.length===1?"":"s"}${res.skipped?`. Skipped ${res.skipped} with an unknown deck`:""}.`;xs.bad=false;renderCustom(true);
-  const h=document.getElementById("x-h");if(h)h.focus({preventScroll:true})}
+  const raw=xd.cards.filter(c=>c.raw).length;
+  xs.msg=`Imported ${res.name}: ${xd.cards.length} card${xd.cards.length===1?"":"s"}${res.skipped?`. Skipped ${res.skipped} with an unknown deck`:""}${raw?`. ${raw} card${raw===1?"":"s"} kept as free text`:""}.`;xs.bad=false;renderCustom(true);
+  const h=$("x-h");if(h)h.focus({preventScroll:true})}
+
+/* ---- progress: what each step still needs ---- */
+function xStatus(k){
+  if(k==="overview")return xd.campaign.trim()?{done:true,txt:"Named"}:{done:false,txt:"Needs a name"};
+  if(k==="intro")return xd.introduction.trim()?{done:true,txt:"Written"}:{done:false,txt:"Not written"};
+  if(k==="guide"){const n=xd.quickReference.sections.filter(s=>s.items.some(i=>i.text.trim())).length;return {done:n>0,txt:n?`${n} section${n===1?"":"s"}`:"No sections"}}
+  if(k==="export"){const left=XSTEPS.filter(s=>s.k!=="export"&&!xStatus(s.k).done).length;return {done:!left,txt:left?`${left} step${left===1?"":"s"} to finish`:"Ready"}}
+  const cs=xOf(k),unf=cs.filter(c=>xNeeds(c).length).length,als=xAls();let have=0,need=0;
+  const slots=(list,n,f)=>list.forEach(x=>{need+=n;have+=Math.min(n,cs.filter(c=>f(c,x)).length)});
+  if(k==="Location")[1,2,3].forEach(p=>slots(ROLLS,1,(c,r)=>c.phase===p&&c.roll===r));
+  else if(k==="Agenda"||k==="Briefing")[1,2,3].forEach(p=>slots(als,k==="Agenda"?3:1,(c,i)=>c.phase===p&&c.alliance===i));
+  else if(k==="Agenda Achieved"||k==="Relic")slots(als,1,(c,i)=>c.alliance===i);
+  else if(k==="Battle Honour")slots([1,2,3],1,(c,p)=>c.phase===p);
+  else slots([0],1,()=>true);
+  const done=have>=need&&!unf;
+  return {done,txt:(k==="Battle Skill"||k==="Battle Honour"||k==="Relic"?`${cs.length} written`:`${have} of ${need}`)+(unf?` · ${unf} unfinished`:"")}}
 
 /* ---- page ---- */
-const XNAV=[["Setup",[["overview","Overview","Overview"]]],["Campaign",FAMILIES.Campaign],["Missions",FAMILIES.Missions],["Upgrades",FAMILIES.Upgrades],
-  ["Rules",[["intro","Introduction","Rules"],["guide","Step-by-step guide","Rules"]]],["Finish",[["export","Import & export","Export"]]]];
-const xNavHTML=()=>XNAV.map(([g,items])=>`<div class="x-ng" aria-hidden="true">${esc(g)}</div>`+items.map(it=>{const [k,l,i]=typeof it==="string"?[it,DECK_PLURAL[it],it]:it;
-  const n=typeof it==="string"?xN(it):null;
-  return `<button class="x-ni" data-xsec="${esc(k)}"${xs.sec===k?' aria-current="page"':""}${n!=null?` aria-label="${esc(l)}, ${n} card${n===1?"":"s"}"`:""}>${ic(i)}<span>${esc(l)}</span>${n!=null?`<span class="n" aria-hidden="true">${n}</span>`:""}</button>`}).join("")).join("");
+const xNavHTML=()=>`<ol class="x-steps">${XSTEPS.map((s,i)=>{const st=xStatus(s.k),cur=xs.sec===s.k;
+  return `<li><button class="x-ni${st.done?" done":""}" data-xsec="${esc(s.k)}"${cur?' aria-current="step"':""} aria-label="Step ${i+1}: ${esc(s.t)}, ${esc(st.txt)}">
+    <span class="x-num" aria-hidden="true">${st.done?"✓":i+1}</span><span class="x-nt"><span class="x-nl">${esc(s.t)}</span><span class="x-ns" aria-hidden="true">${esc(st.txt)}</span></span><span class="x-nsh" aria-hidden="true">${esc(s.s)}</span></button></li>`}).join("")}</ol>`;
 function renderCustom(boot){const el=$("custom");if(!el)return;
-  const top=`<div class="x-top"><button class="back" data-xback>‹ Back</button>
+  const top=`<div class="x-top"><button class="back" data-xback>‹ Back to app</button>
       <div class="x-titles"><div class="d-meta">Custom campaign${xd?" · draft":""}</div><h2 id="x-title">${esc(xd?(xd.campaign.trim()||"Untitled campaign"):"Build your own campaign")}</h2></div>
       ${xd?`<span class="x-saved" id="x-saved">${xSavedAt?"Saved "+fmtTime(xSavedAt):"Saved in this browser"}</span>`:""}
       <input type="file" id="x-file" accept=".json,application/json" hidden></div>
     ${xs.imp?`<div class="acol-ask" role="alert"><p>Replace your draft (${xd.cards.length} card${xd.cards.length===1?"":"s"}) with ${esc(xs.imp.name)} (${xs.imp.d.cards.length} card${xs.imp.d.cards.length===1?"":"s"})? Download your draft first if you want to keep it.</p>
       <div><button class="btn danger-btn" data-ximp="yes">Replace draft</button> <button class="btn" data-ximp="no">Cancel</button></div></div>`:""}
     <p class="x-msg${xs.bad?" bad":""}" id="x-msg" role="status">${esc(xs.msg)}</p>`;
-  el.innerHTML=top+(xd?`<div class="x-grid"><nav class="x-nav term-frame" id="x-nav" aria-label="Custom campaign sections">${xNavHTML()}</nav>
-    <div class="x-main${boot&&!calm()?" boot":""}" id="x-main">${xMainHTML()}</div></div>`:xStartHTML());
-  el.querySelectorAll("textarea").forEach(xGrow);
-  const nav=$("x-nav"),cur=nav&&nav.querySelector('[aria-current="page"]');
+  el.innerHTML=top+(xd?`<div class="x-grid"><nav class="x-nav term-frame" id="x-nav" aria-label="Steps">${xNavHTML()}</nav>
+    <div class="x-main${boot&&!calm()?" boot":""}" id="x-main">${xStepHTML()}</div></div>
+    <datalist id="x-kw">${["Infantry","Mounted","Monster","Vehicle","Monster/Vehicle","Infantry/Mounted","Character","Warlord","Fly"].map(k=>`<option value="${k}">`).join("")}</datalist>`:xStartHTML());
+  el.querySelectorAll("textarea").forEach(xGrow);xNavScroll()}
+function xNavScroll(){const nav=$("x-nav"),cur=nav&&nav.querySelector('[aria-current="step"]');
   if(cur&&nav.scrollWidth>nav.clientWidth)nav.scrollLeft=Math.max(0,cur.offsetLeft-nav.clientWidth/2+cur.offsetWidth/2)}
+/* refresh progress without redrawing the form being typed in */
+function xLive(){const nav=$("x-nav");if(nav){nav.innerHTML=xNavHTML();xNavScroll()}const p=$("x-status");if(p){const st=xStatus(xs.sec);p.className="x-pill"+(st.done?" done":"");p.textContent=(st.done?"✓ ":"")+st.txt}}
 /* text boxes grow to fit what's in them (up to most of the screen), so long rules text is readable without inner scrolling */
 const xGrow=t=>{if(!t.offsetParent)return;t.style.height="auto";t.style.height=Math.min(t.scrollHeight+2,Math.round(innerHeight*.7))+"px"};
-function xMainHTML(){const s=xs.sec;if(XDECK[s])return xDeckHTML(s);if(s==="intro")return xIntroHTML();if(s==="guide")return xGuideHTML();if(s==="export")return xExportHTML();return xOverviewHTML()}
+function xStepHTML(){const i=XSTEPS.findIndex(s=>s.k===xs.sec),S=XSTEPS[i],st=xStatus(S.k),prev=XSTEPS[i-1],next=XSTEPS[i+1];
+  const body=DECKS.includes(S.k)?xDeckHTML(S.k):S.k==="intro"?xIntroHTML():S.k==="guide"?xGuideHTML():S.k==="export"?xExportHTML():xOverviewHTML();
+  return `<section class="x-sec" aria-labelledby="x-h">
+  <div class="x-head"><div class="d-meta">Step ${i+1} of ${XSTEPS.length}</div>
+    <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic(S.ic||S.k)}${esc(S.t)}</h3><span class="x-pill${st.done?" done":""}" id="x-status">${st.done?"✓ ":""}${esc(st.txt)}</span></div></div>
+  <p class="x-lead">${esc(S.why)}</p>
+  <div class="x-how"><div class="k-lbl">What to do</div><ol class="x-todo">${S.todo.map(t=>`<li>${t}</li>`).join("")}</ol>${S.tip?`<p class="x-tip"><b>Added for you:</b> ${esc(S.tip)}</p>`:""}${S.note?`<p class="x-tip">${esc(S.note)}</p>`:""}</div>
+  ${body}
+  <div class="x-pager">${prev?`<button class="btn" data-xsec="${esc(prev.k)}">‹ Back</button>`:"<span></span>"}${next?`<button class="btn primary" data-xsec="${esc(next.k)}">Next: ${esc(next.t)} ›</button>`:""}</div></section>`}
 function xStartHTML(){return `<section class="x-sec x-start-wrap" aria-label="Start a custom campaign">
-  <p class="x-lead">Write your own campaign: its <b>Locations</b>, <b>Briefings</b>, <b>Agendas</b>, <b>upgrades</b> and <b>rules</b>, laid out exactly like the app's card file. Choose a starting point.</p>
+  <p class="x-lead">Write your own campaign in ${XSTEPS.length} short steps: name it, then write its Locations, Agendas, Briefings, upgrades and rules. Card labels are added for you, so you only type the content. When you're done, you download it as a file in the same format as the app's cards.</p>
+  <div class="k-lbl">Choose how to start</div>
   <div class="x-start">
     <button class="x-opt" data-xstart="blank">${ic("Overview")}<b>Start blank</b><span>Empty decks, ready for your own cards.</span></button>
     <button class="x-opt" data-xstart="copy">${ic("Location")}<b>Copy this campaign</b><span>All ${SEED.cards.length+AGENDA_LIB.length} current cards and rules as a starting point to rename and rewrite.</span></button>
-    <button class="x-opt" data-xstart="import">${ic("Import")}<b>Import a file</b><span>Pick up from a campaign JSON file you downloaded earlier.</span></button></div>
+    <button class="x-opt" data-xstart="import">${ic("Import")}<b>Import a file</b><span>Carry on from a campaign file you downloaded earlier.</span></button></div>
   <p class="hint">Your draft is saved in this browser as you type, separately from your campaign progress.</p></section>`}
-function xOverviewHTML(){return `<section class="x-sec" aria-labelledby="x-h">
-  <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic("Overview")}Overview</h3></div>
-  <p class="x-lead">Name your campaign and its three alliances, then pick a deck to write its cards. Every field here matches a field in the campaign's JSON file.</p>
+function xOverviewHTML(){const third=xd.useThird!==false;return `<div class="x-form">
   <label class="fld"><span class="k-lbl">Campaign name</span><input type="text" data-xm="campaign" value="${esc(xd.campaign)}" maxlength="80" placeholder="e.g. The Siege of Varrow"></label>
-  <fieldset class="x-als"><legend class="k-lbl">Alliances</legend>
-    <span class="hint">The first two are always in play. The third is optional, and players can add or remove it during the campaign.</span>
-    <div class="x-als-row">${[0,1,2].map(i=>`<label class="fld x-al" style="--c:${SLOT_COL[i]}"><span class="k-lbl">Alliance ${i+1}${i===2?" · optional":""}</span><input type="text" data-xal="${i}" value="${esc(xd.alliances[i])}" maxlength="40"></label>`).join("")}</div></fieldset>
-  <label class="fld"><span class="k-lbl">Full rules link</span><input type="url" data-xm="source" value="${esc(xd.source)}" placeholder="https://" spellcheck="false"><span class="hint">Optional. A page where players can read the complete rules.</span></label>
-  <div><span class="k-lbl">Decks</span><ul class="x-decks">${DECKS.map(d=>`<li><button data-xsec="${esc(d)}">${ic(d)}<span class="nm">${esc(DECK_PLURAL[d])}</span><span class="x-exp">${esc(XDECK[d].expect)}</span><span class="n">${xN(d)}</span><span class="go" aria-hidden="true">›</span></button></li>`).join("")}</ul></div>
-</section>`}
+  <fieldset class="x-fs"><legend>Alliances</legend>
+    <div class="x-als-row">${[0,1,2].map(i=>`<label class="fld x-al" style="--c:${SLOT_COL[i]}"${i===2&&!third?" hidden":""}><span class="k-lbl">Alliance ${i+1}</span><input type="text" data-xal="${i}" value="${esc(xd.alliances[i])}" maxlength="40"></label>`).join("")}</div>
+    <label class="x-chk"><input type="checkbox" data-xthird${third?" checked":""}> Use a third alliance</label>
+    <span class="hint">Players can still choose to leave the third alliance out while they play.</span></fieldset>
+  <label class="fld"><span class="k-lbl">Link to the full rules · optional</span><input type="url" data-xm="source" value="${esc(xd.source)}" placeholder="https://" spellcheck="false"></label></div>`}
 /* a small table showing which alliance/phase slots have cards, so gaps are easy to spot */
-function xMatrix(d){const cs=xd.cards.filter(c=>c.deck===d),cnt=f=>cs.filter(f).length;
-  const cell=(n,need)=>need?`<td class="${n===need?"ok":n<need?"lo":"hi"}">${n===need?"✓ ":""}${n}/${need}</td>`:`<td class="${n?"ok":"lo"}">${n}</td>`;
+function xMatrix(d){const cs=xOf(d),cnt=f=>cs.filter(f).length,als=xAls();
+  const cell=(n,need)=>`<td class="${n>=need?"ok":"lo"}">${n>=need?"✓ ":""}${n}/${need}</td>`;
   const alTh=i=>`<th scope="row" style="--c:${SLOT_COL[i]}">${esc(xAl(i))}</th>`;
   const phHead=`<thead><tr><th scope="col"><span class="sr">Alliance</span></th>${[1,2,3].map(p=>`<th scope="col">Phase ${ROMAN[p-1]}</th>`).join("")}</tr></thead>`;
-  if(d==="Location")return `<table class="x-mx"><caption>Cards for each phase and D6 roll.</caption><thead><tr><th scope="col"><span class="sr">Phase</span></th>${ROLLS.map(r=>`<th scope="col">D6 ${r}</th>`).join("")}</tr></thead>
+  if(d==="Location")return `<table class="x-mx"><caption>Locations for each phase and D6 roll.</caption><thead><tr><th scope="col"><span class="sr">Phase</span></th>${ROLLS.map(r=>`<th scope="col">D6 ${r}</th>`).join("")}</tr></thead>
     <tbody>${[1,2,3].map(p=>`<tr><th scope="row">Phase ${ROMAN[p-1]}</th>${ROLLS.map(r=>cell(cnt(c=>c.phase===p&&c.roll===r),1)).join("")}</tr>`).join("")}</tbody></table>`;
   if(d==="Briefing"||d==="Agenda"){const need=d==="Agenda"?3:1;
-    return `<table class="x-mx"><caption>Cards for each alliance and phase.</caption>${phHead}<tbody>${[0,1,2].map(i=>`<tr>${alTh(i)}${[1,2,3].map(p=>cell(cnt(c=>c.alliance===i&&c.phase===p),need)).join("")}</tr>`).join("")}</tbody></table>`}
-  if(d==="Agenda Achieved"||d==="Relic")return `<table class="x-mx"><caption>Cards for each alliance.</caption><thead><tr>${[0,1,2].map(i=>`<th scope="col" style="color:${SLOT_COL[i]}">${esc(xAl(i))}</th>`).join("")}</tr></thead>
-    <tbody><tr>${[0,1,2].map(i=>cell(cnt(c=>c.alliance===i),d==="Relic"?0:1)).join("")}</tr></tbody></table>`;
+    return `<table class="x-mx"><caption>${d}s for each alliance and phase.</caption>${phHead}<tbody>${als.map(i=>`<tr>${alTh(i)}${[1,2,3].map(p=>cell(cnt(c=>c.alliance===i&&c.phase===p),need)).join("")}</tr>`).join("")}</tbody></table>`}
+  if(d==="Agenda Achieved"||d==="Relic")return `<table class="x-mx"><caption>Cards for each alliance.</caption><thead><tr>${als.map(i=>`<th scope="col" style="color:${SLOT_COL[i]}">${esc(xAl(i))}</th>`).join("")}</tr></thead>
+    <tbody><tr>${als.map(i=>cell(cnt(c=>c.alliance===i),1)).join("")}</tr></tbody></table>`;
+  if(d==="Battle Honour")return `<table class="x-mx"><caption>Battle Honours for each phase.</caption><thead><tr>${[1,2,3].map(p=>`<th scope="col">Phase ${ROMAN[p-1]}</th>`).join("")}</tr></thead>
+    <tbody><tr>${[1,2,3].map(p=>cell(cnt(c=>c.phase===p),1)).join("")}</tr></tbody></table>`;
   return ""}
-function xDeckHTML(d){const cfg=XDECK[d],list=xSorted(d),groups=[];
-  list.forEach(c=>{const g=cfg.ph==="none"?"":c.phase?"Phase "+ROMAN[c.phase-1]:"Any phase";let G=groups[groups.length-1];if(!G||G.g!==g)groups.push(G={g,cs:[]});G.cs.push(c)});
-  const addBtn=(cls,t)=>`<button class="btn${cls}" data-xadd="${esc(d)}">${t||"+ Add "+esc(d.toLowerCase())}</button>`;
-  return `<section class="x-sec" aria-labelledby="x-h">
-  <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic(d)}${esc(DECK_PLURAL[d])}</h3><span class="cnt">${list.length}</span>${addBtn(" primary")}</div>
-  <p class="x-lead">${esc(cfg.lead)} ${esc(cfg.expect)}</p>${xMatrix(d)}
+const xAddLbl=d=>d==="Agenda Achieved"?"+ Add card":"+ Add "+d;
+function xDeckHTML(d){const list=xSorted(d),groups=[],hasPh=d!=="Agenda Achieved";
+  list.forEach(c=>{const g=!hasPh?"":c.phase?"Phase "+ROMAN[c.phase-1]:"Any phase";let G=groups[groups.length-1];if(!G||G.g!==g)groups.push(G={g,cs:[]});G.cs.push(c)});
+  const addBtn=(cls)=>`<button class="btn${cls}" data-xadd="${esc(d)}">${esc(xAddLbl(d))}</button>`;
+  return `${xMatrix(d)}<div class="x-addrow">${addBtn(" primary")}<span class="hint">${list.length} card${list.length===1?"":"s"} so far</span></div>
   ${list.length?groups.map(G=>`${G.g?`<h4 class="x-grp">${G.g}</h4>`:""}<ul class="x-list">${G.cs.map(xCardHTML).join("")}</ul>`).join("")
-    :`<div class="x-empty"><p>No ${esc(DECK_PLURAL[d].toLowerCase())} yet.</p>${addBtn(" primary","+ Add the first one")}</div>`}
-  ${list.length>3?`<div class="x-foot">${addBtn("")}</div>`:""}</section>`}
-function xCardHTML(c){const cfg=XDECK[c.deck],k=c._k,open=xs.open===k,lbl=sideLabels(c);
-  const tags=[c.alliance!=null?`<span class="tag al" style="--c:${xCol(c.alliance)}">${esc(xAl(c.alliance))}</span>`:cfg.al!=="none"?`<span class="tag shared">Shared</span>`:"",
+    :`<div class="x-empty"><p>No ${esc(DECK_PLURAL[d].toLowerCase())} yet. Tap <b>${esc(xAddLbl(d))}</b> to write the first one.</p></div>`}
+  ${list.length>2?`<div class="x-foot">${addBtn("")}</div>`:""}`}
+function xHeadHTML(c){const k=c._k,open=xs.open===k,cfgAl=c.deck!=="Location",need=xNeeds(c);
+  const tags=[c.alliance!=null?`<span class="tag al" style="--c:${xCol(c.alliance)}">${esc(xAl(c.alliance))}</span>`:cfgAl?`<span class="tag shared">Shared</span>`:"",
     c.phase?`<span class="tag">Phase ${ROMAN[c.phase-1]}</span>`:"",c.roll?`<span class="tag">D6 ${esc(c.roll)}</span>`:"",
-    !c.front.trim()?`<span class="tag shared">No text yet</span>`:""].join("");
-  const sel=(f,l,opts,cur)=>`<label class="fld"><span class="k-lbl">${l}</span><select data-f="${f}">${opts.map(([v,t])=>`<option value="${v}"${String(cur??"")===String(v)?" selected":""}>${esc(t)}</option>`).join("")}</select></label>`;
-  const ta=(f,l,h,rows)=>`<label class="fld"><span class="k-lbl">${l}</span><textarea data-f="${f}" rows="${rows}">${esc(c[f])}</textarea>${h?`<span class="hint">${esc(h)}</span>`:""}</label>`;
-  const alOpts=[...(cfg.al==="req"?[]:[["","Shared · every alliance"]]),...[0,1,2].map(i=>[i,xAl(i)])];
-  const phOpts=[...(cfg.ph==="req"?[]:[["","Any phase"]]),[1,"Phase I"],[2,"Phase II"],[3,"Phase III"]];
-  const meta=cfg.al!=="none"||cfg.ph!=="none"||cfg.roll;
-  return `<li class="xc${open?" open":""}${xs.flash===k?" new":""}" data-k="${k}" style="--c:${c.deck==="Location"?"var(--brass)":xCol(c.alliance)}">
-  <button class="xc-h" data-xopen="${k}" aria-expanded="${open}"${open?` aria-controls="xb-${k}"`:""}><span class="xc-ic">${ic(c.deck)}</span>
-    <span class="xc-t"><b class="${c.name.trim()?"":"untitled"}">${esc(c.name.trim()||"Untitled "+c.deck.toLowerCase())}</b><span class="xc-m">${tags}</span></span><span class="chev" aria-hidden="true"></span></button>
-  ${open?`<div class="xc-b" id="xb-${k}">
-    <label class="fld"><span class="k-lbl">Card name</span><input type="text" data-f="name" value="${esc(c.name)}" maxlength="80"></label>
-    ${meta?`<div class="x-r3">${cfg.al!=="none"?sel("alliance","Alliance",alOpts,c.alliance):""}${cfg.ph!=="none"?sel("phase","Phase",phOpts,c.phase):""}${cfg.roll?sel("roll","D6 roll",ROLLS.map(r=>[r,r]),c.roll):""}</div>`:""}
-    ${ta("front",cfg.back?`${lbl[0]} · front`:"Card text",cfg.fHint,cfg.back?6:4)}
-    ${cfg.back?ta("back",`${lbl[1]} · back`,cfg.bHint,6):""}
-    <details class="x-more"${c.id||c.link||c.notes?" open":""}><summary>More fields</summary><div class="x-more-b">
-      <label class="fld"><span class="k-lbl">Card ID</span><input type="text" data-f="id" value="${esc(c.id)}" placeholder="${esc(xAutoId(c))}" spellcheck="false" autocapitalize="off"><span class="hint">Leave blank and one is made from the name.</span></label>
-      <label class="fld"><span class="k-lbl">Rules link</span><input type="url" data-f="link" value="${esc(c.link)}" placeholder="https://" spellcheck="false"></label>
-      <label class="fld"><span class="k-lbl">Notes</span><textarea data-f="notes" rows="2">${esc(c.notes)}</textarea><span class="hint">Shown under the card text.</span></label></div></details>
+    need.length?`<span class="tag need">Needs ${esc(xList(need))}</span>`:`<span class="tag got">✓ Done</span>`].join("");
+  return `<button class="xc-h" data-xopen="${k}" aria-expanded="${open}"${open?` aria-controls="xb-${k}"`:""}><span class="xc-ic">${ic(c.deck)}</span>
+    <span class="xc-t"><b class="${c.name.trim()?"":"untitled"}">${esc(c.name.trim()||"Untitled "+c.deck.toLowerCase())}</b><span class="xc-m">${tags}</span></span><span class="chev" aria-hidden="true"></span></button>`}
+function xCardHTML(c){const k=c._k,open=xs.open===k;
+  return `<li class="xc${open?" open":""}${xs.flash===k?" new":""}" data-k="${k}" style="--c:${c.deck==="Location"?"var(--brass)":xCol(c.alliance)}">${xHeadHTML(c)}
+  ${open?`<div class="xc-b" id="xb-${k}">${xFormHTML(c)}
+    <details class="x-more"${c.id||c.link||c.notes?" open":""}><summary>More fields · optional</summary><div class="x-more-b">
+      ${xIn('data-f="id"',"Card ID",c.id,{ph:xAutoId(c),hint:"Leave blank and one is made from the name.",attrs:'spellcheck="false" autocapitalize="off"'})}
+      ${xIn('data-f="link"',"Rules link",c.link,{ph:"https://",type:"url",attrs:'spellcheck="false"'})}
+      ${xIn('data-f="notes"',"Notes",c.notes,{area:1,rows:2,hint:"Shown under the card text."})}</div></details>
     <div class="xc-act">${xs.ask===k?`<span class="x-ask" role="alert">Delete this card?</span><button class="btn danger-btn" data-xdel-yes="${k}">Delete</button><button class="btn" data-xdel-no="${k}">Keep</button>`
-      :`<button class="btn primary" data-xprev="${k}" aria-haspopup="dialog">Preview</button><button class="btn" data-xdup="${k}">Duplicate</button><button class="btn ghost x-del" data-xdel="${k}">Delete</button>`}</div>
+      :`<button class="btn primary" data-xprev="${k}" aria-haspopup="dialog">Preview card</button><button class="btn" data-xdone="${k}">Done</button><button class="btn ghost" data-xdup="${k}">Duplicate</button><button class="btn ghost x-del" data-xdel="${k}">Delete</button>`}</div>
   </div>`:""}</li>`}
-function xIntroHTML(){return `<section class="x-sec" aria-labelledby="x-h">
-  <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic("Rules")}Introduction</h3></div>
-  <p class="x-lead">The “How the campaign works” summary on the Rules tab. Write it as plain sentences; each sentence becomes its own bullet point.</p>
-  <label class="fld"><span class="k-lbl">Introduction</span><textarea data-xm="introduction" rows="12">${esc(xd.introduction)}</textarea></label></section>`}
-function xGuideHTML(){const q=xd.quickReference,S=q.sections;return `<section class="x-sec" aria-labelledby="x-h">
-  <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic("Rules")}Step-by-step guide</h3><span class="cnt">${S.length}</span></div>
-  <p class="x-lead">The walkthrough on the Rules tab, split into sections of steps. Wrap words in **double asterisks** for bold or *single asterisks* for italic.</p>
-  <label class="fld"><span class="k-lbl">Guide title</span><input type="text" data-q="title" value="${esc(q.title)}"></label>
-  <label class="fld"><span class="k-lbl">Summary</span><textarea data-q="summary" rows="2">${esc(q.summary)}</textarea></label>
+/* one labelled field; attr carries the data-* binding */
+function xIn(attr,label,val,o={}){const ph=o.ph?` placeholder="${esc(o.ph)}"`:"",ex=o.attrs?" "+o.attrs:"";
+  return `<label class="fld${o.cls?" "+o.cls:""}"><span class="k-lbl">${label}</span>${o.area?`<textarea ${attr} rows="${o.rows||3}"${ph}${ex}>${esc(val)}</textarea>`
+    :`<input type="${o.type||"text"}" ${attr} value="${esc(val)}"${ph}${o.max?` maxlength="${o.max}"`:""}${o.list?` list="${o.list}"`:""}${ex}>`}${o.hint?`<span class="hint">${o.hint}</span>`:""}</label>`}
+const xSel=(f,l,opts,cur)=>`<label class="fld"><span class="k-lbl">${l}</span><select data-f="${f}">${opts.map(([v,t])=>`<option value="${v}"${String(cur??"")===String(v)?" selected":""}>${esc(t)}</option>`).join("")}</select></label>`;
+const xFS=(legend,note,body)=>`<fieldset class="x-fs"><legend>${legend}</legend>${note?`<p class="x-fs-note">${note}</p>`:""}${body}</fieldset>`;
+const xShows=t=>`<span class="x-shows">Shows on the card as: <code>${esc(t)}</code></span>`;
+function xFormHTML(c){const f=c.f,d=c.deck,als=[0,1,2].filter(i=>xAls().includes(i)||c.alliance===i);
+  const alOpts=[...(d==="Battle Honour"||d==="Battle Skill"?[["","Shared · every alliance"]]:[]),...als.map(i=>[i,xAl(i)])];
+  const ph=(opt)=>xSel("phase","Phase",[...(opt?[["","Any phase"]]:[]),[1,"Phase I"],[2,"Phase II"],[3,"Phase III"]],c.phase);
+  const auto=XAUTO[d];
+  const name=xIn('data-f="name"',"Card name",c.name,{max:80,ph:auto?"":{"Location":"e.g. The Glass Wastes","Agenda":"e.g. Hold the Bridge","Battle Honour":"e.g. Iron Nerve","Battle Skill":"e.g. Quick Draw","Relic":"e.g. Banner of the Fallen"}[d]||"",
+    hint:auto?"Filled in for you. Change it if you like.":""});
+  if(c.raw)return `<p class="x-fs-note x-raw">This card's text doesn't follow the usual layout, so it's shown as free text.</p>${name}
+    <div class="x-r3">${d!=="Location"?xSel("alliance","Alliance",[["","Shared · every alliance"],...als.map(i=>[i,xAl(i)])],c.alliance):""}${ph(true)}${d==="Location"?xSel("roll","D6 roll",ROLLS.map(r=>[r,r]),c.roll):""}</div>
+    ${xIn('data-f="front"',"Front",c.front,{area:1,rows:5})}${xIn('data-f="back"',"Back",c.back,{area:1,rows:4})}`;
+  if(d==="Location")return `${name}<div class="x-r3">${ph(false)}${xSel("roll","D6 roll",ROLLS.map(r=>[r,r]),c.roll)}</div>
+    ${xFS("Location bonus","The alliance that controls this Location gets this for the rest of the campaign.",
+      xIn('data-p="bName"',"Bonus name",f.bName,{max:60,ph:"e.g. Supply Depot"})+xIn('data-p="bText"',"What the controlling alliance gets",f.bText,{area:1,rows:3,ph:"e.g. draw one extra Relic card each time you draw Relic cards."})
+      +xShows("Location bonus — Bonus name: …"))}
+    ${xFS("War zone rules","Every battle fought at this Location uses these rules.",
+      `<ol class="x-rules">${f.rules.map((r,j)=>`<li class="x-rule"><span class="num" aria-hidden="true">${j+1}</span><div class="x-rule-f">
+        ${xIn(`data-rule="${j}|n"`,`Rule ${j+1} name`,r.n,{max:60,ph:"e.g. Dust Storms"})}${xIn(`data-rule="${j}|t"`,"What it does",r.t,{area:1,rows:2,ph:"e.g. models are not visible to each other unless they are within 18\"."})}</div>
+        <button class="btn ghost x-ib" data-xrule-rm="${j}" aria-label="Remove rule ${j+1}"${f.rules.length<2?" disabled":""}>✕</button></li>`).join("")}</ol>
+      <button class="btn" data-xrule-add>+ Add rule</button>${xShows("War zone rules. Rule name: … Rule name: …")}`)}`;
+  if(d==="Agenda")return `${name}<div class="x-r3">${xSel("alliance","Alliance",alOpts,c.alliance)}${ph(false)}</div>
+    ${xIn('data-p="story"',"Story",f.story,{area:1,rows:3,ph:"One or two sentences that set the scene.",hint:"Shown in italics at the top of the card."})}
+    ${xFS("How to achieve it","Players who achieve it gain an Agenda Achieved card.",
+      `<label class="x-chk"><input type="checkbox" data-fb="std"${f.std?" checked":""}> Scoring 35 or more VP from its Primary Mission achieves it</label>`
+      +xIn('data-p="cond"',f.std?"Or another way · optional":"How to achieve it",f.cond,{area:1,rows:2,ph:"e.g. control at least half of the objective markers."})
+      +xIn('data-p="bonus"',"Extra Agenda Achieved card · optional",f.bonus,{area:1,rows:2,ph:"e.g. if you destroy the enemy Warlord.",hint:"For a harder goal that earns one more card."}))}
+    ${xFS("Primary Mission","Played instead of the normal Primary Mission when a player attempts this Agenda.",
+      xIn('data-p="timing"',"When it starts · optional",f.timing,{max:80,ph:"e.g. from the second battle round onwards"})
+      +xIn('data-p="scoring"',"How players score",f.scoring,{area:1,rows:4,ph:"e.g. Score 5 victory points for each objective marker you control."}))}`;
+  if(d==="Briefing"){const ags=xSorted("Agenda").filter(a=>a.alliance===c.alliance&&a.phase===c.phase),max=xNPmax(c.phase);
+    const opts=(v)=>{const o=[["","Choose an Agenda"],...ags.map(a=>[a._k,a.name.trim()||"Untitled agenda"])];if(v&&!ags.some(a=>a._k===v)&&xAgName(v))o.push([v,xAgName(v)+" · other phase or alliance"]);return o};
+    const chart=ags.length?`<div class="x-fds">${FDS.map((a,i)=>`<fieldset class="x-fd"><legend>If they chose <b>${esc(a)}</b></legend>${FDS.map((b,j)=>{const v=(f.chart[a]||{})[b]||"";
+        return `<label class="x-fd-r"><span>and their opponent chose ${esc(b)}</span><select data-chart="${i}|${j}">${opts(v).map(([k,t])=>`<option value="${esc(k)}"${k===v?" selected":""}>${esc(t)}</option>`).join("")}</select></label>`}).join("")}
+        <button class="btn ghost x-fd-fill" data-xfill="${i}">Use first choice for all</button></fieldset>`).join("")}</div>`
+      :`<div class="x-empty"><p>${esc(xAl(c.alliance))} has no Phase ${ROMAN[(c.phase||1)-1]} Agendas yet. Write them first, then come back to fill this chart.</p><button class="btn" data-xsec="Agenda">Go to Agendas</button></div>`;
+    return `<div class="x-r3">${xSel("alliance","Alliance",alOpts,c.alliance)}${ph(false)}</div>${name}
+    ${xIn('data-p="story"',"Story",f.story,{area:1,rows:3,ph:"What this alliance is fighting for in this phase."})}
+    ${xFS("Agenda chart","Before each battle, both players reveal a Force Disposition. Pick which of this alliance's Agendas is played for each pairing.",chart)}
+    ${xFS("Outcomes",`At the end of the phase each alliance earns Narrative Points: ${c.phase===3?2:1} for controlling the Location and 1 for being in ascendancy (up to ${max}). Write what happens at each total. The points rule is added to the card for you.`,
+      Array.from({length:max+1},(_,n)=>max-n).map(n=>xIn(`data-out="${n}"`,`${n} Narrative Point${n===1?"":"s"}${n===max?" · best result":n===0?" · worst result":""}`,f.out[n]||"",{area:1,rows:2,ph:n===max?"e.g. a crushing victory that sets up the next phase.":n===0?"e.g. the offensive collapses.":""})).join(""))}`}
+  if(d==="Agenda Achieved")return `<div class="x-r3">${xSel("alliance","Alliance",als.map(i=>[i,xAl(i)]),c.alliance)}</div>${name}
+    ${xIn('data-p="text"',"What holding these cards does",f.text,{area:1,rows:4,ph:"e.g. At the end of each phase, the alliance holding the most Agenda Achieved cards is in ascendancy."})}`;
+  /* Battle Honour, Battle Skill, Relic */
+  const pre=UPG_PRE[d],ex={"Battle Honour":"e.g. The bearer's unit gains the Stealth ability.","Battle Skill":"e.g. Re-roll hit rolls when the bearer targets a unit within 9\".","Relic":"e.g. The bearer gains a 4+ invulnerable save."}[d];
+  return `${name}<div class="x-r3">${xSel("alliance","Alliance",alOpts,c.alliance)}${d==="Relic"?"":ph(true)}</div>
+    <div class="x-chks"><label class="x-chk"><input type="checkbox" data-fb="bestow"${f.bestow?" checked":""}> Given to one Character</label>
+    ${f.bestow?`<label class="x-chk"><input type="checkbox" data-fb="noEpic"${f.noEpic?" checked":""}> Not for Epic Heroes</label>`:""}</div>
+    ${xIn('data-p="effect"',"What it does",f.effect,{area:1,rows:3,ph:ex})}
+    ${f.bestow?xFS("Bonus · optional","Extra effect when the bearer has a keyword.",`<div class="x-r2">${xIn('data-p="bKw"',"Keyword",f.bKw,{max:40,ph:"e.g. Monster",list:"x-kw"})}${xIn('data-p="bText"',"Extra effect",f.bText,{area:1,rows:2,ph:"e.g. add 3\" instead."})}</div>`)
+      +xShows(`${pre} — bestow on one Character${f.noEpic?" that is not an Epic Hero":""}. What it does. Bonus (Keyword): …`):""}`}
+function xIntroHTML(){return `${xIn('data-xm="introduction"',"Introduction",xd.introduction,{area:1,rows:10,ph:"e.g. Players split into two or three alliances and fight across three campaign phases. Each phase is fought at one Location…"})}`}
+function xGuideHTML(){const q=xd.quickReference,S=q.sections;return `<div class="x-form">
+  ${xIn('data-q="title"',"Guide title",q.title,{ph:"e.g. Quick reference"})}
+  ${xIn('data-q="summary"',"Summary · optional",q.summary,{area:1,rows:2,ph:"One line on how to use the guide."})}</div>
   ${S.map((s,i)=>`<div class="x-qs term-frame" data-qsec="${i}">
     <div class="x-qs-h"><span class="x-qn" aria-hidden="true">${String(i+1).padStart(2,"0")}</span>
-      <label class="fld"><span class="k-lbl">Section ${i+1} title</span><input type="text" data-qs="${i}|title" value="${esc(s.title)}"></label>
+      <label class="fld"><span class="k-lbl">Section ${i+1} title</span><input type="text" data-qs="${i}|title" value="${esc(s.title)}" placeholder="e.g. Setup"></label>
       <div class="x-qs-tools"><button class="btn ghost x-ib" data-qmv="${i}|-1" aria-label="Move section ${i+1} up"${i?"":" disabled"}>↑</button><button class="btn ghost x-ib" data-qmv="${i}|1" aria-label="Move section ${i+1} down"${i<S.length-1?"":" disabled"}>↓</button><button class="btn ghost x-ib" data-qdel="${i}" aria-label="Delete section ${i+1}">✕</button></div></div>
     ${xs.qask===i?`<div class="acol-ask" role="alert"><p>Delete “${esc(s.title||"Section "+(i+1))}” and its ${s.items.length} step${s.items.length===1?"":"s"}?</p><div><button class="btn danger-btn" data-qdel-yes="${i}">Delete</button> <button class="btn" data-qdel-no="${i}">Keep</button></div></div>`:""}
-    <label class="x-chk"><input type="checkbox" data-qs="${i}|ordered"${s.ordered?" checked":""}> Numbered steps</label>
-    <label class="fld"><span class="k-lbl">Intro text · optional</span><textarea data-qs="${i}|text" rows="2">${esc(s.text)}</textarea></label>
+    <label class="x-chk"><input type="checkbox" data-qs="${i}|ordered"${s.ordered?" checked":""}> Number the steps</label>
+    ${xIn(`data-qs="${i}|text"`,"Intro text · optional",s.text,{area:1,rows:2})}
     <ol class="x-qis">${s.items.map((it,j)=>`<li class="x-qi"><span class="num" aria-hidden="true">${s.ordered?String(j+1).padStart(2,"0"):"▸"}</span><div class="x-qi-f">
-      <label class="fld"><span class="k-lbl">Step ${j+1}</span><textarea data-qi="${i}|${j}|text" rows="2">${esc(it.text)}</textarea></label>
-      <label class="fld"><span class="k-lbl">Sub-points · one per line</span><textarea data-qi="${i}|${j}|sub" rows="${Math.max(2,Math.min(8,it.sub.length))}">${esc(it.sub.join("\n"))}</textarea></label></div>
+      ${xIn(`data-qi="${i}|${j}|text"`,`Step ${j+1}`,it.text,{area:1,rows:2,ph:"e.g. **Roll for the Location.** Roll a D6 and use that phase's Location."})}
+      ${xIn(`data-qi="${i}|${j}|sub"`,"Sub-points · optional, one per line",it.sub.join("\n"),{area:1,rows:Math.max(2,Math.min(8,it.sub.length))})}</div>
       <button class="btn ghost x-ib" data-qirm="${i}|${j}" aria-label="Remove step ${j+1} from section ${i+1}">✕</button></li>`).join("")}</ol>
     <button class="btn" data-qiadd="${i}">+ Add step</button></div>`).join("")}
-  <button class="btn primary x-addsec" data-qadd="1">+ Add section</button></section>`}
-function xExportHTML(){const n=xd.cards.length;return `<section class="x-sec" aria-labelledby="x-h">
-  <div class="x-sh"><h3 id="x-h" tabindex="-1">${ic("Export")}Import &amp; export</h3></div>
-  <p class="x-lead">Your draft is saved in this browser as you type. Download it as a JSON file in the same format as the app's card file to keep a copy or share it, or import a file you downloaded earlier.</p>
+  <button class="btn primary x-addsec" data-qadd="1">+ Add section</button>`}
+function xExportHTML(){const n=xd.cards.length;return `<ul class="x-review">${XSTEPS.filter(s=>s.k!=="export").map((s,i)=>{const st=xStatus(s.k);
+    return `<li class="${st.done?"done":""}"><span class="x-num" aria-hidden="true">${st.done?"✓":i+1}</span><span class="x-nt"><span class="x-nl">${esc(s.t)}</span><span class="x-ns">${esc(st.txt)}</span></span>${st.done?`<button class="btn ghost" data-xsec="${esc(s.k)}" aria-label="Open ${esc(s.t)}">Open</button>`:`<button class="btn" data-xsec="${esc(s.k)}" aria-label="Go to ${esc(s.t)}">Go</button>`}</li>`}).join("")}</ul>
   <div class="x-acts"><button class="btn primary" data-xexp="dl">Download JSON</button><button class="btn" data-xexp="copy">Copy JSON</button><button class="btn" data-xexp="import">Import JSON…</button></div>
+  <p class="hint">You can download at any point, even before every step is finished.</p>
   <details class="intro x-json"><summary><span class="eyebrow">Preview the file · ${n} card${n===1?"":"s"}</span><span class="chev" aria-hidden="true"></span></summary><pre class="x-pre" tabindex="0">${esc(xExport())}</pre></details>
   <div class="danger"><div><strong>Start over</strong><p class="hint" style="margin:2px 0 0">Deletes this draft from the browser. Download it first if you want to keep it.</p></div>
-    <span id="x-reset">${xs.reset?`<button class="btn danger-btn" data-xreset="yes">Delete draft</button> <button class="btn" data-xreset="no">Cancel</button>`:`<button class="btn" data-xreset="ask">Delete draft…</button>`}</span></div></section>`}
+    <span id="x-reset">${xs.reset?`<button class="btn danger-btn" data-xreset="yes">Delete draft</button> <button class="btn" data-xreset="no">Cancel</button>`:`<button class="btn" data-xreset="ask">Delete draft…</button>`}</span></div>`}
 
 /* ---- actions ---- */
 function xGo(sec,focus=true){xs.sec=sec;xs.open=null;xs.ask=null;xs.qask=null;xs.reset=false;xs.msg="";renderCustom(true);
-  const m=xMain$();if(m){const t=m.getBoundingClientRect().top;const nav=$("x-nav");const off=innerWidth<=860&&nav?nav.offsetHeight+8:12;if(t<off)scrollBy(0,t-off)}
+  const m=xMain$();if(m){const t=m.getBoundingClientRect().top;const nav=$("x-nav");const off=innerWidth<=860&&nav?nav.offsetHeight+8:12;if(t<off||t>innerHeight*.6)scrollBy(0,t-off)}
   const h=$("x-h");if(focus&&h)h.focus({preventScroll:true})}
 /* new cards land in the first empty slot (phase × alliance × roll) so a deck fills up in order */
-function xAdd(d){const cfg=XDECK[d],c={_k:xUid(),id:"",deck:d,name:"",alliance:cfg.al==="req"?0:null,phase:cfg.ph==="req"||d==="Battle Honour"?1:null,roll:null,front:"",back:"",link:"",notes:""};
-  const has=f=>xd.cards.filter(x=>x.deck===d&&f(x)).length;
-  if(cfg.roll){c.roll="1-2";out:for(const p of [1,2,3])for(const r of ROLLS)if(!has(x=>x.phase===p&&x.roll===r)){c.phase=p;c.roll=r;break out}}
-  else if(d==="Briefing"||d==="Agenda"){const need=d==="Agenda"?3:1;out:for(const p of [1,2,3])for(const i of [0,1,2])if(has(x=>x.phase===p&&x.alliance===i)<need){c.phase=p;c.alliance=i;break out}}
-  else if(d==="Agenda Achieved"){const i=[0,1,2].find(i=>!has(x=>x.alliance===i));if(i!=null)c.alliance=i}
-  else if(d==="Relic"){c.alliance=[0,1,2].reduce((b,i)=>has(x=>x.alliance===i)<has(x=>x.alliance===b)?i:b,0)}
-  else if(d==="Battle Honour"){const p=[1,2,3].reduce((b,p)=>has(x=>x.phase===p)<has(x=>x.phase===b)?p:b,1);c.phase=p}
-  xd.cards.push(c);xs.sec=d;xs.open=c._k;xs.ask=null;xs.flash=c._k;xs.msg="";xSave();renderCustom();xs.flash="";xFocusCard(c._k,"name","center")}
-function xFocusCard(k,f,block){const li=document.querySelector(`#custom [data-k="${k}"]`);if(!li)return;
-  li.scrollIntoView({block:block||"nearest",behavior:calm()?"auto":"smooth"});const n=li.querySelector(f?`[data-f="${f}"]`:".xc-h");if(n)n.focus({preventScroll:true})}
-function xPreview(k){const c=xd.cards.find(x=>x._k===k);if(!c)return;lastFocus=document.activeElement;
+function xAdd(d){const c={_k:xUid(),id:"",deck:d,name:"",alliance:null,phase:null,roll:null,front:"",back:"",link:"",notes:""};
+  const has=f=>xd.cards.filter(x=>x.deck===d&&f(x)).length,als=xAls();
+  if(d==="Location"){c.phase=1;c.roll="1-2";out:for(const p of [1,2,3])for(const r of ROLLS)if(!has(x=>x.phase===p&&x.roll===r)){c.phase=p;c.roll=r;break out}}
+  else if(d==="Briefing"||d==="Agenda"){const need=d==="Agenda"?3:1;c.phase=1;c.alliance=0;out:for(const p of [1,2,3])for(const i of als)if(has(x=>x.phase===p&&x.alliance===i)<need){c.phase=p;c.alliance=i;break out}}
+  else if(d==="Agenda Achieved"){const i=als.find(i=>!has(x=>x.alliance===i));c.alliance=i==null?0:i}
+  else if(d==="Relic")c.alliance=als.reduce((b,i)=>has(x=>x.alliance===i)<has(x=>x.alliance===b)?i:b,als[0]);
+  else if(d==="Battle Honour")c.phase=[1,2,3].reduce((b,p)=>has(x=>x.phase===p)<has(x=>x.phase===b)?p:b,1);
+  if(XAUTO[d])c.name=XAUTO[d](xAl(c.alliance),c.phase);
+  xPrep(c);xd.cards.push(c);xs.sec=d;xs.open=c._k;xs.ask=null;xs.flash=c._k;xs.msg="";xSave();renderCustom();xs.flash="";
+  xFocusCard(c._k,XAUTO[d]?null:"name","start",XAUTO[d]?'[data-p="story"],[data-p="text"]':null)}
+function xFocusCard(k,f,block,sel){const li=document.querySelector(`#custom [data-k="${k}"]`);if(!li)return;
+  li.scrollIntoView({block:block||"nearest",behavior:calm()?"auto":"smooth"});const n=li.querySelector(sel||(f?`[data-f="${f}"]`:".xc-h"));if(n)n.focus({preventScroll:true})}
+function xPreview(k){const c=xd.cards.find(x=>x._k===k);if(!c)return;lastFocus=document.activeElement;const t=xText(c);
   openCard("preview","front",{id:"preview",deck:c.deck,name:c.name.trim()||"Untitled "+c.deck.toLowerCase(),alliance:xAl(c.alliance),phase:c.phase,
-    roll:c.deck==="Location"?c.roll:null,front:c.front,back:c.back,link:c.link,notes:c.notes})}
+    roll:c.deck==="Location"?c.roll:null,front:t.front,back:t.back,link:c.link,notes:c.notes})}
+const xCardOf=el=>{const li=el.closest("[data-k]");return li&&xd.cards.find(x=>x._k===li.dataset.k)};
 const xEl=$("custom");
 xEl.addEventListener("toggle",e=>{if(e.target.tagName==="DETAILS")e.target.querySelectorAll("textarea").forEach(xGrow)},true);
 xEl.addEventListener("input",e=>{const t=e.target;if(!xd||t.type==="checkbox"||t.type==="file"||t.tagName==="SELECT")return;if(t.tagName==="TEXTAREA")xGrow(t);
-  const li=t.closest("[data-k]");
-  if(li&&t.dataset.f){const c=xd.cards.find(x=>x._k===li.dataset.k);if(!c)return;c[t.dataset.f]=t.value;
-    if(t.dataset.f==="name"){const b=li.querySelector(".xc-t b");b.textContent=t.value.trim()||"Untitled "+c.deck.toLowerCase();b.classList.toggle("untitled",!t.value.trim());
-      const idf=li.querySelector('[data-f="id"]');if(idf)idf.placeholder=xAutoId(c)}
-    xSave();return}
-  if(t.dataset.xm){xd[t.dataset.xm]=t.value;if(t.dataset.xm==="campaign")$("x-title").textContent=t.value.trim()||"Untitled campaign";xSave();return}
-  if(t.dataset.xal){xd.alliances[+t.dataset.xal]=t.value;xSave();return}
-  if(t.dataset.q){xd.quickReference[t.dataset.q]=t.value;xSave();return}
-  if(t.dataset.qs){const [i,f]=t.dataset.qs.split("|");xd.quickReference.sections[+i][f]=t.value;xSave();return}
-  if(t.dataset.qi){const [i,j,f]=t.dataset.qi.split("|");const it=xd.quickReference.sections[+i].items[+j];
-    it[f]=f==="sub"?t.value.split("\n").map(s=>s.trim()).filter(Boolean):t.value;xSave()}});
-xEl.addEventListener("change",e=>{const t=e.target;
+  const c=xCardOf(t),D=t.dataset;
+  if(c){if(D.f)c[D.f]=t.value;else if(D.p)c.f[D.p]=t.value;else if(D.rule){const [j,k]=D.rule.split("|");c.f.rules[+j][k]=t.value}else if(D.out)c.f.out[D.out]=t.value;else return;
+    const li=t.closest("[data-k]"),h=li.querySelector(".xc-h");h.outerHTML=xHeadHTML(c);
+    if(D.f==="name"){const idf=li.querySelector('[data-f="id"]');if(idf)idf.placeholder=xAutoId(c)}
+    xSave();xLive();return}
+  if(D.xm){xd[D.xm]=t.value;if(D.xm==="campaign")$("x-title").textContent=t.value.trim()||"Untitled campaign"}
+  else if(D.xal){const i=+D.xal,old=xd.alliances[i];xd.alliances[i]=t.value;
+    xd.cards.forEach(c=>{const a=XAUTO[c.deck];if(a&&c.alliance===i&&c.name===a(old,c.phase))c.name=a(t.value,c.phase)})}
+  else if(D.q)xd.quickReference[D.q]=t.value;
+  else if(D.qs){const [i,f]=D.qs.split("|");xd.quickReference.sections[+i][f]=t.value}
+  else if(D.qi){const [i,j,f]=D.qi.split("|");const it=xd.quickReference.sections[+i].items[+j];it[f]=f==="sub"?t.value.split("\n").map(s=>s.trim()).filter(Boolean):t.value}
+  else return;
+  xSave();xLive()});
+xEl.addEventListener("change",e=>{const t=e.target,D=t.dataset;
   if(t.id==="x-file"){xImport(t.files[0]);t.value="";return}
-  if(!xd)return;const li=t.closest("[data-k]");
-  if(li&&t.tagName==="SELECT"){const c=xd.cards.find(x=>x._k===li.dataset.k);if(!c)return;const f=t.dataset.f;
-    c[f]=f==="roll"?t.value:(t.value===""?null:+t.value);xSave();renderCustom();xFocusCard(c._k,f);return}
-  if(t.dataset.xal){const i=+t.dataset.xal;if(!t.value.trim()){t.value=xd.alliances[i]=AL[i];xSave()}else xd.alliances[i]=t.value.trim();xSave();return}
-  if(t.dataset.qs&&t.type==="checkbox"){const i=+t.dataset.qs.split("|")[0];xd.quickReference.sections[i].ordered=t.checked;xSave();renderCustom();
+  if(!xd)return;const c=xCardOf(t);
+  if(c&&t.tagName==="SELECT"&&D.f){const f=D.f,a=XAUTO[c.deck],was=a&&a(xAl(c.alliance),c.phase);
+    c[f]=f==="roll"?t.value:(t.value===""?null:+t.value);
+    if(a&&(!c.name.trim()||c.name===was))c.name=a(xAl(c.alliance),c.phase);
+    xSave();renderCustom();xFocusCard(c._k,null,"nearest",`[data-f="${f}"]`);return}
+  if(c&&D.chart){const [i,j]=D.chart.split("|").map(Number),a=FDS[i],b=FDS[j];c.f.chart[a]=c.f.chart[a]||{};if(t.value)c.f.chart[a][b]=t.value;else delete c.f.chart[a][b];
+    const h=t.closest("[data-k]").querySelector(".xc-h");h.outerHTML=xHeadHTML(c);xSave();xLive();return}
+  if(c&&D.fb){c.f[D.fb]=t.checked;xSave();renderCustom();xFocusCard(c._k,null,"nearest",`[data-fb="${D.fb}"]`);return}
+  if("xthird" in D){xd.useThird=t.checked;xSave();renderCustom();const n=document.querySelector("#custom [data-xthird]");if(n)n.focus();return}
+  if(D.xal){const i=+D.xal;if(!t.value.trim()){t.value=xd.alliances[i]=AL[i]}else xd.alliances[i]=t.value.trim();xSave();return}
+  if(D.qs&&t.type==="checkbox"){const i=+D.qs.split("|")[0];xd.quickReference.sections[i].ordered=t.checked;xSave();renderCustom();
     const n=document.querySelector(`#custom [data-qs="${i}|ordered"]`);if(n)n.focus()}});
-xEl.addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!xEl.contains(b))return;const D=b.dataset,Q=xd&&xd.quickReference;
+xEl.addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!xEl.contains(b))return;const D=b.dataset,Q=xd&&xd.quickReference,c=xd&&xCardOf(b);
   const re=(sel)=>{renderCustom();const f=sel&&document.querySelector("#custom "+sel);if(f)f.focus()};
   if("xback" in D){showTab(lastTab);scrollTo(0,0);return}
   if(D.xstart){if(D.xstart==="import"){$("x-file").click();return}
     xd=D.xstart==="copy"?xCopyCampaign():xBlank();xs.sec="overview";save(XKEY,xd);xSavedAt=Date.now();flicker(true);
-    xs.msg=D.xstart==="copy"?`Copied ${xd.cards.length} cards. Rename the campaign, then rewrite any deck.`:"";xs.bad=false;renderCustom(true);
+    xs.msg=D.xstart==="copy"?`Copied ${xd.cards.length} cards. Rename the campaign, then work through the steps.`:"";xs.bad=false;renderCustom(true);
     const f=document.querySelector('#custom [data-xm="campaign"]');if(f)f.focus();return}
   if(D.ximp){if(D.ximp==="yes")xApplyImport(xs.imp);else{xs.imp=null;xMsg("Import cancelled. Your draft is unchanged.");re()}return}
   if(D.xsec){xGo(D.xsec);return}
-  if(D.xopen){const k=D.xopen;xs.open=xs.open===k?null:k;xs.ask=null;renderCustom();xFocusCard(k);return}
+  if(D.xopen){const k=D.xopen;xs.open=xs.open===k?null:k;xs.ask=null;renderCustom();xFocusCard(k,null,"nearest");return}
+  if(D.xdone){xs.open=null;renderCustom();xFocusCard(D.xdone,null,"nearest");return}
   if(D.xadd){xAdd(D.xadd);return}
   if(D.xprev){xPreview(D.xprev);return}
-  if(D.xdup){const i=xd.cards.findIndex(x=>x._k===D.xdup);if(i<0)return;const c={...xd.cards[i],_k:xUid(),id:"",name:xd.cards[i].name.trim()?xd.cards[i].name.trim()+" (copy)":""};
-    xd.cards.splice(i+1,0,c);xs.open=c._k;xs.flash=c._k;xSave();renderCustom();xs.flash="";xFocusCard(c._k,"name","center");return}
+  if("xruleAdd" in D&&c){c.f.rules.push({n:"",t:""});xSave();re(`[data-k="${c._k}"] [data-rule="${c.f.rules.length-1}|n"]`);return}
+  if(D.xruleRm&&c){const j=+D.xruleRm;c.f.rules.splice(j,1);xSave();re(`[data-k="${c._k}"] [data-rule="${Math.min(j,c.f.rules.length-1)}|n"]`);return}
+  if(D.xfill&&c){const a=FDS[+D.xfill],r=c.f.chart[a]||{},v=r[FDS[0]];if(!v){xMsg("Choose an Agenda in the first row of that block, then copy it.",true);return}
+    c.f.chart[a]={};FDS.forEach(b=>c.f.chart[a][b]=v);xSave();renderCustom();xFocusCard(c._k,null,"nearest",`[data-xfill="${D.xfill}"]`);return}
+  if(D.xdup){const i=xd.cards.findIndex(x=>x._k===D.xdup);if(i<0)return;const s=xd.cards[i],n={...JSON.parse(JSON.stringify(s)),_k:xUid(),id:""};
+    if(!XAUTO[s.deck])n.name=s.name.trim()?s.name.trim()+" (copy)":"";
+    xd.cards.splice(i+1,0,n);xs.open=n._k;xs.flash=n._k;xSave();renderCustom();xs.flash="";xFocusCard(n._k,"name","start");return}
   if(D.xdel){xs.ask=D.xdel;re(`[data-xdel-no="${D.xdel}"]`);return}
   if(D.xdelNo){xs.ask=null;re(`[data-xdel="${D.xdelNo}"]`);return}
-  if(D.xdelYes){const c=xd.cards.find(x=>x._k===D.xdelYes);xd.cards=xd.cards.filter(x=>x._k!==D.xdelYes);xs.ask=null;xs.open=null;xSave();flicker(true);
-    xMsg(`Deleted ${c&&c.name.trim()?c.name.trim():"the card"}.`);re(`[data-xadd]`);return}
+  if(D.xdelYes){const k=D.xdelYes,c=xd.cards.find(x=>x._k===k);xd.cards=xd.cards.filter(x=>x._k!==k);let refs=0;
+    xd.cards.forEach(b=>{if(b.deck==="Briefing"&&b.f)Object.values(b.f.chart).forEach(r=>Object.keys(r).forEach(o=>{if(r[o]===k){delete r[o];refs++}}))});
+    xs.ask=null;xs.open=null;xSave();flicker(true);
+    xMsg(`Deleted ${c&&c.name.trim()?c.name.trim():"the card"}.${refs?` Also cleared it from ${refs} Briefing chart cell${refs===1?"":"s"}.`:""}`);re(`[data-xadd]`);return}
   if(D.xexp){if(D.xexp==="dl")xDownload();else if(D.xexp==="copy")xCopyJSON();else $("x-file").click();return}
   if(D.xreset){if(D.xreset==="yes"){xd=null;try{localStorage.removeItem(XKEY)}catch(_){}Object.assign(xs,{sec:"overview",open:null,ask:null,reset:false,msg:"Draft deleted."});xSavedAt=0;flicker(true);re(".x-opt")}
     else{xs.reset=D.xreset==="ask";re(xs.reset?'[data-xreset="no"]':'[data-xreset="ask"]')}return}
